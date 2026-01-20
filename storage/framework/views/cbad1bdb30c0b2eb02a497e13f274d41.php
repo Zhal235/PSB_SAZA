@@ -149,57 +149,17 @@
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
-                    <?php else: ?>
-                        <div class="p-8 text-center text-gray-500">
-                            <p>Belum ada calon santri di jenjang <?php echo e($jenjang); ?></p>
-                            <a href="<?php echo e(route('admin.calon-santri.create', ['jenjang' => $jenjang])); ?>" class="text-indigo-600 hover:underline font-semibold">
-                                Tambah sekarang
-                            </a>
-                        </div>
-                    <?php endif; ?>
-                </div>
-                                        <td class="px-6 py-3 font-semibold text-indigo-600"><?php echo e($santri->no_pendaftaran); ?></td>
-                                        <td class="px-6 py-3"><?php echo e($santri->nama); ?></td>
-                                        <td class="px-6 py-3 text-sm"><?php echo e($santri->jenis_kelamin === 'laki-laki' ? 'L' : 'P'); ?></td>
-                                        <td class="px-6 py-3"><?php echo e($santri->no_telp); ?></td>
-                                        <td class="px-6 py-3 text-sm"><?php echo e($santri->asal_sekolah); ?></td>
-                                        <td class="px-6 py-3">
-                                            <span class="px-3 py-1 text-sm rounded-full font-semibold
-                                                <?php if($santri->status === 'baru'): ?> bg-blue-100 text-blue-700
-                                                <?php elseif($santri->status === 'proses'): ?> bg-yellow-100 text-yellow-700
-                                                <?php elseif($santri->status === 'lolos'): ?> bg-green-100 text-green-700
-                                                <?php elseif($santri->status === 'tidak_lolos'): ?> bg-red-100 text-red-700
-                                                <?php endif; ?>
-                                            ">
-                                                <?php echo e(ucfirst(str_replace('_', ' ', $santri->status))); ?>
-
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-3 space-x-2 flex">
-                                            <a href="<?php echo e(route('admin.calon-santri.show', $santri)); ?>" class="text-blue-600 hover:text-blue-800 text-sm font-semibold">👁️ Lihat</a>
-                                            <a href="<?php echo e(route('dokumen.create', $santri)); ?>" class="text-green-600 hover:text-green-800 text-sm font-semibold">📋 Dokumen</a>
-                                            <a href="<?php echo e(route('admin.calon-santri.edit', $santri)); ?>" class="text-yellow-600 hover:text-yellow-800 text-sm font-semibold">✏️ Edit</a>
-                                            <form method="POST" action="<?php echo e(route('admin.calon-santri.destroy', $santri)); ?>" class="inline" onsubmit="return confirm('Yakin ingin menghapus?');">
-                                                <?php echo csrf_field(); ?>
-                                                <?php echo method_field('DELETE'); ?>
-                                                <button type="submit" class="text-red-600 hover:text-red-800 text-sm font-semibold">🗑️ Hapus</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </tbody>
-                        </table>
-
+                        
                         <!-- Pagination -->
                         <div class="p-6 bg-gray-50 border-t">
                             <?php echo e($calonSantri->links()); ?>
 
                         </div>
                     <?php else: ?>
-                        <div class="p-12 text-center">
-                            <p class="text-gray-500 text-lg mb-4">Belum ada data calon santri</p>
-                            <a href="<?php echo e(route('admin.calon-santri.create')); ?>" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
-                                Tambah Calon Santri Sekarang
+                        <div class="p-8 text-center text-gray-500">
+                            <p>Belum ada calon santri di jenjang <?php echo e($jenjang); ?></p>
+                            <a href="<?php echo e(route('admin.calon-santri.create', ['jenjang' => $jenjang])); ?>" class="text-indigo-600 hover:underline font-semibold">
+                                Tambah sekarang
                             </a>
                         </div>
                     <?php endif; ?>

@@ -1,95 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Santri - PSB SAZA</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
-    <div class="flex h-screen">
-        <!-- Sidebar -->
-        <div class="w-64 bg-blue-600 text-white p-6">
-            <div class="mb-8">
-                <h1 class="text-2xl font-bold">PSB SAZA</h1>
-                <p class="text-blue-200 text-sm">Santri Portal</p>
-            </div>
+@extends('layouts.admin')
 
-            <nav class="space-y-2">
-                <a href="#" class="block px-4 py-2 rounded bg-blue-700 hover:bg-blue-800 transition">
-                    📊 Dashboard
-                </a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-blue-700 transition">
-                    📝 Status Pendaftaran
-                </a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-blue-700 transition">
-                    📄 Upload Dokumen
-                </a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-blue-700 transition">
-                    📢 Pengumuman
-                </a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-blue-700 transition">
-                    👤 Profil
-                </a>
-            </nav>
+@section('title', 'Dashboard Santri')
+@section('page-title', '👋 Selamat Datang, ' . Auth::user()->name . '!')
+@section('page-subtitle', '<p class="text-sm text-gray-600 mt-1">Jenjang: <span class="font-semibold">{{ Auth::user()->jenjang }}</span> | No. HP: {{ Auth::user()->phone }}</p>')
 
-            <hr class="my-6 border-blue-400">
-
-            <form method="POST" action="{{ route('logout') }}" class="mt-auto">
-                @csrf
-                <button
-                    type="submit"
-                    class="w-full px-4 py-2 rounded bg-red-500 hover:bg-red-600 transition font-semibold text-sm"
-                >
-                    🚪 Logout
-                </button>
-            </form>
+@section('content')
+    <!-- Info Cards -->
+    <div class="grid grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow p-6">
+            <p class="text-gray-600 text-sm mb-2">Status Pendaftaran</p>
+            @if($calonSantri)
+                <p class="text-3xl font-bold text-green-600">✅ Sudah Input</p>
+                <p class="text-xs text-gray-500 mt-2">No. Daftar: {{ $calonSantri->no_pendaftaran }}</p>
+            @else
+                <p class="text-3xl font-bold text-yellow-600">⏳ Belum Input</p>
+                <p class="text-xs text-gray-500 mt-2">Lengkapi form dulu</p>
+            @endif
         </div>
 
-        <!-- Main Content -->
-        <div class="flex-1 overflow-auto">
-            <!-- Top Bar -->
-            <div class="bg-white shadow p-6 flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-gray-800">Selamat Datang, {{ Auth::user()->name }}!</h2>
-                <div class="text-right">
-                    <p class="text-gray-600 text-sm">{{ Auth::user()->email }}</p>
-                    <p class="text-blue-600 font-semibold text-sm">Calon Santri</p>
-                </div>
-            </div>
+        <div class="bg-white rounded-lg shadow p-6">
+            <p class="text-gray-600 text-sm mb-2">Jenjang Pilihan</p>
+            <p class="text-3xl font-bold text-blue-600">{{ Auth::user()->jenjang }}</p>
+            <p class="text-xs text-gray-500 mt-2">Terdaftar</p>
+        </div>
 
-            <!-- Content -->
-            <div class="p-8">
-                <!-- Status Card -->
-                <div class="bg-white rounded-lg shadow p-6 mb-8">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">Status Pendaftaran Anda</h3>
-                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
-                        <p class="text-gray-700 font-semibold mb-2">Status: <span class="text-blue-600">Belum Lengkap</span></p>
-                        <p class="text-gray-600 text-sm">Silakan lengkapi data dan upload dokumen yang diperlukan untuk menyelesaikan pendaftaran.</p>
-                    </div>
-                </div>
-
-                <!-- Info Cards -->
-                <div class="grid grid-cols-2 gap-6 mb-8">
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <h3 class="text-gray-600 text-sm font-medium mb-2">📅 Jadwal Tes</h3>
-                        <p class="text-2xl font-bold text-blue-600">--</p>
-                        <p class="text-gray-500 text-xs mt-2">Akan diumumkan</p>
-                    </div>
-
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <h3 class="text-gray-600 text-sm font-medium mb-2">📋 Dokumen</h3>
-                        <p class="text-2xl font-bold text-yellow-600">0/5</p>
-                        <p class="text-gray-500 text-xs mt-2">Terupload</p>
-                    </div>
-                </div>
-
-                <!-- Recent Announcements -->
-                <div class="bg-white rounded-lg shadow p-6">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">📢 Pengumuman Terbaru</h3>
-                    <p class="text-gray-500 text-center py-8">Tidak ada pengumuman terbaru</p>
-                </div>
-            </div>
+        <div class="bg-white rounded-lg shadow p-6">
+            <p class="text-gray-600 text-sm mb-2">Status Pembayaran</p>
+            @if($pembayaran)
+                @if($pembayaran->status === 'lunas')
+                    <p class="text-3xl font-bold text-green-600">✅ Lunas</p>
+                @elseif($pembayaran->status === 'cicilan')
+                    <p class="text-3xl font-bold text-yellow-600">🔄 Cicilan</p>
+                @else
+                    <p class="text-3xl font-bold text-red-600">❌ Belum Bayar</p>
+                @endif
+                <p class="text-xs text-gray-500 mt-2">Rp {{ number_format($pembayaran->remaining_amount, 0, ',', '.') }}</p>
+            @else
+                <p class="text-3xl font-bold text-gray-400">-</p>
+                <p class="text-xs text-gray-500 mt-2">Belum ada data</p>
+            @endif
         </div>
     </div>
-</body>
-</html>
+
+    @if(session('success'))
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <!-- Quick Actions -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-bold text-gray-800 mb-6">🚀 Aksi Cepat</h3>
+        <div class="grid grid-cols-3 gap-4">
+            <a href="{{ route('santri.form-pendaftaran') }}" class="p-6 border-2 border-indigo-200 rounded-lg hover:bg-indigo-50 hover:border-indigo-400 transition text-center">
+                <div class="text-4xl mb-3">📋</div>
+                <p class="font-semibold text-gray-800">Form Pendaftaran</p>
+                <p class="text-xs text-gray-500 mt-2">@if($calonSantri)Edit @else Isi @endif data diri Anda</p>
+            </a>
+            <a href="{{ route('santri.pembayaran') }}" class="p-6 border-2 border-indigo-200 rounded-lg hover:bg-indigo-50 hover:border-indigo-400 transition text-center">
+                <div class="text-4xl mb-3">💳</div>
+                <p class="font-semibold text-gray-800">Pembayaran</p>
+                <p class="text-xs text-gray-500 mt-2">Lihat tagihan & invoice</p>
+            </a>
+            <a href="#" class="p-6 border-2 border-indigo-200 rounded-lg hover:bg-indigo-50 hover:border-indigo-400 transition text-center">
+                <div class="text-4xl mb-3">📄</div>
+                <p class="font-semibold text-gray-800">Upload Dokumen</p>
+                <p class="text-xs text-gray-500 mt-2">Dokumen persyaratan</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- Info Box -->
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mt-8">
+        <p class="text-sm text-blue-700">
+            <span class="font-semibold">ℹ️ Langkah Pendaftaran:</span>
+        </p>
+        <ol class="text-sm text-blue-700 ml-5 mt-2 list-decimal space-y-1">
+            <li>Lengkapi form pendaftaran dengan data diri yang benar</li>
+            <li>Upload dokumen persyaratan yang diminta</li>
+            <li>Lihat detail pembayaran dan bayar sesuai dengan tagihan</li>
+            <li>Ikuti tes seleksi sesuai jadwal yang diumumkan</li>
+        </ol>
+    </div>
+@endsection

@@ -60,4 +60,8 @@ Route::middleware(['auth', 'role:calon_santri'])->prefix('santri')->name('santri
     Route::get('/select-jenjang', [SantriController::class, 'selectJenjang'])->name('select-jenjang');
     Route::post('/save-jenjang', [SantriController::class, 'saveJenjang'])->name('save-jenjang');
     Route::get('/dashboard', [SantriController::class, 'dashboard'])->name('dashboard');
+    Route::get('/form-pendaftaran', [SantriController::class, 'formPendaftaran'])->name('form-pendaftaran');
+    Route::post('/save-data', [SantriController::class, 'savePendaftaran'])->name('save-data');
+    Route::get('/pembayaran', [SantriController::class, 'pembayaran'])->name('pembayaran');
+    Route::get('/pembayaran/{pembayaran}/invoice', [SantriController::class, 'pembayaranInvoice'])->name('pembayaran-invoice');
 });
