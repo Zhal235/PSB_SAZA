@@ -6,12 +6,16 @@
 
 @section('content')
     @if($pembayaran)
+        @php
+            $totalTagihan = $items ? $items->sum('nominal') : $pembayaran->total_amount;
+        @endphp
+        
         <!-- Summary Cards -->
         <div class="grid grid-cols-4 gap-4 mb-8">
             <div class="bg-white rounded-lg shadow p-6">
                 <p class="text-sm text-gray-600">Total Tagihan</p>
                 <p class="text-2xl font-bold text-indigo-600 mt-2">
-                    Rp {{ number_format($pembayaran->total_amount, 0, ',', '.') }}
+                    Rp {{ number_format($totalTagihan, 0, ',', '.') }}
                 </p>
             </div>
             <div class="bg-white rounded-lg shadow p-6">
@@ -23,15 +27,15 @@
             <div class="bg-white rounded-lg shadow p-6">
                 <p class="text-sm text-gray-600">Sisa Tagihan</p>
                 <p class="text-2xl font-bold text-red-600 mt-2">
-                    Rp {{ number_format($pembayaran->remaining_amount, 0, ',', '.') }}
+                    Rp {{ number_format($totalTagihan - $pembayaran->paid_amount, 0, ',', '.') }}
                 </p>
             </div>
             <div class="bg-white rounded-lg shadow p-6">
                 <p class="text-sm text-gray-600">Status</p>
                 <p class="text-lg font-bold mt-2">
-                    @if($pembayaran->status === 'lunas')
+                    @if($pembayaran->paid_amount >= $totalTagihan)
                         <span class="text-green-600">✅ Lunas</span>
-                    @elseif($pembayaran->status === 'cicilan')
+                    @elseif($pembayaran->paid_amount > 0)
                         <span class="text-yellow-600">🔄 Cicilan</span>
                     @else
                         <span class="text-red-600">❌ Belum Bayar</span>
@@ -86,52 +90,56 @@
                             <tr class="bg-gray-50 font-bold">
                                 <td colspan="3" class="px-4 py-3 text-right">Total:</td>
                                 <td class="px-4 py-3 text-right text-indigo-600 text-lg">
-                                    Rp {{ number_format($items->sum('nominal'), 0, ',', '.') }}
+                                    Rp {{ number_format($totalTagihan, 0, ',', '.') }}
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Payment Status Summary -->
+                <div class="mt-6 space-y-4">
+                    <div class="border border-gray-200 rounded p-4">
+                        <p class="text-sm text-gray-600 mb-3">Status Pembayaran Anda</p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center pb-2 border-b">
+                                <span class="text-gray-700 font-semibold">Total Tagihan:</span>
+                                <span class="font-semibold text-indigo-600">Rp {{ number_format($totalTagihan, 0, ',', '.') }}</span>
+                            </div>
+                            <div class="flex justify-between items-center pb-2 border-b">
+                                <span class="text-gray-700">Sudah Dibayar:</span>
+                                <span class="font-semibold text-green-600">Rp {{ number_format($pembayaran->paid_amount, 0, ',', '.') }}</span>
+                            </div>
+                            <div class="flex justify-between items-center pt-2">
+                                <span class="text-gray-700 font-semibold">Sisa Tagihan:</span>
+                                <span class="font-semibold text-red-600 text-lg">Rp {{ number_format($totalTagihan - $pembayaran->paid_amount, 0, ',', '.') }}</span>
+                            </div>
+                            @if($pembayaran->due_date)
+                                <div class="flex justify-between items-center text-sm pt-3 border-t">
+                                    <span class="text-gray-600">Batas Waktu Pembayaran:</span>
+                                    <span class="text-gray-700 font-semibold">{{ $pembayaran->due_date->format('d/m/Y') }}</span>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Opsi Pembayaran -->
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                        <p class="text-sm text-blue-700 font-semibold mb-2">
+                            💡 Opsi Pembayaran:
+                        </p>
+                        <ul class="text-sm text-blue-700 ml-4 space-y-1 list-disc">
+                            <li>Pembayaran tunai atau transfer ke rekening sekolah</li>
+                            <li>Bisa dicicil sesuai kesepakatan dengan panitia</li>
+                            <li>Hubungi panitia untuk info rekening dan metode pembayaran lainnya</li>
+                        </ul>
+                    </div>
                 </div>
             @else
                 <div class="text-center py-6 text-gray-500">
                     <p>Belum ada item pembayaran yang aktif</p>
                 </div>
             @endif
-
-            <div class="mt-6 space-y-4">
-                <!-- Status Pembayaran -->
-                <div class="border border-gray-200 rounded p-4">
-                    <p class="text-sm text-gray-600 mb-2">Status Pembayaran Anda</p>
-                    <div class="space-y-2">
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-700">Sudah Dibayar:</span>
-                            <span class="font-semibold text-green-600">Rp {{ number_format($pembayaran->paid_amount, 0, ',', '.') }}</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-700">Sisa Tagihan:</span>
-                            <span class="font-semibold text-red-600">Rp {{ number_format($pembayaran->remaining_amount, 0, ',', '.') }}</span>
-                        </div>
-                        @if($pembayaran->due_date)
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-gray-600">Batas Waktu:</span>
-                                <span class="text-gray-700">{{ $pembayaran->due_date->format('d/m/Y') }}</span>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-
-                <!-- Opsi Pembayaran -->
-                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
-                    <p class="text-sm text-blue-700">
-                        <strong>💡 Opsi Pembayaran:</strong>
-                    </p>
-                    <ul class="text-sm text-blue-700 mt-2 ml-4 space-y-1 list-disc">
-                        <li>Pembayaran tunai atau transfer ke rekening sekolah</li>
-                        <li>Bisa dicicil sesuai kesepakatan dengan panitia</li>
-                        <li>Hubungi panitia untuk info rekening dan metode pembayaran lainnya</li>
-                    </ul>
-                </div>
-            </div>
         </div>
 
         <!-- Riwayat Pembayaran -->
