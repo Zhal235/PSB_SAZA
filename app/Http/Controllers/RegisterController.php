@@ -25,13 +25,11 @@ class RegisterController extends Controller
         $validated = $request->validate([
             'nama' => 'required|string|max:100',
             'no_telp' => 'required|string|unique:users,phone|regex:/^(\+62|62|0)[0-9]{9,12}$/',
-            'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
             'agree' => 'required|accepted',
         ], [
             'no_telp.unique' => 'Nomor HP ini sudah terdaftar',
             'no_telp.regex' => 'Format nomor HP tidak valid',
-            'email.unique' => 'Email ini sudah terdaftar',
             'password.confirmed' => 'Password tidak cocok',
             'password.min' => 'Password minimal 8 karakter',
             'agree.required' => 'Anda harus menyetujui syarat & ketentuan',
@@ -41,7 +39,7 @@ class RegisterController extends Controller
         $user = User::create([
             'name' => $validated['nama'],
             'phone' => $validated['no_telp'],
-            'email' => $validated['email'],
+            'email' => $validated['no_telp'] . '@santri.local', // Auto-generated email
             'password' => Hash::make($validated['password']),
             'role' => 'calon_santri',
         ]);

@@ -86,7 +86,7 @@
 
             <!-- Footer -->
             <div class="mt-6 text-center text-sm text-gray-600">
-                <p>Belum punya akun? <a href="#" class="text-indigo-600 hover:text-indigo-700 font-medium">Daftar di sini</a></p>
+                <p>Belum punya akun? <a href="<?php echo e(route('register')); ?>" class="text-indigo-600 hover:text-indigo-700 font-medium">Daftar di sini</a></p>
             </div>
         </div>
 

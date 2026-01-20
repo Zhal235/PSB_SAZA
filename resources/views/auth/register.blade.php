@@ -63,22 +63,6 @@
                     <p class="text-xs text-gray-500 mt-1">Gunakan nomor HP yang aktif</p>
                 </div>
 
-                <!-- Email -->
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
-                        Email *
-                    </label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value="{{ old('email') }}"
-                        required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                        placeholder="Contoh: ahmad@gmail.com"
-                    />
-                </div>
-
                 <!-- Password -->
                 <div>
                     <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
