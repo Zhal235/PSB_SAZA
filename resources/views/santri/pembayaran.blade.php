@@ -127,14 +127,87 @@
                     </div>
 
                     <!-- Opsi Pembayaran -->
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mb-4">
+                        <p class="text-sm text-blue-700 font-semibold mb-3">
+                            💳 Metode Pembayaran Tersedia:
+                        </p>
+                        <div class="space-y-3">
+                            <!-- Cash Option -->
+                            <div class="bg-white p-3 rounded border border-blue-200">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">💵</span>
+                                    <div>
+                                        <p class="font-semibold text-gray-800">Pembayaran Tunai (Cash)</p>
+                                        <p class="text-xs text-gray-600 mt-1">Bayar langsung ke panitia pendaftaran di kantor sekolah</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Transfer Option -->
+                            <div class="bg-white p-3 rounded border border-green-200">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">🏦</span>
+                                    <div>
+                                        <p class="font-semibold text-gray-800">Transfer Bank</p>
+                                        <p class="text-xs text-gray-600 mt-1">Transfer ke rekening sekolah yang tersedia di bawah</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bank Accounts for Transfer -->
+                    @php
+                        $activeBanks = \App\Models\BankSetting::where('is_active', true)->get();
+                    @endphp
+
+                    @if($activeBanks->count() > 0)
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded mb-4">
+                            <p class="text-sm text-green-700 font-semibold mb-3">
+                                🏦 Rekening Bank untuk Transfer:
+                            </p>
+                            <div class="space-y-3">
+                                @foreach($activeBanks as $bank)
+                                    <div class="bg-white p-3 rounded border border-green-200">
+                                        <div class="flex justify-between items-start">
+                                            <div>
+                                                <p class="font-semibold text-gray-800">{{ $bank->bank_name }}</p>
+                                                <p class="text-sm text-gray-700 mt-1">
+                                                    <span class="font-mono">{{ $bank->account_number }}</span>
+                                                </p>
+                                                <p class="text-xs text-gray-600">A.n. {{ $bank->account_holder }}</p>
+                                                @if($bank->description)
+                                                    <p class="text-xs text-gray-500 mt-1 italic">{{ $bank->description }}</p>
+                                                @endif
+                                                @if($bank->phone)
+                                                    <p class="text-xs text-gray-600 mt-1">📞 {{ $bank->phone }}</p>
+                                                @endif
+                                            </div>
+                                            <button type="button" 
+                                                onclick="copyToClipboard('{{ $bank->account_number }}')" 
+                                                class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded hover:bg-blue-200">
+                                                📋 Copy
+                                            </button>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @else
+                        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded mb-4">
+                            <p class="text-sm text-yellow-700">⚠️ Belum ada rekening bank yang aktif. Hubungi panitia untuk informasi rekening.</p>
+                        </div>
+                    @endif
+
+                    <!-- Info Box -->
                     <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
                         <p class="text-sm text-blue-700 font-semibold mb-2">
-                            💡 Opsi Pembayaran:
+                            💡 Informasi Penting:
                         </p>
                         <ul class="text-sm text-blue-700 ml-4 space-y-1 list-disc">
-                            <li>Pembayaran tunai atau transfer ke rekening sekolah</li>
-                            <li>Bisa dicicil sesuai kesepakatan dengan panitia</li>
-                            <li>Hubungi panitia untuk info rekening dan metode pembayaran lainnya</li>
+                            <li>Pembayaran bisa dicicil sesuai kesepakatan dengan panitia</li>
+                            <li>Simpan bukti pembayaran untuk verifikasi</li>
+                            <li>Setelah transfer, hubungi panitia untuk konfirmasi pembayaran</li>
                         </ul>
                     </div>
                 </div>
@@ -214,3 +287,13 @@
         </div>
     @endif
 @endsection
+
+<script>
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert('✅ Nomor rekening berhasil disalin!');
+    }).catch(err => {
+        console.error('Error copying: ', err);
+    });
+}
+</script>

@@ -76,7 +76,6 @@
                             <option value="">-- Pilih Metode --</option>
                             <option value="cash">💵 Tunai</option>
                             <option value="transfer">🏦 Transfer Bank</option>
-                            <option value="check">📋 Cek</option>
                         </select>
                     </div>
 

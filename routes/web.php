@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BankSettingController;
 use App\Http\Controllers\CalonSantriController;
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\PembayaranItemController;
@@ -33,6 +34,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     // Pembayaran Items Management
     Route::resource('pembayaran-items', PembayaranItemController::class);
+
+    // Bank Settings Management
+    Route::resource('bank-settings', BankSettingController::class);
 
     // Pembayaran Management
     Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran.index');
