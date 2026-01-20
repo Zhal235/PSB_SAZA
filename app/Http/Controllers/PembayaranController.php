@@ -14,7 +14,15 @@ class PembayaranController extends Controller
      */
     public function index()
     {
-        $pembayarans = Pembayaran::with('calonSantri')->get();
+        // Ambil pembayaran terbaru untuk setiap calon santri (avoid duplicate)
+        $pembayarans = Pembayaran::with('calonSantri')
+            ->orderBy('updated_at', 'desc')
+            ->get()
+            ->groupBy('calon_santri_id')
+            ->map(function($group) {
+                return $group->first(); // Ambil yang paling baru
+            })
+            ->values();
         
         // Hitung total dari active items untuk setiap pembayaran
         $pembayarans = $pembayarans->map(function($pembayaran) {
