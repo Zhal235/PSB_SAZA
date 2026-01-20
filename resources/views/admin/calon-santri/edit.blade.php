@@ -1,67 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Calon Santri - PSB SAZA</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
-    <div class="flex h-screen">
-        <!-- Sidebar -->
-        <div class="w-64 bg-indigo-600 text-white p-6">
-            <div class="mb-8">
-                <h1 class="text-2xl font-bold">PSB SAZA</h1>
-                <p class="text-indigo-200 text-sm">Admin Panel</p>
-            </div>
+@extends('layouts.admin')
 
-            <nav class="space-y-2">
-                <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
-                    📊 Dashboard
-                </a>
-                <a href="{{ route('admin.calon-santri.index') }}" class="block px-4 py-2 rounded bg-indigo-700 hover:bg-indigo-800 transition font-semibold">
-                    👥 Kelola Pendaftar
-                </a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
-                    📋 Verifikasi Dokumen
-                </a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
-                    📊 Laporan
-                </a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
-                    ⚙️ Pengaturan
-                </a>
-            </nav>
+@section('title', 'Edit Calon Santri')
+@section('page-title', 'Edit Calon Santri: ' . $calonSantri->nama)
+@section('page-subtitle', 'Jenjang: ' . $calonSantri->jenjang)
 
-            <hr class="my-6 border-indigo-400">
-
-            <form method="POST" action="{{ route('logout') }}" class="mt-auto">
-                @csrf
-                <button
-                    type="submit"
-                    class="w-full px-4 py-2 rounded bg-red-500 hover:bg-red-600 transition font-semibold text-sm"
-                >
-                    🚪 Logout
-                </button>
-            </form>
-        </div>
-
-        <!-- Main Content -->
-        <div class="flex-1 overflow-auto">
-            <!-- Top Bar -->
-            <div class="bg-white shadow p-6 flex justify-between items-center sticky top-0 z-10">
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-800">Edit Calon Santri: {{ $calonSantri->nama }}</h2>
-                    <p class="text-sm text-gray-600 mt-1">Jenjang: <span class="font-bold text-indigo-600">{{ $calonSantri->jenjang }}</span></p>
-                </div>
-                <a href="{{ route('admin.calon-santri.index', ['jenjang' => $calonSantri->jenjang]) }}" class="text-gray-600 hover:text-gray-800 font-semibold">
-                    ← Kembali
-                </a>
-            </div>
-
-            <!-- Content -->
-            <div class="p-8">
-                <div class="bg-white rounded-lg shadow max-w-6xl">
+@section('content')
+    <div class="bg-white rounded-lg shadow max-w-6xl">
                     <form method="POST" action="{{ route('admin.calon-santri.update', $calonSantri) }}" class="p-8 space-y-8">
                         @csrf
                         @method('PUT')
@@ -304,8 +248,5 @@
                         </div>
                     </form>
                 </div>
-            </div>
-        </div>
     </div>
-</body>
-</html>
+@endsection

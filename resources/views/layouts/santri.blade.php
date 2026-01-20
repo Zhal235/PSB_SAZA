@@ -9,24 +9,24 @@
 </head>
 <body class="bg-gray-50">
     <div class="flex h-screen">
-        <!-- Sidebar (Santri Version - Simplified) -->
-        <div class="w-64 bg-[#0066CC] text-white p-6 flex flex-col overflow-y-auto shadow-lg">
+        <!-- Sidebar (Santri Version - Simplified) - Teal BSI -->
+        <div class="w-64 text-white p-6 flex flex-col overflow-y-auto shadow-lg" style="background-color: #00a0a0;">
             <div class="mb-8 border-b border-white/20 pb-4">
                 <h1 class="text-2xl font-bold">PSB SAZA</h1>
-                <p class="text-[#E3F2FD] text-sm mt-1">Portal Santri</p>
+                <p class="text-white/80 text-sm mt-1">Portal Santri</p>
             </div>
 
             <nav class="space-y-2 flex-1">
-                <a href="{{ route('santri.dashboard') }}" class="block px-4 py-2 rounded @if(Route::is('santri.dashboard')) bg-[#003F87] @else hover:bg-[#003F87] @endif transition font-semibold">
+                <a href="{{ route('santri.dashboard') }}" class="block px-4 py-2 rounded @if(Route::is('santri.dashboard')) @else hover:bg-white/20 @endif transition font-semibold" style="@if(Route::is('santri.dashboard')) background-color: #007a7a; @endif">
                     📊 Dashboard
                 </a>
-                <a href="{{ route('santri.form-pendaftaran') }}" class="block px-4 py-2 rounded @if(Route::is('santri.form-pendaftaran')) bg-[#003F87] @else hover:bg-[#003F87] @endif transition font-semibold">
+                <a href="{{ route('santri.form-pendaftaran') }}" class="block px-4 py-2 rounded @if(Route::is('santri.form-pendaftaran')) @else hover:bg-white/20 @endif transition font-semibold" style="@if(Route::is('santri.form-pendaftaran')) background-color: #007a7a; @endif">
                     📋 Form Pendaftaran
                 </a>
-                <a href="{{ route('santri.pembayaran') }}" class="block px-4 py-2 rounded @if(Route::is('santri.pembayaran')) bg-[#003F87] @else hover:bg-[#003F87] @endif transition font-semibold">
+                <a href="{{ route('santri.pembayaran') }}" class="block px-4 py-2 rounded @if(Route::is('santri.pembayaran')) @else hover:bg-white/20 @endif transition font-semibold" style="@if(Route::is('santri.pembayaran')) background-color: #007a7a; @endif">
                     💳 Pembayaran
                 </a>
-                <a href="{{ route('santri.dokumen-upload') }}" class="block px-4 py-2 rounded @if(Route::is('santri.dokumen-upload')) bg-[#003F87] @else hover:bg-[#003F87] @endif transition font-semibold">
+                <a href="{{ route('santri.dokumen-upload') }}" class="block px-4 py-2 rounded @if(Route::is('santri.dokumen-upload')) @else hover:bg-white/20 @endif transition font-semibold" style="@if(Route::is('santri.dokumen-upload')) background-color: #007a7a; @endif">
                     📄 Upload Dokumen
                 </a>
             </nav>
@@ -35,7 +35,7 @@
 
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit" class="w-full px-4 py-2 rounded bg-[#FF9900] hover:bg-[#E68A00] transition font-semibold text-sm text-white">
+                <button type="submit" class="w-full px-4 py-2 rounded transition font-semibold text-sm" style="background-color: #f0b43c; color: #333;">
                     🚪 Logout
                 </button>
             </form>
@@ -44,9 +44,9 @@
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Top Bar -->
-            <div class="bg-white shadow-md p-6 flex justify-between items-center border-b-4 border-[#0066CC]">
+            <div class="bg-white shadow-md p-6 flex justify-between items-center" style="border-bottom: 4px solid #00a0a0;">
                 <div>
-                    <h2 class="text-2xl font-bold text-[#003F87]">@yield('page-title')</h2>
+                    <h2 class="text-2xl font-bold" style="color: #007a7a;">@yield('page-title')</h2>
                     @yield('page-subtitle')
                 </div>
                 <div class="text-right">

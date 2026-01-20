@@ -1,69 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Calon Santri - PSB SAZA</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
-    <div class="flex h-screen">
-        <!-- Sidebar -->
-        <div class="w-64 bg-indigo-600 text-white p-6">
-            <div class="mb-8">
-                <h1 class="text-2xl font-bold">PSB SAZA</h1>
-                <p class="text-indigo-200 text-sm">Admin Panel</p>
-            </div>
+@extends('layouts.admin')
 
-            <nav class="space-y-2">
-                <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
-                    📊 Dashboard
-                </a>
-                <a href="{{ route('admin.calon-santri.index') }}" class="block px-4 py-2 rounded bg-indigo-700 hover:bg-indigo-800 transition font-semibold">
-                    👥 Kelola Pendaftar
-                </a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
-                    📋 Verifikasi Dokumen
-                </a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
-                    📊 Laporan
-                </a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
-                    ⚙️ Pengaturan
-                </a>
-            </nav>
+@section('title', 'Detail Calon Santri')
+@section('page-title', 'Detail: ' . $calonSantri->nama)
+@section('page-subtitle', 'No. Pendaftaran: ' . $calonSantri->no_pendaftaran)
 
-            <hr class="my-6 border-indigo-400">
-
-            <form method="POST" action="{{ route('logout') }}" class="mt-auto">
-                @csrf
-                <button
-                    type="submit"
-                    class="w-full px-4 py-2 rounded bg-red-500 hover:bg-red-600 transition font-semibold text-sm"
-                >
-                    🚪 Logout
-                </button>
-            </form>
-        </div>
-
-        <!-- Main Content -->
-        <div class="flex-1 overflow-auto">
-            <!-- Top Bar -->
-            <div class="bg-white shadow p-6 flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-gray-800">Detail: {{ $calonSantri->nama }}</h2>
-                <div class="space-x-2">
-                    <a href="{{ route('admin.calon-santri.edit', $calonSantri) }}" class="inline-block bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 font-semibold">
-                        ✏️ Edit
-                    </a>
-                    <a href="{{ route('admin.calon-santri.index') }}" class="inline-block bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 font-semibold">
-                        ← Kembali
-                    </a>
-                </div>
-            </div>
-
-            <!-- Content -->
-            <div class="p-8">
-                <div class="bg-white rounded-lg shadow max-w-4xl">
+@section('content')
+    <div class="bg-white rounded-lg shadow max-w-4xl">
                     <div class="p-8 space-y-6">
                         <!-- Header Info -->
                         <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 flex justify-between items-center">
@@ -197,8 +139,5 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
     </div>
-</body>
-</html>
+@endsection

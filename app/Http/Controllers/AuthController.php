@@ -18,10 +18,19 @@ class AuthController extends Controller
     // Handle login
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
+        $login = $request->validate([
+            'email' => 'required',
             'password' => 'required|min:6'
         ]);
+
+        // Cek apakah input adalah nomor HP atau email
+        $fieldType = filter_var($login['email'], FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+        
+        // Coba login dengan email atau nomor HP
+        $credentials = [
+            $fieldType => $login['email'],
+            'password' => $login['password']
+        ];
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
@@ -35,7 +44,7 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'Email atau password salah.'
+            'email' => 'Email/No. HP atau password salah.'
         ])->onlyInput('email');
     }
 

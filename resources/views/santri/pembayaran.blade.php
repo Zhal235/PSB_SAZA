@@ -1,8 +1,11 @@
 @extends('layouts.santri')
 
 @section('title', 'Pembayaran')
-@section('page-title', '💳 Pembayaran & Tagihan')
-@section('page-subtitle', '<p class="text-sm text-gray-600 mt-1">Kelola pembayaran pendaftaran Anda</p>')
+@section('page-title', 'Pembayaran & Tagihan')
+
+@section('page-subtitle')
+    <p class="text-sm text-gray-600 mt-1">Kelola pembayaran pendaftaran Anda</p>
+@endsection
 
 @section('content')
     @if($pembayaran)

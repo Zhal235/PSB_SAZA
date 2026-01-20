@@ -6,60 +6,22 @@
     <title>Dashboard Admin - PSB SAZA</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gradient-to-br from-gray-50 via-white to-gray-50">
     <div class="flex h-screen">
-        <!-- Sidebar - BSI Green -->
-        <div class="w-64 bg-[#00A651] text-white p-6 flex flex-col shadow-lg">
-            <div class="mb-8 border-b border-white/20 pb-4">
-                <h1 class="text-3xl font-bold">PSB SAZA</h1>
-                <p class="text-[#E8F5E9] text-sm mt-1">Sistem Pendaftaran Santri</p>
-            </div>
-
-            <nav class="space-y-2 flex-1">
-                <a href="<?php echo e(route('admin.dashboard')); ?>" class="block px-4 py-2 rounded bg-[#003F87] hover:bg-[#003F87] transition font-semibold">
-                    📊 Dashboard
-                </a>
-                <a href="<?php echo e(route('admin.calon-santri.index')); ?>" class="block px-4 py-2 rounded hover:bg-[#003F87] transition">
-                    👥 Kelola Pendaftar
-                </a>
-                <a href="<?php echo e(route('verifikasi-dokumen.index')); ?>" class="block px-4 py-2 rounded hover:bg-[#003F87] transition">
-                    📋 Verifikasi Dokumen
-                </a>
-                <a href="<?php echo e(route('admin.pembayaran-items.index')); ?>" class="block px-4 py-2 rounded hover:bg-[#003F87] transition">
-                    💳 Item Pembayaran
-                </a>
-                <a href="<?php echo e(route('admin.pembayaran.index')); ?>" class="block px-4 py-2 rounded hover:bg-[#003F87] transition">
-                    💰 Kelola Pembayaran
-                </a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-[#003F87] transition">
-                    📊 Laporan
-                </a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-[#003F87] transition">
-                    ⚙️ Pengaturan
-                </a>
-            </nav>
-
-            <hr class="my-6 border-white/20">
-
-            <form method="POST" action="<?php echo e(route('logout')); ?>">
-                <?php echo csrf_field(); ?>
-                <button
-                    type="submit"
-                    class="w-full px-4 py-2 rounded bg-[#FF9900] hover:bg-[#E68A00] transition font-semibold text-sm text-white"
-                >
-                    🚪 Logout
-                </button>
-            </form>
-        </div>
+        <!-- Sidebar -->
+        <?php echo $__env->make('components.sidebar-admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">
-            <!-- Top Bar -->
-            <div class="bg-white shadow-md p-6 flex justify-between items-center border-b-4 border-[#00A651]">
-                <h2 class="text-2xl font-bold text-[#003F87]">Selamat Datang, <?php echo e(Auth::user()->name); ?>!</h2>
+            <!-- Top Bar - Premium -->
+            <div class="bg-white shadow-xl p-6 flex justify-between items-center" style="border-bottom: 4px solid #00a0a0;">
+                <div>
+                    <h2 class="text-3xl font-bold" style="color: #00a0a0;">Selamat Datang, <?php echo e(Auth::user()->name); ?>!</h2>
+                    <p class="text-gray-500 text-sm mt-1">Kelola Sistem Pendaftaran Santri dengan mudah</p>
+                </div>
                 <div class="text-right">
                     <p class="text-gray-600 text-sm"><?php echo e(Auth::user()->email); ?></p>
-                    <p class="text-[#00A651] font-semibold text-sm">Admin</p>
+                    <p class="font-bold text-sm mt-1 px-3 py-1 rounded-full inline-block" style="background-color: #E8F5E9; color: #00a0a0;">👑 Admin</p>
                 </div>
             </div>
 
@@ -68,35 +30,59 @@
                 <div class="p-8">
                     <!-- Stats Cards -->
                     <div class="grid grid-cols-4 gap-6 mb-8">
-                        <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-[#00A651]">
-                            <h3 class="text-gray-600 text-sm font-medium mb-2">Total Pendaftar</h3>
-                            <p class="text-3xl font-bold text-[#00A651]">--</p>
-                            <p class="text-gray-500 text-xs mt-2">Bulan ini</p>
+                        <!-- Card 1: Total Pendaftar -->
+                        <div class="card-bsi bg-gradient-to-br from-white to-[#E8F5E9] p-6 border-l-4 border-[#00A651] group cursor-pointer">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-gray-600 text-sm font-medium mb-2">Total Pendaftar</h3>
+                                    <p class="text-4xl font-bold text-[#00A651] group-hover:scale-110 transition-transform duration-300">--</p>
+                                    <p class="text-gray-500 text-xs mt-2">Bulan ini</p>
+                                </div>
+                                <div class="text-5xl opacity-20 group-hover:opacity-40 transition-opacity duration-300">👥</div>
+                            </div>
                         </div>
 
-                        <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-[#FF9900]">
-                            <h3 class="text-gray-600 text-sm font-medium mb-2">Menunggu Verifikasi</h3>
-                            <p class="text-3xl font-bold text-[#FF9900]">--</p>
-                            <p class="text-gray-500 text-xs mt-2">Dokumen</p>
+                        <!-- Card 2: Menunggu Verifikasi -->
+                        <div class="card-bsi bg-gradient-to-br from-white to-[#FFF3E0] p-6 border-l-4 border-[#FF9900] group cursor-pointer">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-gray-600 text-sm font-medium mb-2">Menunggu Verifikasi</h3>
+                                    <p class="text-4xl font-bold text-[#FF9900] group-hover:scale-110 transition-transform duration-300">--</p>
+                                    <p class="text-gray-500 text-xs mt-2">Dokumen</p>
+                                </div>
+                                <div class="text-5xl opacity-20 group-hover:opacity-40 transition-opacity duration-300">⏳</div>
+                            </div>
                         </div>
 
-                        <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-[#00A651]">
-                            <h3 class="text-gray-600 text-sm font-medium mb-2">Lolos Seleksi</h3>
-                            <p class="text-3xl font-bold text-[#00A651]">--</p>
-                            <p class="text-gray-500 text-xs mt-2">Terkonfirmasi</p>
+                        <!-- Card 3: Lolos Seleksi -->
+                        <div class="card-bsi bg-gradient-to-br from-white to-[#E8F5E9] p-6 border-l-4 border-[#00A651] group cursor-pointer">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-gray-600 text-sm font-medium mb-2">Lolos Seleksi</h3>
+                                    <p class="text-4xl font-bold text-[#00A651] group-hover:scale-110 transition-transform duration-300">--</p>
+                                    <p class="text-gray-500 text-xs mt-2">Terkonfirmasi</p>
+                                </div>
+                                <div class="text-5xl opacity-20 group-hover:opacity-40 transition-opacity duration-300">✅</div>
+                            </div>
                         </div>
 
-                        <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-red-500">
-                            <h3 class="text-gray-600 text-sm font-medium mb-2">Tidak Lolos</h3>
-                            <p class="text-3xl font-bold text-red-600">--</p>
-                            <p class="text-gray-500 text-xs mt-2">Ditolak</p>
+                        <!-- Card 4: Tidak Lolos -->
+                        <div class="card-bsi bg-gradient-to-br from-white to-[#FFEBEE] p-6 border-l-4 border-red-500 group cursor-pointer">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-gray-600 text-sm font-medium mb-2">Tidak Lolos</h3>
+                                    <p class="text-4xl font-bold text-red-600 group-hover:scale-110 transition-transform duration-300">--</p>
+                                    <p class="text-gray-500 text-xs mt-2">Ditolak</p>
+                                </div>
+                                <div class="text-5xl opacity-20 group-hover:opacity-40 transition-opacity duration-300">❌</div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Recent Activity -->
-                    <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-[#00A651]">
-                        <h3 class="text-lg font-bold text-[#003F87] mb-4">Aktivitas Terbaru</h3>
-                        <p class="text-gray-500 text-center py-8">Tidak ada aktivitas terbaru</p>
+                    <div class="card-bsi bg-white p-6 border-l-4 border-[#00A651]">
+                        <h3 class="text-xl font-bold bg-gradient-to-r from-[#00A651] to-[#003F87] bg-clip-text text-transparent mb-4">📊 Aktivitas Terbaru</h3>
+                        <p class="text-gray-500 text-center py-12">Tidak ada aktivitas terbaru</p>
                     </div>
                 </div>
             </div>

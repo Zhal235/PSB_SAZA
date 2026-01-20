@@ -45,6 +45,15 @@ class PembayaranController extends Controller
     public function show(Pembayaran $pembayaran)
     {
         $pembayaran->load('calonSantri', 'records');
+        
+        // Hitung total dari active items
+        $items = \App\Models\PembayaranItem::where('status', 'active')->get();
+        $totalFromItems = $items->sum('nominal');
+        
+        // Gunakan total dari items jika ada
+        $pembayaran->total_amount = $totalFromItems ?: $pembayaran->total_amount;
+        $pembayaran->remaining_amount = $pembayaran->total_amount - $pembayaran->paid_amount;
+        
         return view('admin.pembayaran.show', compact('pembayaran'));
     }
 
@@ -81,6 +90,15 @@ class PembayaranController extends Controller
     public function invoice(Pembayaran $pembayaran)
     {
         $pembayaran->load('calonSantri', 'records');
+        
+        // Hitung total dari active items
+        $items = \App\Models\PembayaranItem::where('status', 'active')->get();
+        $totalFromItems = $items->sum('nominal');
+        
+        // Gunakan total dari items jika ada
+        $pembayaran->total_amount = $totalFromItems ?: $pembayaran->total_amount;
+        $pembayaran->remaining_amount = $pembayaran->total_amount - $pembayaran->paid_amount;
+        
         return view('admin.pembayaran.invoice', compact('pembayaran'));
     }
 

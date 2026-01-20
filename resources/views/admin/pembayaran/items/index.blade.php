@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Manage Item Pembayaran')
-@section('page-title', '💳 Manage Item Pembayaran')
+@section('page-title', 'Manage Item Pembayaran')
 @section('page-subtitle', '<p class="text-sm text-gray-600 mt-1">Kelola item/komponen pembayaran</p>')
 
 @section('top-bar-action')

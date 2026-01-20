@@ -30,20 +30,20 @@
             <form method="POST" action="{{ route('login') }}" class="space-y-5">
                 @csrf
 
-                <!-- Email Field -->
+                <!-- Email/Phone Field -->
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
-                        Email
+                        Email atau Nomor HP
                     </label>
                     <input
-                        type="email"
+                        type="text"
                         id="email"
                         name="email"
                         value="{{ old('email') }}"
                         required
                         autofocus
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                        placeholder="Masukkan email Anda"
+                        placeholder="Masukkan email atau nomor HP Anda"
                     />
                 </div>
 

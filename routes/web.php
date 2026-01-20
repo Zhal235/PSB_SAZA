@@ -65,4 +65,5 @@ Route::middleware(['auth', 'role:calon_santri'])->prefix('santri')->name('santri
     Route::get('/pembayaran', [SantriController::class, 'pembayaran'])->name('pembayaran');
     Route::get('/pembayaran/{pembayaran}/invoice', [SantriController::class, 'pembayaranInvoice'])->name('pembayaran-invoice');
     Route::get('/dokumen-upload', [SantriController::class, 'dokumenUpload'])->name('dokumen-upload');
+    Route::post('/dokumen-upload', [SantriController::class, 'dokumenStore'])->name('dokumen-store');
 });

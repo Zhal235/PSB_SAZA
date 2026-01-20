@@ -1,8 +1,11 @@
 @extends('layouts.admin')
 
 @section('title', 'Detail Pembayaran')
-@section('page-title', '💰 Detail Pembayaran')
-@section('page-subtitle', '<p class="text-sm text-gray-600 mt-1">' . $pembayaran->calonSantri->nama . '</p>')
+@section('page-title', 'Detail Pembayaran')
+
+@section('page-subtitle')
+    <p class="text-sm text-gray-600 mt-1">{{ $pembayaran->calonSantri->nama }}</p>
+@endsection
 
 @section('top-bar-action')
     <div class="flex gap-3">

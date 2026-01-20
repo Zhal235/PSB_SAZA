@@ -7,71 +7,40 @@
     <title>Verifikasi Dokumen - PSB SAZA</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gradient-to-br from-gray-50 via-white to-gray-50">
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <div class="w-64 bg-indigo-600 text-white p-6">
-            <div class="mb-8">
-                <h1 class="text-2xl font-bold">PSB SAZA</h1>
-                <p class="text-indigo-200 text-sm">Admin Panel</p>
-            </div>
-
-            <nav class="space-y-2">
-                <a href="<?php echo e(route('admin.dashboard')); ?>" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
-                    📊 Dashboard
-                </a>
-                <a href="<?php echo e(route('admin.calon-santri.index')); ?>" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
-                    👥 Kelola Pendaftar
-                </a>
-                <a href="<?php echo e(route('verifikasi-dokumen.index')); ?>" class="block px-4 py-2 rounded bg-indigo-700 hover:bg-indigo-800 transition font-semibold">
-                    📋 Verifikasi Dokumen
-                </a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
-                    📊 Laporan
-                </a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
-                    ⚙️ Pengaturan
-                </a>
-            </nav>
-
-            <hr class="my-6 border-indigo-400">
-
-            <form method="POST" action="<?php echo e(route('logout')); ?>" class="mt-auto">
-                <?php echo csrf_field(); ?>
-                <button type="submit" class="w-full px-4 py-2 rounded bg-red-500 hover:bg-red-600 transition font-semibold text-sm">
-                    🚪 Logout
-                </button>
-            </form>
-        </div>
+        <?php echo $__env->make('components.sidebar-admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
         <!-- Main Content -->
         <div class="flex-1 overflow-auto">
             <!-- Top Bar -->
-            <div class="bg-white shadow p-6 sticky top-0 z-10">
-                <h2 class="text-2xl font-bold text-gray-800">📋 Verifikasi Dokumen</h2>
+            <div class="bg-white shadow-xl p-6 sticky top-0 z-10" style="border-bottom: 4px solid #00a0a0;">
+                <h2 class="text-3xl font-bold" style="color: #007a7a;">📋 Verifikasi Dokumen</h2>
+                <p class="text-gray-500 text-sm mt-1">Verifikasi dan tracking dokumen calon santri</p>
             </div>
 
             <!-- Tabs untuk Jenjang -->
-            <div class="bg-white border-b border-gray-200 px-6 sticky top-16 z-10">
+            <div class="bg-white border-b border-gray-200 px-6 sticky top-24 z-10">
                 <div class="flex space-x-2">
                     <a href="<?php echo e(route('verifikasi-dokumen.index', ['jenjang' => 'MTs'])); ?>" 
                         class="px-6 py-4 font-semibold border-b-2 transition
-                        <?php echo e($jenjang === 'MTs' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-600 hover:text-gray-800'); ?>">
+                        <?php echo e($jenjang === 'MTs' ? 'border-[#00a0a0] text-[#00a0a0]' : 'border-transparent text-gray-600 hover:text-gray-800'); ?>">
                         🏫 MTs (Sudah: <?php echo e($mtsSudah); ?>/<?php echo e($mtsTotal); ?>)
                     </a>
                     <a href="<?php echo e(route('verifikasi-dokumen.index', ['jenjang' => 'SMK'])); ?>" 
                         class="px-6 py-4 font-semibold border-b-2 transition
-                        <?php echo e($jenjang === 'SMK' ? 'border-purple-600 text-purple-600' : 'border-transparent text-gray-600 hover:text-gray-800'); ?>">
+                        <?php echo e($jenjang === 'SMK' ? 'border-[#00a0a0] text-[#00a0a0]' : 'border-transparent text-gray-600 hover:text-gray-800'); ?>">
                         🎓 SMK (Sudah: <?php echo e($smkSudah); ?>/<?php echo e($smkTotal); ?>)
                     </a>
                 </div>
             </div>
 
             <!-- Filter Hardcopy -->
-            <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 sticky top-32 z-10">
+            <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 sticky top-40 z-10">
                 <div class="flex space-x-3">
                     <a href="<?php echo e(route('verifikasi-dokumen.index', ['jenjang' => $jenjang, 'hardcopy' => 'semua'])); ?>" 
-                        class="px-4 py-2 rounded font-semibold transition <?php echo e($hardcopy === 'semua' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700 border border-gray-300 hover:border-gray-400'); ?>">
+                        class="px-4 py-2 rounded font-semibold transition <?php echo e($hardcopy === 'semua' ? 'text-white' : 'bg-white text-gray-700 border border-gray-300 hover:border-gray-400'); ?>" style="<?php if($hardcopy === 'semua'): ?> background-color: #00a0a0; <?php endif; ?>">
                         📋 Semua
                     </a>
                     <a href="<?php echo e(route('verifikasi-dokumen.index', ['jenjang' => $jenjang, 'hardcopy' => 'sudah'])); ?>" 

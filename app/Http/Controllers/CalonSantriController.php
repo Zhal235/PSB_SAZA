@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CalonSantri;
+use App\Models\Pembayaran;
 use Illuminate\Http\Request;
 
 class CalonSantriController extends Controller
@@ -68,6 +69,17 @@ class CalonSantriController extends Controller
         $validated['no_pendaftaran'] = CalonSantri::generateNoPendaftaran();
 
         $calonSantri = CalonSantri::create($validated);
+
+        // Otomatis buat pembayaran record
+        $totalItems = \App\Models\PembayaranItem::where('status', 'active')->sum('nominal');
+        Pembayaran::create([
+            'calon_santri_id' => $calonSantri->id,
+            'total_amount' => $totalItems,
+            'paid_amount' => 0,
+            'remaining_amount' => $totalItems,
+            'status' => 'belum_bayar',
+            'due_date' => now()->addDays(7)
+        ]);
 
         return redirect()->route('dokumen.create', $calonSantri)
             ->with('success', 'Data calon santri berhasil ditambahkan! Silakan upload dokumen.');

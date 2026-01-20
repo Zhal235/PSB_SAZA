@@ -30,7 +30,7 @@
             </div>
 
             <!-- Upload Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-3 gap-6">
                 @foreach($dokumenTypes as $value => $label)
                     @php
                         $dokumen = $calonSantri->dokumens()->where('tipe_dokumen', $value)->first();
@@ -65,25 +65,25 @@
                             <p class="text-xs text-gray-500 text-center mb-3">{{ $dokumen->created_at->format('d/m/Y H:i') }}</p>
                             
                             <!-- Upload Ulang Form - Hidden -->
-                            <form action="{{ route('dokumen.store', $calonSantri) }}" method="POST" enctype="multipart/form-data" class="form-upload hidden" id="form-ulang-{{ $loop->index }}">
+                            <form action="{{ route('santri.dokumen-store') }}" method="POST" enctype="multipart/form-data" class="form-upload hidden" id="form-ulang-{{ $loop->index }}">
                                 @csrf
                                 <input type="hidden" name="tipe_dokumen" value="{{ $value }}">
                                 <input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png" class="hidden" id="file-ulang-{{ $loop->index }}">
                             </form>
 
-                            <button type="button" class="w-full bg-yellow-500 text-white px-3 py-2 rounded hover:bg-yellow-600 font-semibold transition text-sm" onclick="showUploadMenu('ulang-{{ $loop->index }}', '{{ $value }}')">
+                            <button type="button" class="w-full text-white px-3 py-2 rounded hover:shadow-lg font-semibold transition text-sm" style="background-color: #f0b43c; color: #333;" onclick="showUploadMenu('ulang-{{ $loop->index }}', '{{ $value }}')">
                                 🔄 Upload Ulang
                             </button>
                         @else
                             <!-- Upload Form - Hidden -->
-                            <form action="{{ route('dokumen.store', $calonSantri) }}" method="POST" enctype="multipart/form-data" class="form-upload hidden" id="form-{{ $loop->index }}">
+                            <form action="{{ route('santri.dokumen-store') }}" method="POST" enctype="multipart/form-data" class="form-upload hidden" id="form-{{ $loop->index }}">
                                 @csrf
                                 <input type="hidden" name="tipe_dokumen" value="{{ $value }}">
                                 <input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png" class="hidden" id="file-{{ $loop->index }}">
                             </form>
 
                             <!-- Upload Button -->
-                            <button type="button" class="w-full bg-indigo-600 text-white px-3 py-2 rounded hover:bg-indigo-700 font-semibold transition text-sm" onclick="showUploadMenu('{{ $loop->index }}', '{{ $value }}')">
+                            <button type="button" class="w-full text-white px-3 py-2 rounded hover:shadow-lg font-semibold transition text-sm" style="background-color: #00a0a0;" onclick="showUploadMenu('{{ $loop->index }}', '{{ $value }}')">
                                 📤 Upload {{ $label }}
                             </button>
                         @endif
@@ -147,7 +147,7 @@
                 <div id="addOptionalForm" class="hidden border border-blue-300 rounded-lg p-6 bg-blue-50">
                     <h3 class="text-lg font-bold text-gray-800 mb-4">➕ Tambah Dokumen Opsional</h3>
                     
-                    <form action="{{ route('dokumen.store', $calonSantri) }}" method="POST" enctype="multipart/form-data" class="form-upload space-y-4" id="form-optional">
+                    <form action="{{ route('santri.dokumen-store') }}" method="POST" enctype="multipart/form-data" class="form-upload space-y-4" id="form-optional">
                         @csrf
                         
                         <div>

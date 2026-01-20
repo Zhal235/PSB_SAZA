@@ -16,28 +16,44 @@
     --color-bsi-gold: #FF9900;
     --color-bsi-light-green: #E8F5E9;
     --color-bsi-light-blue: #E3F2FD;
+}
+
+/* Custom Gradients */
+@layer utilities {
+    .gradient-bsi-primary {
+        @apply bg-gradient-to-r from-[#00A651] via-[#00B85F] to-[#009E47];
+    }
     
-    /* Override default colors with BSI colors */
-    --color-primary-50: #E8F5E9;
-    --color-primary-100: #C8E6C9;
-    --color-primary-200: #A5D6A7;
-    --color-primary-300: #81C784;
-    --color-primary-400: #66BB6A;
-    --color-primary-500: #4CAF50;
-    --color-primary-600: #43A047;
-    --color-primary-700: #388E3C;
-    --color-primary-800: #2E7D32;
-    --color-primary-900: #1B5E20;
+    .gradient-bsi-dark {
+        @apply bg-gradient-to-b from-[#003F87] to-[#002F66];
+    }
     
-    --color-indigo-50: #E3F2FD;
-    --color-indigo-100: #BBDEFB;
-    --color-indigo-200: #90CAF9;
-    --color-indigo-300: #64B5F6;
-    --color-indigo-400: #42A5F5;
-    --color-indigo-500: #2196F3;
-    --color-indigo-600: #1E88E5;
-    --color-indigo-700: #1976D2;
-    --color-indigo-800: #1565C0;
-    --color-indigo-900: #0D47A1;
+    .gradient-bsi-blue {
+        @apply bg-gradient-to-r from-[#0066CC] to-[#0052A3];
+    }
+    
+    .shadow-bsi {
+        @apply shadow-lg hover:shadow-2xl transition-shadow duration-300;
+    }
+    
+    .shadow-bsi-sm {
+        @apply shadow-md hover:shadow-lg transition-shadow duration-300;
+    }
+    
+    .card-bsi {
+        @apply bg-white rounded-xl shadow-bsi-sm border border-gray-100;
+    }
+    
+    .btn-bsi-primary {
+        @apply px-6 py-2 rounded-lg font-semibold text-white gradient-bsi-primary hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5;
+    }
+    
+    .btn-bsi-dark {
+        @apply px-6 py-2 rounded-lg font-semibold text-white gradient-bsi-dark hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5;
+    }
+    
+    .btn-bsi-gold {
+        @apply px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-[#FF9900] to-[#FF8C00] hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5;
+    }
 }
 

@@ -1,8 +1,11 @@
 @extends('layouts.santri')
 
 @section('title', 'Dashboard Santri')
-@section('page-title', '👋 Selamat Datang, ' . Auth::user()->name . '!')
-@section('page-subtitle', '<p class="text-sm text-gray-600 mt-1">Jenjang: <span class="font-semibold">{{ Auth::user()->jenjang }}</span> | No. HP: {{ Auth::user()->phone }}</p>')
+@section('page-title', 'Selamat Datang, ' . Auth::user()->name . '!')
+
+@section('page-subtitle')
+    <p class="text-sm text-gray-600 mt-1">Jenjang: <span class="font-semibold">{{ Auth::user()->jenjang }}</span> | No. HP: {{ Auth::user()->phone }}</p>
+@endsection
 
 @section('content')
     <!-- Info Cards -->

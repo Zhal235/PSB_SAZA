@@ -1,55 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Calon Santri - PSB SAZA</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
-    <div class="flex h-screen">
-        <!-- Sidebar -->
-        <div class="w-64 bg-indigo-600 text-white p-6 overflow-y-auto">
-            <div class="mb-8">
-                <h1 class="text-2xl font-bold">PSB SAZA</h1>
-                <p class="text-indigo-200 text-sm">Admin Panel</p>
-            </div>
+@extends('layouts.admin')
 
-            <nav class="space-y-2">
-                <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
-                    📊 Dashboard
-                </a>
-                <a href="{{ route('admin.calon-santri.index') }}" class="block px-4 py-2 rounded bg-indigo-700 hover:bg-indigo-800 transition font-semibold">
-                    👥 Kelola Pendaftar
-                </a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
-                    📋 Verifikasi Dokumen
-                </a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
-                    📊 Laporan
-                </a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
-                    ⚙️ Pengaturan
-                </a>
-            </nav>
+@section('title', 'Tambah Calon Santri')
+@section('page-title', 'Tambah Calon Santri')
 
-            <hr class="my-6 border-indigo-400">
+@section('page-subtitle')
+    <p class="text-sm text-gray-600 mt-1">Tambah data calon santri baru ke sistem</p>
+@endsection
 
-            <form method="POST" action="{{ route('logout') }}" class="mt-auto">
-                @csrf
-                <button
-                    type="submit"
-                    class="w-full px-4 py-2 rounded bg-red-500 hover:bg-red-600 transition font-semibold text-sm"
-                >
-                    🚪 Logout
-                </button>
-            </form>
-        </div>
-
-        <!-- Main Content -->
-        <div class="flex-1 overflow-auto">
-            <!-- Top Bar -->
-            <div class="bg-white shadow p-6 flex justify-between items-center sticky top-0 z-10">
+@section('content')            <div class="bg-white shadow p-6 flex justify-between items-center sticky top-0 z-10">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800">Tambah Calon Santri Baru</h2>
                     <p class="text-sm text-gray-600 mt-1">Jenjang: <span class="font-bold text-indigo-600">{{ $jenjang }}</span></p>
@@ -308,9 +266,5 @@
                         </div>
                     </form>
                 </div>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+@endsection
                     
