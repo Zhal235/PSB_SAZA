@@ -22,8 +22,14 @@
                 <a href="<?php echo e(route('admin.calon-santri.index')); ?>" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
                     👥 Kelola Pendaftar
                 </a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
+                <a href="<?php echo e(route('verifikasi-dokumen.index')); ?>" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
                     📋 Verifikasi Dokumen
+                </a>
+                <a href="<?php echo e(route('admin.pembayaran-items.index')); ?>" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
+                    💳 Item Pembayaran
+                </a>
+                <a href="<?php echo e(route('admin.pembayaran.index')); ?>" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
+                    💰 Kelola Pembayaran
                 </a>
                 <a href="#" class="block px-4 py-2 rounded hover:bg-indigo-700 transition">
                     📊 Laporan
