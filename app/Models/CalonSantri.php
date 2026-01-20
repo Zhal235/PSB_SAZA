@@ -50,6 +50,14 @@ class CalonSantri extends Model
         'tanggal_lahir' => 'date',
     ];
 
+    /**
+     * Relationship ke User (santri yang mendaftar)
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'no_telp', 'phone');
+    }
+
     public function dokumens()
     {
         return $this->hasMany(Dokumen::class);
