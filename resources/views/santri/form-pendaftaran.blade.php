@@ -2,7 +2,10 @@
 
 @section('title', 'Form Pendaftaran')
 @section('page-title', '📋 Form Pendaftaran Santri')
-@section('page-subtitle', '<p class="text-sm text-gray-600 mt-1">Lengkapi data pendaftaran Anda untuk jenjang: <span class="font-semibold">{{ Auth::user()->jenjang }}</span></p>')
+
+@section('page-subtitle')
+    <p class="text-sm text-gray-600 mt-1">Lengkapi data pendaftaran Anda untuk jenjang: <span class="font-semibold">{{ Auth::user()->jenjang }}</span></p>
+@endsection
 
 @section('content')
     <div class="grid grid-cols-3 gap-6 mb-8">
