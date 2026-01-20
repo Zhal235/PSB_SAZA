@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.santri')
 
 @section('title', 'Pembayaran')
 @section('page-title', '💳 Pembayaran & Tagihan')

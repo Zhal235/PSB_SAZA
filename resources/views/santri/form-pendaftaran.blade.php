@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.santri')
 
 @section('title', 'Form Pendaftaran')
 @section('page-title', '📋 Form Pendaftaran Santri')

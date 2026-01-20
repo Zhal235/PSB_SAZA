@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.santri')
 
 @section('title', 'Dashboard Santri')
 @section('page-title', '👋 Selamat Datang, ' . Auth::user()->name . '!')
