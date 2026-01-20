@@ -6,6 +6,7 @@ use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\PembayaranItemController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SantriController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -56,7 +57,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('api')->group(function () {
 
 // Santri Routes
 Route::middleware(['auth', 'role:calon_santri'])->prefix('santri')->name('santri.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('santri.dashboard');
-    })->name('dashboard');
+    Route::get('/select-jenjang', [SantriController::class, 'selectJenjang'])->name('select-jenjang');
+    Route::post('/save-jenjang', [SantriController::class, 'saveJenjang'])->name('save-jenjang');
+    Route::get('/dashboard', [SantriController::class, 'dashboard'])->name('dashboard');
 });

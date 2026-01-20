@@ -58,6 +58,6 @@ class RegisterController extends Controller
         // Auto login setelah register
         auth()->login($user);
 
-        return redirect()->route('santri.dashboard')->with('success', '✅ Pendaftaran berhasil! Selamat datang!');
+        return redirect()->route('santri.select-jenjang');
     }
 }

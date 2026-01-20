@@ -23,6 +23,8 @@ class User extends Authenticatable
         'phone',
         'password',
         'role',
+        'jenjang',
+        'has_selected_jenjang',
     ];
 
     /**
