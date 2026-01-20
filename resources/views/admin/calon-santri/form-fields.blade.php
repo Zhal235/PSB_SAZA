@@ -33,7 +33,7 @@
         </div>
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Lahir *</label>
-            <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir', $calonSantri->tanggal_lahir ? $calonSantri->tanggal_lahir->format('Y-m-d') : '') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir', isset($calonSantri) && $calonSantri->tanggal_lahir ? $calonSantri->tanggal_lahir->format('Y-m-d') : '') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
             <p class="text-xs text-gray-500 mt-1">Format: dd/mm/yyyy</p>
         </div>
         <div>
