@@ -5431,3 +5431,9 @@ Did you mean this?
 #70 C:/Users/Rhezal Maulana/Documents/GitHub/PSB_SAZA/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('...')
 #71 {main}
 "} 
+[2026-01-20 17:28:08] local.INFO: === UPLOAD START ===  
+[2026-01-20 17:28:08] local.INFO: File: 209071978.png (0.4MB)  
+[2026-01-20 17:28:08] local.INFO: Tipe dokumen: Foto  
+[2026-01-20 17:28:08] local.INFO: File content size: 0.4MB  
+[2026-01-20 17:28:08] local.INFO: === UPLOAD SUCCESS ===  
+[2026-01-20 17:28:08] local.INFO: Saved as: dokumen_santri/geri_nurdiansyah_foto.png (0.4MB)  

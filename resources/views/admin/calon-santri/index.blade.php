@@ -105,12 +105,25 @@
                                             </td>
                                             <td class="px-6 py-3">
                                                 <div class="flex gap-2">
-                                                    <a href="{{ route('admin.calon-santri.show', $santri) }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">
+                                                    <a href="{{ route('admin.calon-santri.show', $santri) }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm" title="Lihat Detail">
                                                         👁️
                                                     </a>
-                                                    <a href="{{ route('admin.calon-santri.edit', $santri) }}" class="text-indigo-600 hover:text-indigo-800 font-semibold text-sm">
+                                                    <a href="{{ route('admin.calon-santri.edit', $santri) }}" class="text-indigo-600 hover:text-indigo-800 font-semibold text-sm" title="Edit">
                                                         ✏️
                                                     </a>
+                                                    <form action="{{ route('admin.calon-santri.reset-password', $santri) }}" method="POST" class="inline" onsubmit="return confirm('Reset password menjadi 12345678?')">
+                                                        @csrf
+                                                        <button type="submit" class="text-yellow-600 hover:text-yellow-800 font-semibold text-sm" title="Reset Password">
+                                                            🔑
+                                                        </button>
+                                                    </form>
+                                                    <form action="{{ route('admin.calon-santri.destroy', $santri) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin menghapus data ini? Data yang terhapus tidak dapat dikembalikan!')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="text-red-600 hover:text-red-800 font-semibold text-sm" title="Hapus">
+                                                            🗑️
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>

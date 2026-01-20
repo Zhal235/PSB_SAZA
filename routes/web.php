@@ -40,6 +40,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     // Calon Santri Management
     Route::resource('calon-santri', CalonSantriController::class);
+    Route::post('calon-santri/{calonSantri}/reset-password', [CalonSantriController::class, 'resetPassword'])->name('calon-santri.reset-password');
 
     // Pembayaran Items Management
     Route::resource('pembayaran-items', PembayaranItemController::class);

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\CalonSantri;
 use App\Models\Pembayaran;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class CalonSantriController extends Controller
 {
@@ -134,13 +136,37 @@ class CalonSantriController extends Controller
             ->with('success', 'Data calon santri berhasil diperbarui! Silakan update dokumen.');
     }
 
+    // Reset password santri jadi 12345678
+    public function resetPassword(CalonSantri $calonSantri)
+    {
+        // Cari user berdasarkan nomor telepon
+        $user = User::where('phone', $calonSantri->no_telp)->first();
+        
+        if (!$user) {
+            return back()->with('error', 'User tidak ditemukan!');
+        }
+
+        // Reset password jadi 12345678
+        $user->password = Hash::make('12345678');
+        $user->save();
+
+        return back()->with('success', 'Password berhasil direset menjadi: 12345678');
+    }
+
     // Delete data
     public function destroy(CalonSantri $calonSantri)
     {
+        // Hapus user terkait jika ada
+        $user = User::where('phone', $calonSantri->no_telp)->first();
+        if ($user) {
+            $user->delete();
+        }
+
+        // Hapus data calon santri
         $calonSantri->delete();
 
         return redirect()->route('admin.calon-santri.index')
-            ->with('success', 'Data calon santri berhasil dihapus!');
+            ->with('success', 'Data calon santri dan akun user berhasil dihapus!');
     }
 
     // Show detail calon santri
