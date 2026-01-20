@@ -53,27 +53,10 @@
             <div class="p-8">
                 <div class="bg-white rounded-lg shadow max-w-4xl">
                     <div class="p-8">
-                        <!-- Success Message -->
-                        @if (session('success'))
-                            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6">
-                                ✅ {{ session('success') }}
-                            </div>
-                        @endif
-
-                        <!-- Error Message -->
-                        @if (session('error'))
-                            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6">
-                                ❌ {{ session('error') }}
-                            </div>
-                        @endif
-
-                        <!-- Info Box -->
-                        <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4 mb-6">
-                            <p class="text-sm"><strong>ℹ️ Info:</strong> Upload semua dokumen wajib. Gambar akan otomatis dikompres hingga 2MB.</p>
-                        </div>
-
-                        <!-- Upload Grid -->
-                        <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                        @include('dokumen.upload-content', compact('calonSantri', 'dokumenTypes'))
+                    </div>
+                </div>
+            </div>
                             @foreach($dokumenTypes as $value => $label)
                                 @php
                                     $dokumen = $calonSantri->dokumens()->where('tipe_dokumen', $value)->first();
