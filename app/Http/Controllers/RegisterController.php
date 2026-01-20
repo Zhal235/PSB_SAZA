@@ -24,12 +24,12 @@ class RegisterController extends Controller
         // Validate input
         $validated = $request->validate([
             'nama' => 'required|string|max:100',
-            'no_telp' => 'required|string|unique:users,phone|regex:/^(\+62|62|0)[0-9]{9,12}$/',
+            'no_telp' => 'required|string|unique:users,phone|regex:/^(\\+62|62|0)[0-9]{9,12}$/',
             'password' => 'required|string|min:8|confirmed',
             'agree' => 'required|accepted',
         ], [
             'no_telp.unique' => 'Nomor HP ini sudah terdaftar',
-            'no_telp.regex' => 'Format nomor HP tidak valid',
+            'no_telp.regex' => 'Format nomor HP tidak valid (contoh: 08123456789)',
             'password.confirmed' => 'Password tidak cocok',
             'password.min' => 'Password minimal 8 karakter',
             'agree.required' => 'Anda harus menyetujui syarat & ketentuan',
