@@ -40,7 +40,7 @@ class PembayaranItemController extends Controller
 
         PembayaranItem::create($validated);
 
-        return redirect()->route('pembayaran-items.index')->with('success', '✅ Item pembayaran berhasil ditambahkan!');
+        return redirect()->route('admin.pembayaran-items.index')->with('success', '✅ Item pembayaran berhasil ditambahkan!');
     }
 
     /**
@@ -68,7 +68,7 @@ class PembayaranItemController extends Controller
 
         $pembayaranItem->update($validated);
 
-        return redirect()->route('pembayaran-items.index')->with('success', '✅ Item pembayaran berhasil diperbarui!');
+        return redirect()->route('admin.pembayaran-items.index')->with('success', '✅ Item pembayaran berhasil diperbarui!');
     }
 
     /**
