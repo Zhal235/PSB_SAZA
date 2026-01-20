@@ -127,8 +127,11 @@ class SantriController extends Controller
     {
         $calonSantri = CalonSantri::where('no_telp', auth()->user()->phone)->first();
         $pembayaran = $calonSantri ? $calonSantri->pembayaran()->with('records')->first() : null;
+        
+        // Load active pembayaran items
+        $items = \App\Models\PembayaranItem::where('status', 'active')->get();
 
-        return view('santri.pembayaran', compact('pembayaran'));
+        return view('santri.pembayaran', compact('pembayaran', 'items'));
     }
 
     /**

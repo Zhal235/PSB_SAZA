@@ -44,23 +44,64 @@
         <div class="bg-white rounded-lg shadow p-6 mb-8">
             <h3 class="text-lg font-bold text-gray-800 mb-4">📋 Rincian Tagihan</h3>
             
-            <div class="space-y-4">
-                <!-- Tagihan Total -->
-                <div class="border border-gray-200 rounded p-4">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <p class="text-sm text-gray-600">Total Tagihan</p>
-                            <p class="text-lg font-semibold text-gray-800">Biaya Pendaftaran & SPP</p>
-                        </div>
-                        <p class="text-2xl font-bold text-indigo-600">
-                            Rp {{ number_format($pembayaran->total_amount, 0, ',', '.') }}
-                        </p>
-                    </div>
+            @if($items && $items->count() > 0)
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-100 border-b">
+                            <tr>
+                                <th class="px-4 py-3 text-left">Item</th>
+                                <th class="px-4 py-3 text-center">Wajib</th>
+                                <th class="px-4 py-3 text-center">Cicil</th>
+                                <th class="px-4 py-3 text-right">Nominal</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            @foreach($items as $item)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-3">
+                                        <div class="font-semibold text-gray-800">{{ $item->nama }}</div>
+                                        @if($item->deskripsi)
+                                            <p class="text-xs text-gray-600 mt-1">{{ $item->deskripsi }}</p>
+                                        @endif
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        @if($item->is_required)
+                                            <span class="text-red-600 font-bold">✓ Wajib</span>
+                                        @else
+                                            <span class="text-blue-600 text-xs">Optional</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        @if($item->can_cicil)
+                                            <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">{{ $item->cicil_month }} bulan</span>
+                                        @else
+                                            <span class="text-xs text-gray-500">Tidak</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-semibold text-indigo-600">
+                                        Rp {{ number_format($item->nominal, 0, ',', '.') }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                            <tr class="bg-gray-50 font-bold">
+                                <td colspan="3" class="px-4 py-3 text-right">Total:</td>
+                                <td class="px-4 py-3 text-right text-indigo-600 text-lg">
+                                    Rp {{ number_format($items->sum('nominal'), 0, ',', '.') }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+            @else
+                <div class="text-center py-6 text-gray-500">
+                    <p>Belum ada item pembayaran yang aktif</p>
+                </div>
+            @endif
 
+            <div class="mt-6 space-y-4">
                 <!-- Status Pembayaran -->
                 <div class="border border-gray-200 rounded p-4">
-                    <p class="text-sm text-gray-600 mb-2">Status Pembayaran</p>
+                    <p class="text-sm text-gray-600 mb-2">Status Pembayaran Anda</p>
                     <div class="space-y-2">
                         <div class="flex justify-between items-center">
                             <span class="text-gray-700">Sudah Dibayar:</span>
