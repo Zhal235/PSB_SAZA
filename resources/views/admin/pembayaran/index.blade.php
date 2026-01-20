@@ -29,20 +29,20 @@
                             <p class="text-xs text-gray-600 mt-1">{{ $pembayaran->calonSantri->jenjang }}</p>
                         </td>
                         <td class="px-6 py-4 text-right font-semibold text-gray-700">
-                            Rp {{ number_format($pembayaran->total_amount, 0, ',', '.') }}
+                            Rp {{ number_format($pembayaran->calculated_total, 0, ',', '.') }}
                         </td>
                         <td class="px-6 py-4 text-right font-semibold text-green-600">
                             Rp {{ number_format($pembayaran->paid_amount, 0, ',', '.') }}
                         </td>
                         <td class="px-6 py-4 text-right font-semibold text-red-600">
-                            Rp {{ number_format($pembayaran->remaining_amount, 0, ',', '.') }}
+                            Rp {{ number_format($pembayaran->calculated_remaining, 0, ',', '.') }}
                         </td>
                         <td class="px-6 py-4 text-center">
-                            @if($pembayaran->status === 'lunas')
+                            @if($pembayaran->paid_amount >= $pembayaran->calculated_total)
                                 <span class="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
                                     ✅ Lunas
                                 </span>
-                            @elseif($pembayaran->status === 'cicilan')
+                            @elseif($pembayaran->paid_amount > 0)
                                 <span class="inline-block bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold">
                                     🔄 Cicilan
                                 </span>
@@ -72,10 +72,5 @@
                 @endforelse
             </tbody>
         </table>
-    </div>
-
-    <!-- Pagination -->
-    <div class="mt-6">
-        {{ $pembayarans->links() }}
     </div>
 @endsection

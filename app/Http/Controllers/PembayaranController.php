@@ -14,7 +14,20 @@ class PembayaranController extends Controller
      */
     public function index()
     {
-        $pembayarans = Pembayaran::with('calonSantri')->paginate(15);
+        $pembayarans = Pembayaran::with('calonSantri')->get();
+        
+        // Hitung total dari active items untuk setiap pembayaran
+        $pembayarans = $pembayarans->map(function($pembayaran) {
+            $items = \App\Models\PembayaranItem::where('status', 'active')->get();
+            $totalFromItems = $items->sum('nominal');
+            
+            // Gunakan total dari items jika ada, jika tidak gunakan dari db
+            $pembayaran->calculated_total = $totalFromItems ?: $pembayaran->total_amount;
+            $pembayaran->calculated_remaining = $pembayaran->calculated_total - $pembayaran->paid_amount;
+            
+            return $pembayaran;
+        });
+        
         return view('admin.pembayaran.index', compact('pembayarans'));
     }
 
