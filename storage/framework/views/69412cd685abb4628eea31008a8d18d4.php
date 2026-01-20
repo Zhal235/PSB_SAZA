@@ -70,19 +70,34 @@
                             <div>
                                 <p class="text-gray-600 text-sm">No. Pendaftaran</p>
                                 <p class="text-2xl font-bold text-indigo-600"><?php echo e($calonSantri->no_pendaftaran); ?></p>
+                                <?php if($calonSantri->user): ?>
+                                    <p class="text-xs text-green-600 mt-2">✓ Terdaftar dengan akun: <?php echo e($calonSantri->user->name); ?></p>
+                                <?php else: ?>
+                                    <p class="text-xs text-yellow-600 mt-2">⚠ Belum ada akun user terkait</p>
+                                <?php endif; ?>
                             </div>
                             <div class="text-right">
-                                <p class="text-gray-600 text-sm">Status</p>
-                                <span class="px-4 py-2 text-lg rounded-full font-bold
-                                    <?php if($calonSantri->status === 'baru'): ?> bg-blue-100 text-blue-700
-                                    <?php elseif($calonSantri->status === 'proses'): ?> bg-yellow-100 text-yellow-700
-                                    <?php elseif($calonSantri->status === 'lolos'): ?> bg-green-100 text-green-700
-                                    <?php elseif($calonSantri->status === 'tidak_lolos'): ?> bg-red-100 text-red-700
-                                    <?php endif; ?>
-                                ">
-                                    <?php echo e(ucfirst(str_replace('_', ' ', $calonSantri->status))); ?>
+                                <p class="text-gray-600 text-sm">Jenjang & Status</p>
+                                <div class="flex gap-2 justify-end mt-2">
+                                    <span class="px-3 py-1 text-sm rounded-full font-bold
+                                        <?php if($calonSantri->jenjang === 'MTs'): ?> bg-blue-100 text-blue-700
+                                        <?php else: ?> bg-purple-100 text-purple-700
+                                        <?php endif; ?>
+                                    ">
+                                        <?php echo e($calonSantri->jenjang); ?>
 
-                                </span>
+                                    </span>
+                                    <span class="px-4 py-1 text-sm rounded-full font-bold
+                                        <?php if($calonSantri->status === 'baru'): ?> bg-blue-100 text-blue-700
+                                        <?php elseif($calonSantri->status === 'proses'): ?> bg-yellow-100 text-yellow-700
+                                        <?php elseif($calonSantri->status === 'lolos'): ?> bg-green-100 text-green-700
+                                        <?php elseif($calonSantri->status === 'tidak_lolos'): ?> bg-red-100 text-red-700
+                                        <?php endif; ?>
+                                    ">
+                                        <?php echo e(ucfirst(str_replace('_', ' ', $calonSantri->status))); ?>
+
+                                    </span>
+                                </div>
                             </div>
                         </div>
 

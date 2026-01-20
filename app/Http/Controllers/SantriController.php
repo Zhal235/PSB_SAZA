@@ -116,8 +116,8 @@ class SantriController extends Controller
             ]);
         }
 
-        return redirect()->route('santri.form-pendaftaran')
-            ->with('success', '✅ Data pendaftaran berhasil disimpan!');
+        return redirect()->route('santri.dokumen-upload', $calonSantri)
+            ->with('success', '✅ Data pendaftaran berhasil disimpan! Silakan upload dokumen.');
     }
 
     /**
@@ -143,5 +143,29 @@ class SantriController extends Controller
         }
 
         return view('santri.pembayaran-invoice', compact('pembayaran'));
+    }
+
+    /**
+     * Show dokumen upload page
+     */
+    public function dokumenUpload()
+    {
+        $calonSantri = CalonSantri::where('no_telp', auth()->user()->phone)->first();
+        
+        if (!$calonSantri) {
+            return redirect()->route('santri.form-pendaftaran')
+                ->with('error', 'Silakan lengkapi form pendaftaran terlebih dahulu');
+        }
+
+        $dokumenTypes = [
+            'Foto' => 'Foto 4x6 cm',
+            'Ijazah' => 'Scan Ijazah',
+            'Akte Kelahiran' => 'Scan Akte Kelahiran',
+            'KTP Ayah' => 'Scan KTP Ayah',
+            'KTP Ibu' => 'Scan KTP Ibu',
+            'Kartu Keluarga' => 'Scan Kartu Keluarga'
+        ];
+
+        return view('santri.dokumen-upload', compact('calonSantri', 'dokumenTypes'));
     }
 }
