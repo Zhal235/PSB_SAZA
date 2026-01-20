@@ -43,49 +43,14 @@
         <!-- Breakdown Tagihan -->
         <div class="bg-white rounded-lg shadow p-6 mb-8">
             <h3 class="text-lg font-bold text-gray-800 mb-4">📋 Rincian Tagihan</h3>
-            
-            @if($pembayaran->items && $pembayaran->items->count() > 0)
-                <table class="w-full">
-                    <thead class="bg-gray-100 border-b">
-                        <tr>
-                            <th class="px-4 py-2 text-left">Item</th>
-                            <th class="px-4 py-2 text-center">Wajib</th>
-                            <th class="px-4 py-2 text-center">Cicil</th>
-                            <th class="px-4 py-2 text-right">Nominal</th>
-                            <th class="px-4 py-2 text-right">Dibayar</th>
-                            <th class="px-4 py-2 text-right">Sisa</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y">
-                        @foreach($pembayaran->items as $item)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-3 font-semibold">{{ $item->nama }}</td>
-                                <td class="px-4 py-3 text-center">
-                                    @if($item->is_required)
-                                        <span class="text-red-600 font-bold">●</span>
-                                    @endif
-                                </td>
-                                <td class="px-4 py-3 text-center">
-                                    @if($item->can_cicil)
-                                        <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">{{ $item->cicil_month }} bln</span>
-                                    @endif
-                                </td>
-                                <td class="px-4 py-3 text-right font-semibold">
-                                    Rp {{ number_format($item->nominal, 0, ',', '.') }}
-                                </td>
-                                <td class="px-4 py-3 text-right text-green-600">
-                                    Rp {{ number_format($item->nominal - ($pembayaran->remaining_amount / ($pembayaran->total_amount / $item->nominal) ?? 0), 0, ',', '.') }}
-                                </td>
-                                <td class="px-4 py-3 text-right text-red-600">
-                                    Rp {{ number_format($pembayaran->remaining_amount / count($pembayaran->items ?? []) ?? 0, 0, ',', '.') }}
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            @else
-                <p class="text-gray-500 text-center py-6">Belum ada item tagihan</p>
-            @endif
+            <p class="text-gray-600 text-sm">
+                Total tagihan sebesar <span class="font-semibold text-indigo-600">Rp {{ number_format($pembayaran->total_amount, 0, ',', '.') }}</span> dengan opsi pembayaran tunai atau cicilan.
+            </p>
+            <div class="mt-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+                <p class="text-sm text-blue-700">
+                    <strong>ℹ️ Catatan:</strong> Silakan hubungi panitia untuk detail breakdown tagihan lebih lanjut.
+                </p>
+            </div>
         </div>
 
         <!-- Riwayat Pembayaran -->
