@@ -55,6 +55,11 @@ class CalonSantri extends Model
         return $this->hasMany(Dokumen::class);
     }
 
+    public function pembayaran()
+    {
+        return $this->hasOne(Pembayaran::class);
+    }
+
     /**
      * Generate nomor pendaftaran otomatis
      * Format: PSB-YYYY-NNNNN (PSB-2026-00001)

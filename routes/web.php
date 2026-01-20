@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CalonSantriController;
 use App\Http\Controllers\DokumenController;
+use App\Http\Controllers\PembayaranItemController;
+use App\Http\Controllers\PembayaranController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -22,6 +24,16 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     // Calon Santri Management
     Route::resource('calon-santri', CalonSantriController::class);
+
+    // Pembayaran Items Management
+    Route::resource('pembayaran-items', PembayaranItemController::class);
+
+    // Pembayaran Management
+    Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran.index');
+    Route::get('/pembayaran/{pembayaran}', [PembayaranController::class, 'show'])->name('pembayaran.show');
+    Route::post('/pembayaran/{pembayaran}/payment', [PembayaranController::class, 'storePayment'])->name('pembayaran.storePayment');
+    Route::get('/pembayaran/{pembayaran}/invoice', [PembayaranController::class, 'invoice'])->name('pembayaran.invoice');
+    Route::get('/pembayaran/{pembayaran}/invoice-pdf', [PembayaranController::class, 'invoicePdf'])->name('pembayaran.invoicePdf');
 });
 
 // Dokumen Upload Routes

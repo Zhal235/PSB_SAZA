@@ -1,0 +1,82 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\CalonSantri;
+use App\Models\Pembayaran;
+use App\Models\PembayaranRecord;
+use Illuminate\Http\Request;
+
+class PembayaranController extends Controller
+{
+    /**
+     * Display a listing of pembayaran
+     */
+    public function index()
+    {
+        $pembayarans = Pembayaran::with('calonSantri')->paginate(15);
+        return view('admin.pembayaran.index', compact('pembayarans'));
+    }
+
+    /**
+     * Show detail pembayaran santri
+     */
+    public function show(Pembayaran $pembayaran)
+    {
+        $pembayaran->load('calonSantri', 'records');
+        return view('admin.pembayaran.show', compact('pembayaran'));
+    }
+
+    /**
+     * Store pembayaran record (input pembayaran)
+     */
+    public function storePayment(Request $request, Pembayaran $pembayaran)
+    {
+        $validated = $request->validate([
+            'amount' => 'required|numeric|min:0',
+            'payment_method' => 'required|in:cash,transfer,check',
+            'paid_at' => 'required|date',
+            'notes' => 'nullable|string',
+            'receipt_number' => 'nullable|string',
+        ]);
+
+        $validated['pembayaran_id'] = $pembayaran->id;
+        $validated['paid_at'] = $validated['paid_at'] . ' ' . now()->format('H:i:s');
+
+        // Create payment record
+        PembayaranRecord::create($validated);
+
+        // Update pembayaran
+        $pembayaran->paid_amount += $validated['amount'];
+        $pembayaran->remaining_amount = $pembayaran->total_amount - $pembayaran->paid_amount;
+        $pembayaran->updateStatus();
+
+        return back()->with('success', '✅ Pembayaran berhasil dicatat!');
+    }
+
+    /**
+     * Generate Invoice
+     */
+    public function invoice(Pembayaran $pembayaran)
+    {
+        $pembayaran->load('calonSantri', 'records');
+        return view('admin.pembayaran.invoice', compact('pembayaran'));
+    }
+
+    /**
+     * Download Invoice as PDF
+     */
+    public function invoicePdf(Pembayaran $pembayaran)
+    {
+        $pembayaran->load('calonSantri', 'records');
+        
+        $html = view('admin.pembayaran.invoice', compact('pembayaran'))->render();
+        
+        // Menggunakan library bawaannya
+        $pdf = \PDF::loadHTML($html)
+            ->setPaper('a4')
+            ->setOrientation('portrait');
+        
+        return $pdf->download('invoice-' . $pembayaran->calonSantri->nama . '-' . date('Y-m-d') . '.pdf');
+    }
+}
