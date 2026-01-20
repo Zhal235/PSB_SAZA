@@ -175,7 +175,14 @@
             <!-- Data Keluarga (Ringkas) -->
             <div>
                 <h3 class="text-lg font-bold text-gray-800 mb-4 pb-2 border-b-2 border-indigo-600">👨‍👩‍👦 Data Keluarga</h3>
-                <div class="grid grid-cols-2 gap-6">
+                <div class="grid grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">No. Kartu Keluarga</label>
+                        <input type="text" name="no_kk" value="{{ old('no_kk', $calonSantri->no_kk ?? '') }}" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                            placeholder="Nomor Kartu Keluarga" />
+                    </div>
+
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Jumlah Saudara</label>
                         <input type="number" name="jumlah_saudara" value="{{ old('jumlah_saudara', $calonSantri->jumlah_saudara ?? '') }}" min="0"
@@ -184,14 +191,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">No. KK</label>
-                        <input type="text" name="no_kk" value="{{ old('no_kk', $calonSantri->no_kk ?? '') }}" 
-                            class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" 
-                            placeholder="Nomor Kartu Keluarga" />
-                    </div>
-
-                    <div class="col-span-2">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Pendapatan Keluarga (Opsional)</label>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Pendapatan Keluarga</label>
                         <select name="pendapatan_keluarga"
                             class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             <option value="">-- Pilih --</option>
@@ -200,6 +200,108 @@
                             <option value="2 - 5 juta" {{ old('pendapatan_keluarga', $calonSantri->pendapatan_keluarga ?? '') == '2 - 5 juta' ? 'selected' : '' }}>2 - 5 juta</option>
                             <option value="> 5 juta" {{ old('pendapatan_keluarga', $calonSantri->pendapatan_keluarga ?? '') == '> 5 juta' ? 'selected' : '' }}>> 5 juta</option>
                         </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Ayah -->
+            <div>
+                <h3 class="text-lg font-bold text-gray-800 mb-4 pb-2 border-b-2 border-indigo-600">👨 Data Ayah</h3>
+                <div class="grid grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Ayah *</label>
+                        <input type="text" name="nama_ayah" value="{{ old('nama_ayah', $calonSantri->nama_ayah ?? '') }}" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                            placeholder="Nama lengkap ayah" />
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">NIK Ayah</label>
+                        <input type="text" name="nik_ayah" value="{{ old('nik_ayah', $calonSantri->nik_ayah ?? '') }}"
+                            class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                            placeholder="Nomor Induk Kependudukan" />
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Pendidikan Ayah</label>
+                        <select name="pendidikan_ayah"
+                            class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="">-- Pilih --</option>
+                            <option value="Tidak Sekolah" {{ old('pendidikan_ayah', $calonSantri->pendidikan_ayah ?? '') == 'Tidak Sekolah' ? 'selected' : '' }}>Tidak Sekolah</option>
+                            <option value="SD" {{ old('pendidikan_ayah', $calonSantri->pendidikan_ayah ?? '') == 'SD' ? 'selected' : '' }}>SD</option>
+                            <option value="SMP" {{ old('pendidikan_ayah', $calonSantri->pendidikan_ayah ?? '') == 'SMP' ? 'selected' : '' }}>SMP</option>
+                            <option value="SMA" {{ old('pendidikan_ayah', $calonSantri->pendidikan_ayah ?? '') == 'SMA' ? 'selected' : '' }}>SMA</option>
+                            <option value="D3" {{ old('pendidikan_ayah', $calonSantri->pendidikan_ayah ?? '') == 'D3' ? 'selected' : '' }}>D3</option>
+                            <option value="S1" {{ old('pendidikan_ayah', $calonSantri->pendidikan_ayah ?? '') == 'S1' ? 'selected' : '' }}>S1</option>
+                            <option value="S2" {{ old('pendidikan_ayah', $calonSantri->pendidikan_ayah ?? '') == 'S2' ? 'selected' : '' }}>S2</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Pekerjaan Ayah</label>
+                        <input type="text" name="pekerjaan_ayah" value="{{ old('pekerjaan_ayah', $calonSantri->pekerjaan_ayah ?? '') }}"
+                            class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                            placeholder="Contoh: Wiraswasta, PNS, Buruh, dll" />
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">HP Ayah</label>
+                        <input type="tel" name="hp_ayah" value="{{ old('hp_ayah', $calonSantri->hp_ayah ?? '') }}"
+                            class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                            placeholder="08xxxxxxxxxx" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Ibu -->
+            <div>
+                <h3 class="text-lg font-bold text-gray-800 mb-4 pb-2 border-b-2 border-indigo-600">👩 Data Ibu</h3>
+                <div class="grid grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Ibu *</label>
+                        <input type="text" name="nama_ibu" value="{{ old('nama_ibu', $calonSantri->nama_ibu ?? '') }}" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                            placeholder="Nama lengkap ibu" />
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">NIK Ibu</label>
+                        <input type="text" name="nik_ibu" value="{{ old('nik_ibu', $calonSantri->nik_ibu ?? '') }}"
+                            class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                            placeholder="Nomor Induk Kependudukan" />
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Pendidikan Ibu</label>
+                        <select name="pendidikan_ibu"
+                            class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="">-- Pilih --</option>
+                            <option value="Tidak Sekolah" {{ old('pendidikan_ibu', $calonSantri->pendidikan_ibu ?? '') == 'Tidak Sekolah' ? 'selected' : '' }}>Tidak Sekolah</option>
+                            <option value="SD" {{ old('pendidikan_ibu', $calonSantri->pendidikan_ibu ?? '') == 'SD' ? 'selected' : '' }}>SD</option>
+                            <option value="SMP" {{ old('pendidikan_ibu', $calonSantri->pendidikan_ibu ?? '') == 'SMP' ? 'selected' : '' }}>SMP</option>
+                            <option value="SMA" {{ old('pendidikan_ibu', $calonSantri->pendidikan_ibu ?? '') == 'SMA' ? 'selected' : '' }}>SMA</option>
+                            <option value="D3" {{ old('pendidikan_ibu', $calonSantri->pendidikan_ibu ?? '') == 'D3' ? 'selected' : '' }}>D3</option>
+                            <option value="S1" {{ old('pendidikan_ibu', $calonSantri->pendidikan_ibu ?? '') == 'S1' ? 'selected' : '' }}>S1</option>
+                            <option value="S2" {{ old('pendidikan_ibu', $calonSantri->pendidikan_ibu ?? '') == 'S2' ? 'selected' : '' }}>S2</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Pekerjaan Ibu</label>
+                        <input type="text" name="pekerjaan_ibu" value="{{ old('pekerjaan_ibu', $calonSantri->pekerjaan_ibu ?? '') }}"
+                            class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                            placeholder="Contoh: Ibu Rumah Tangga, PNS, Buruh, dll" />
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">HP Ibu</label>
+                        <input type="tel" name="hp_ibu" value="{{ old('hp_ibu', $calonSantri->hp_ibu ?? '') }}"
+                            class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                            placeholder="08xxxxxxxxxx" />
                     </div>
                 </div>
             </div>

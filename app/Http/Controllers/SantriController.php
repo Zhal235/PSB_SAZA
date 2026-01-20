@@ -81,6 +81,16 @@ class SantriController extends Controller
             'jumlah_saudara' => 'nullable|integer|min:0',
             'no_kk' => 'nullable|string|max:20',
             'pendapatan_keluarga' => 'nullable|string|max:255',
+            'nama_ayah' => 'required|string|max:255',
+            'nik_ayah' => 'nullable|string|max:20',
+            'pendidikan_ayah' => 'nullable|string|max:100',
+            'pekerjaan_ayah' => 'nullable|string|max:100',
+            'hp_ayah' => 'nullable|string|max:15',
+            'nama_ibu' => 'required|string|max:255',
+            'nik_ibu' => 'nullable|string|max:20',
+            'pendidikan_ibu' => 'nullable|string|max:100',
+            'pekerjaan_ibu' => 'nullable|string|max:100',
+            'hp_ibu' => 'nullable|string|max:15',
         ]);
 
         $calonSantri = CalonSantri::where('no_telp', auth()->user()->phone)->first();
