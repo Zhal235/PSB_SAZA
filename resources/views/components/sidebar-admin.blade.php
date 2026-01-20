@@ -24,6 +24,9 @@
         <a href="{{ route('admin.bank-settings.index') }}" class="block px-4 py-3 rounded-lg text-white hover:bg-white/20 transition-all duration-300 font-semibold @if(Route::is('admin.bank-settings.*')) bg-white/20 @endif">
             <span class="text-lg">🏦</span> Pengaturan Bank
         </a>
+        <a href="{{ route('admin.financial-records.index') }}" class="block px-4 py-3 rounded-lg text-white hover:bg-white/20 transition-all duration-300 font-semibold @if(Route::is('admin.financial-records.*')) bg-white/20 @endif">
+            <span class="text-lg">💰</span> Pencatatan Keuangan
+        </a>
         <a href="#" class="block px-4 py-3 rounded-lg text-white hover:bg-white/20 transition-all duration-300 font-semibold">
             <span class="text-lg">▬</span> Laporan
         </a>

@@ -3,7 +3,9 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankSettingController;
 use App\Http\Controllers\CalonSantriController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DokumenController;
+use App\Http\Controllers\FinancialRecordController;
 use App\Http\Controllers\PembayaranItemController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\RegisterController;
@@ -25,9 +27,7 @@ Route::post('/register', [RegisterController::class, 'register'])->middleware('g
 
 // Admin Routes
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Calon Santri Management
     Route::resource('calon-santri', CalonSantriController::class);
@@ -37,6 +37,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     // Bank Settings Management
     Route::resource('bank-settings', BankSettingController::class);
+
+    // Financial Records Management
+    Route::resource('financial-records', FinancialRecordController::class);
 
     // Pembayaran Management
     Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran.index');

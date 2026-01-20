@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\CalonSantri;
+use App\Models\FinancialRecord;
 use App\Models\Pembayaran;
 use App\Models\PembayaranRecord;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PembayaranController extends Controller
 {
@@ -80,6 +82,18 @@ class PembayaranController extends Controller
         $pembayaran->paid_amount += $validated['amount'];
         $pembayaran->remaining_amount = $pembayaran->total_amount - $pembayaran->paid_amount;
         $pembayaran->updateStatus();
+
+        // Auto-create Financial Record untuk pencatatan keuangan
+        FinancialRecord::create([
+            'transaction_date' => $validated['paid_at'],
+            'type' => 'income',
+            'category' => 'Pembayaran Pendaftaran - ' . $pembayaran->calonSantri->nama,
+            'amount' => $validated['amount'],
+            'payment_method' => $validated['payment_method'] == 'check' ? 'transfer' : $validated['payment_method'],
+            'reference_number' => $validated['receipt_number'] ?? null,
+            'description' => 'Pembayaran dari ' . $pembayaran->calonSantri->nama . ' - ' . ($validated['notes'] ?? ''),
+            'recorded_by' => Auth::user()->name,
+        ]);
 
         return back()->with('success', '✅ Pembayaran berhasil dicatat!');
     }
