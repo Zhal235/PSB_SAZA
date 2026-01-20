@@ -90,7 +90,7 @@
                                 <tr>
                                     <th class="px-6 py-3">No. Daftar</th>
                                     <th class="px-6 py-3">Nama</th>
-                                    <th class="px-6 py-3">L/P</th>
+                                    <th class="px-6 py-3">Jenjang</th>
                                     <th class="px-6 py-3">No. Telp</th>
                                     <th class="px-6 py-3">Asal Sekolah</th>
                                     <th class="px-6 py-3">Status</th>
@@ -100,6 +100,64 @@
                             <tbody>
                                 <?php $__currentLoopData = $calonSantri; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $santri): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr class="border-t hover:bg-gray-50">
+                                        <td class="px-6 py-3 font-mono font-semibold text-sm"><?php echo e($santri->no_pendaftaran); ?></td>
+                                        <td class="px-6 py-3">
+                                            <div>
+                                                <p class="font-semibold"><?php echo e($santri->nama); ?></p>
+                                                <?php if($santri->user): ?>
+                                                    <p class="text-xs text-gray-500">✓ Akun Terkait</p>
+                                                <?php else: ?>
+                                                    <p class="text-xs text-yellow-600">⚠ Belum Ada Akun</p>
+                                                <?php endif; ?>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-3">
+                                            <?php if($santri->jenjang === 'MTs'): ?>
+                                                <span class="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
+                                                    🏫 MTs
+                                                </span>
+                                            <?php else: ?>
+                                                <span class="inline-block bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold">
+                                                    🎓 SMK
+                                                </span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="px-6 py-3 font-mono text-sm"><?php echo e($santri->no_telp); ?></td>
+                                        <td class="px-6 py-3 text-sm"><?php echo e(Str::limit($santri->asal_sekolah, 20)); ?></td>
+                                        <td class="px-6 py-3">
+                                            <?php if($santri->status === 'lolos'): ?>
+                                                <span class="inline-block bg-green-100 text-green-700 px-3 py-1 rounded text-xs font-semibold">✅ Lolos</span>
+                                            <?php elseif($santri->status === 'tidak_lolos'): ?>
+                                                <span class="inline-block bg-red-100 text-red-700 px-3 py-1 rounded text-xs font-semibold">❌ Tidak Lolos</span>
+                                            <?php elseif($santri->status === 'proses'): ?>
+                                                <span class="inline-block bg-yellow-100 text-yellow-700 px-3 py-1 rounded text-xs font-semibold">⏳ Proses</span>
+                                            <?php else: ?>
+                                                <span class="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded text-xs font-semibold">🆕 Baru</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="px-6 py-3">
+                                            <div class="flex gap-2">
+                                                <a href="<?php echo e(route('admin.calon-santri.show', $santri)); ?>" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">
+                                                    👁️
+                                                </a>
+                                                <a href="<?php echo e(route('admin.calon-santri.edit', $santri)); ?>" class="text-indigo-600 hover:text-indigo-800 font-semibold text-sm">
+                                                    ✏️
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </tbody>
+                        </table>
+                    <?php else: ?>
+                        <div class="p-8 text-center text-gray-500">
+                            <p>Belum ada calon santri di jenjang <?php echo e($jenjang); ?></p>
+                            <a href="<?php echo e(route('admin.calon-santri.create', ['jenjang' => $jenjang])); ?>" class="text-indigo-600 hover:underline font-semibold">
+                                Tambah sekarang
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                </div>
                                         <td class="px-6 py-3 font-semibold text-indigo-600"><?php echo e($santri->no_pendaftaran); ?></td>
                                         <td class="px-6 py-3"><?php echo e($santri->nama); ?></td>
                                         <td class="px-6 py-3 text-sm"><?php echo e($santri->jenis_kelamin === 'laki-laki' ? 'L' : 'P'); ?></td>
