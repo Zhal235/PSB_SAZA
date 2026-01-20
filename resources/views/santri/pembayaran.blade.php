@@ -43,13 +43,53 @@
         <!-- Breakdown Tagihan -->
         <div class="bg-white rounded-lg shadow p-6 mb-8">
             <h3 class="text-lg font-bold text-gray-800 mb-4">📋 Rincian Tagihan</h3>
-            <p class="text-gray-600 text-sm">
-                Total tagihan sebesar <span class="font-semibold text-indigo-600">Rp {{ number_format($pembayaran->total_amount, 0, ',', '.') }}</span> dengan opsi pembayaran tunai atau cicilan.
-            </p>
-            <div class="mt-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
-                <p class="text-sm text-blue-700">
-                    <strong>ℹ️ Catatan:</strong> Silakan hubungi panitia untuk detail breakdown tagihan lebih lanjut.
-                </p>
+            
+            <div class="space-y-4">
+                <!-- Tagihan Total -->
+                <div class="border border-gray-200 rounded p-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-sm text-gray-600">Total Tagihan</p>
+                            <p class="text-lg font-semibold text-gray-800">Biaya Pendaftaran & SPP</p>
+                        </div>
+                        <p class="text-2xl font-bold text-indigo-600">
+                            Rp {{ number_format($pembayaran->total_amount, 0, ',', '.') }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Status Pembayaran -->
+                <div class="border border-gray-200 rounded p-4">
+                    <p class="text-sm text-gray-600 mb-2">Status Pembayaran</p>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-700">Sudah Dibayar:</span>
+                            <span class="font-semibold text-green-600">Rp {{ number_format($pembayaran->paid_amount, 0, ',', '.') }}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-700">Sisa Tagihan:</span>
+                            <span class="font-semibold text-red-600">Rp {{ number_format($pembayaran->remaining_amount, 0, ',', '.') }}</span>
+                        </div>
+                        @if($pembayaran->due_date)
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-600">Batas Waktu:</span>
+                                <span class="text-gray-700">{{ $pembayaran->due_date->format('d/m/Y') }}</span>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Opsi Pembayaran -->
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                    <p class="text-sm text-blue-700">
+                        <strong>💡 Opsi Pembayaran:</strong>
+                    </p>
+                    <ul class="text-sm text-blue-700 mt-2 ml-4 space-y-1 list-disc">
+                        <li>Pembayaran tunai atau transfer ke rekening sekolah</li>
+                        <li>Bisa dicicil sesuai kesepakatan dengan panitia</li>
+                        <li>Hubungi panitia untuk info rekening dan metode pembayaran lainnya</li>
+                    </ul>
+                </div>
             </div>
         </div>
 
