@@ -106,10 +106,12 @@
             <label class="block text-sm font-medium text-gray-700 mb-2">Rata-rata Pendapatan Keluarga</label>
             <select name="pendapatan_keluarga" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <option value="">-- Pilih --</option>
-                <option value="< 1 juta" {{ old('pendapatan_keluarga', $calonSantri->pendapatan_keluarga ?? '') == '< 1 juta' ? 'selected' : '' }}>< 1 juta</option>
-                <option value="1 - 2 juta" {{ old('pendapatan_keluarga', $calonSantri->pendapatan_keluarga ?? '') == '1 - 2 juta' ? 'selected' : '' }}>1 - 2 juta</option>
-                <option value="2 - 5 juta" {{ old('pendapatan_keluarga', $calonSantri->pendapatan_keluarga ?? '') == '2 - 5 juta' ? 'selected' : '' }}>2 - 5 juta</option>
-                <option value="> 5 juta" {{ old('pendapatan_keluarga', $calonSantri->pendapatan_keluarga ?? '') == '> 5 juta' ? 'selected' : '' }}>> 5 juta</option>
+                @php
+                    $pendapatans = \App\Models\PendapatanKeluarga::orderBy('nama')->get();
+                @endphp
+                @foreach($pendapatans as $pendapatan)
+                    <option value="{{ $pendapatan->nama }}" {{ old('pendapatan_keluarga', $calonSantri->pendapatan_keluarga ?? '') === $pendapatan->nama ? 'selected' : '' }}>{{ $pendapatan->nama }}</option>
+                @endforeach
             </select>
         </div>
         <div>
@@ -135,20 +137,27 @@
             <label class="block text-sm font-medium text-gray-700 mb-2">Pendidikan Ayah</label>
             <select name="pendidikan_ayah" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <option value="">-- Pilih --</option>
-                <option value="Tidak Sekolah" {{ old('pendidikan_ayah', $calonSantri->pendidikan_ayah ?? '') == 'Tidak Sekolah' ? 'selected' : '' }}>Tidak Sekolah</option>
-                <option value="SD" {{ old('pendidikan_ayah', $calonSantri->pendidikan_ayah ?? '') == 'SD' ? 'selected' : '' }}>SD</option>
-                <option value="SMP" {{ old('pendidikan_ayah', $calonSantri->pendidikan_ayah ?? '') == 'SMP' ? 'selected' : '' }}>SMP</option>
-                <option value="SMA" {{ old('pendidikan_ayah', $calonSantri->pendidikan_ayah ?? '') == 'SMA' ? 'selected' : '' }}>SMA</option>
-                <option value="D3" {{ old('pendidikan_ayah', $calonSantri->pendidikan_ayah ?? '') == 'D3' ? 'selected' : '' }}>D3</option>
-                <option value="S1" {{ old('pendidikan_ayah', $calonSantri->pendidikan_ayah ?? '') == 'S1' ? 'selected' : '' }}>S1</option>
-                <option value="S2" {{ old('pendidikan_ayah', $calonSantri->pendidikan_ayah ?? '') == 'S2' ? 'selected' : '' }}>S2</option>
+                @php
+                    $pendidikans = \App\Models\Pendidikan::orderBy('nama')->get();
+                @endphp
+                @foreach($pendidikans as $pendidikan)
+                    <option value="{{ $pendidikan->nama }}" {{ old('pendidikan_ayah', $calonSantri->pendidikan_ayah ?? '') === $pendidikan->nama ? 'selected' : '' }}>{{ $pendidikan->nama }}</option>
+                @endforeach
             </select>
         </div>
     </div>
     <div class="grid grid-cols-2 gap-4 mt-4">
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">Pekerjaan Ayah</label>
-            <input type="text" name="pekerjaan_ayah" value="{{ old('pekerjaan_ayah', $calonSantri->pekerjaan_ayah ?? '') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Pekerjaan" />
+            <select name="pekerjaan_ayah" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="">-- Pilih --</option>
+                @php
+                    $pekerjaans = \App\Models\Pekerjaan::orderBy('nama')->get();
+                @endphp
+                @foreach($pekerjaans as $pekerjaan)
+                    <option value="{{ $pekerjaan->nama }}" {{ old('pekerjaan_ayah', $calonSantri->pekerjaan_ayah ?? '') === $pekerjaan->nama ? 'selected' : '' }}>{{ $pekerjaan->nama }}</option>
+                @endforeach
+            </select>
         </div>
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">HP Ayah</label>
@@ -173,20 +182,27 @@
             <label class="block text-sm font-medium text-gray-700 mb-2">Pendidikan Ibu</label>
             <select name="pendidikan_ibu" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <option value="">-- Pilih --</option>
-                <option value="Tidak Sekolah" {{ old('pendidikan_ibu', $calonSantri->pendidikan_ibu ?? '') == 'Tidak Sekolah' ? 'selected' : '' }}>Tidak Sekolah</option>
-                <option value="SD" {{ old('pendidikan_ibu', $calonSantri->pendidikan_ibu ?? '') == 'SD' ? 'selected' : '' }}>SD</option>
-                <option value="SMP" {{ old('pendidikan_ibu', $calonSantri->pendidikan_ibu ?? '') == 'SMP' ? 'selected' : '' }}>SMP</option>
-                <option value="SMA" {{ old('pendidikan_ibu', $calonSantri->pendidikan_ibu ?? '') == 'SMA' ? 'selected' : '' }}>SMA</option>
-                <option value="D3" {{ old('pendidikan_ibu', $calonSantri->pendidikan_ibu ?? '') == 'D3' ? 'selected' : '' }}>D3</option>
-                <option value="S1" {{ old('pendidikan_ibu', $calonSantri->pendidikan_ibu ?? '') == 'S1' ? 'selected' : '' }}>S1</option>
-                <option value="S2" {{ old('pendidikan_ibu', $calonSantri->pendidikan_ibu ?? '') == 'S2' ? 'selected' : '' }}>S2</option>
+                @php
+                    $pendidikans = \App\Models\Pendidikan::orderBy('nama')->get();
+                @endphp
+                @foreach($pendidikans as $pendidikan)
+                    <option value="{{ $pendidikan->nama }}" {{ old('pendidikan_ibu', $calonSantri->pendidikan_ibu ?? '') === $pendidikan->nama ? 'selected' : '' }}>{{ $pendidikan->nama }}</option>
+                @endforeach
             </select>
         </div>
     </div>
     <div class="grid grid-cols-2 gap-4 mt-4">
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">Pekerjaan Ibu</label>
-            <input type="text" name="pekerjaan_ibu" value="{{ old('pekerjaan_ibu', $calonSantri->pekerjaan_ibu ?? '') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Pekerjaan" />
+            <select name="pekerjaan_ibu" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="">-- Pilih --</option>
+                @php
+                    $pekerjaans = \App\Models\Pekerjaan::orderBy('nama')->get();
+                @endphp
+                @foreach($pekerjaans as $pekerjaan)
+                    <option value="{{ $pekerjaan->nama }}" {{ old('pekerjaan_ibu', $calonSantri->pekerjaan_ibu ?? '') === $pekerjaan->nama ? 'selected' : '' }}>{{ $pekerjaan->nama }}</option>
+                @endforeach
+            </select>
         </div>
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">HP Ibu</label>
