@@ -120,7 +120,7 @@ class CalonSantriController extends Controller
             'unique_code' => \App\Models\Pembayaran::generateUniqueCode()
         ]);
 
-        return redirect()->route('dokumen.create', $calonSantri)
+        return redirect()->route('admin.dokumen.create', $calonSantri)
             ->with('success', 'Data calon santri berhasil ditambahkan! Akun sudah dibuat dengan HP: ' . $phoneToUse . ' dan password default: 12345678');
     }
 
@@ -201,7 +201,7 @@ class CalonSantriController extends Controller
 
         $calonSantri->update($validated);
 
-        return redirect()->route('dokumen.create', $calonSantri)
+        return redirect()->route('admin.dokumen.create', $calonSantri)
             ->with('success', 'Data calon santri berhasil diperbarui! Silakan update dokumen.');
     }
 

@@ -148,7 +148,7 @@
                             <p class="text-xs text-gray-500 text-center mb-3">{{ $doc->created_at->format('d/m/Y H:i') }}</p>
                             
                             <!-- Delete & Upload Ulang -->
-                            <form action="{{ route('dokumen.destroy', $doc) }}" method="POST" class="inline-block w-full">
+                            <form action="{{ route('admin.dokumen.destroy', $doc) }}" method="POST" class="inline-block w-full">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="w-full bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 font-semibold transition text-xs" onclick="return confirm('Hapus dokumen ini?')">🗑️ Hapus</button>

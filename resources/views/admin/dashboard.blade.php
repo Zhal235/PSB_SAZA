@@ -67,45 +67,6 @@
                         </div>
                     </div>
 
-                    <!-- Statistik Status -->
-                    <div class="mb-8">
-                        <h3 class="text-xl font-bold text-gray-800 mb-4">📊 Status Pendaftar</h3>
-                        <div class="grid grid-cols-3 gap-6">
-                            <div class="card-bsi bg-gradient-to-br from-white to-yellow-50 p-6 border-l-4 border-yellow-600 group cursor-pointer">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h3 class="text-gray-600 text-sm font-medium mb-2">Pendaftar Baru</h3>
-                                        <p class="text-4xl font-bold text-yellow-600 group-hover:scale-110 transition-transform duration-300">{{ $statusBaru }}</p>
-                                        <p class="text-gray-500 text-xs mt-2">Menunggu verifikasi</p>
-                                    </div>
-                                    <div class="text-5xl opacity-20 group-hover:opacity-40 transition-opacity duration-300">⏳</div>
-                                </div>
-                            </div>
-
-                            <div class="card-bsi bg-gradient-to-br from-white to-green-50 p-6 border-l-4 border-green-600 group cursor-pointer">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h3 class="text-gray-600 text-sm font-medium mb-2">Diterima</h3>
-                                        <p class="text-4xl font-bold text-green-600 group-hover:scale-110 transition-transform duration-300">{{ $statusDiterima }}</p>
-                                        <p class="text-gray-500 text-xs mt-2">Lolos seleksi</p>
-                                    </div>
-                                    <div class="text-5xl opacity-20 group-hover:opacity-40 transition-opacity duration-300">✅</div>
-                                </div>
-                            </div>
-
-                            <div class="card-bsi bg-gradient-to-br from-white to-red-50 p-6 border-l-4 border-red-600 group cursor-pointer">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h3 class="text-gray-600 text-sm font-medium mb-2">Ditolak</h3>
-                                        <p class="text-4xl font-bold text-red-600 group-hover:scale-110 transition-transform duration-300">{{ $statusDitolak }}</p>
-                                        <p class="text-gray-500 text-xs mt-2">Tidak lolos</p>
-                                    </div>
-                                    <div class="text-5xl opacity-20 group-hover:opacity-40 transition-opacity duration-300">❌</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Statistik Keuangan -->
                     <div class="mb-8">
                         <h3 class="text-xl font-bold text-gray-800 mb-4">💰 Statistik Keuangan</h3>

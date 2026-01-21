@@ -16,11 +16,6 @@ class DashboardController extends Controller
         $pendaftarMTs = CalonSantri::where('jenjang', 'MTs')->count();
         $pendaftarSMK = CalonSantri::where('jenjang', 'SMK')->count();
         
-        // Statistik Status
-        $statusBaru = CalonSantri::where('status', 'baru')->count();
-        $statusDiterima = CalonSantri::where('status', 'diterima')->count();
-        $statusDitolak = CalonSantri::where('status', 'ditolak')->count();
-        
         // Statistik Dokumen
         $totalDokumen = \App\Models\Dokumen::count();
         $dokumenBelumVerifikasi = CalonSantri::where('status_hardcopy', 0)->count();
@@ -51,7 +46,6 @@ class DashboardController extends Controller
         
         return view('admin.dashboard', compact(
             'totalPendaftar', 'pendaftarMTs', 'pendaftarSMK',
-            'statusBaru', 'statusDiterima', 'statusDitolak',
             'totalDokumen', 'dokumenBelumVerifikasi', 'dokumenSudahVerifikasi',
             'totalPemasukan', 'totalPengeluaran', 'saldoTotal', 'saldoCash', 'saldoTransfer',
             'totalTagihan', 'totalTerbayar', 'sisaTagihan',

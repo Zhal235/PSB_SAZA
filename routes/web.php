@@ -16,12 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if (auth()->check()) {
-        // Jika sudah login, redirect ke dashboard sesuai role
-        if (auth()->user()->role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        } else {
-            return redirect()->route('santri.dashboard');
-        }
+        // Semua role redirect ke admin dashboard (akses diatur by permissions di sidebar)
+        return redirect()->route('admin.dashboard');
     }
     // Jika belum login, redirect ke halaman login
     return redirect()->route('login');
@@ -36,8 +32,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register')->middleware('guest');
 Route::post('/register', [RegisterController::class, 'register'])->middleware('guest');
 
-// Admin Routes
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+// Admin Routes (accessible by admin and petugas roles based on permissions)
+Route::middleware(['auth', 'role:admin,petugas_pendaftaran,petugas_keuangan'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Calon Santri Management
@@ -69,29 +65,17 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // User Management
     Route::resource('users', UserController::class);
     Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
-});
 
-// Dokumen Upload Routes
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/verifikasi-dokumen', [DokumenController::class, 'index'])->name('verifikasi-dokumen.index');
+    // Dokumen Routes (moved inside admin group for consistency)
+    Route::get('/verifikasi-dokumen', [DokumenController::class, 'index'])->name('dokumen.index');
     Route::get('/dokumen/{calonSantri}/upload', [DokumenController::class, 'create'])->name('dokumen.create');
     Route::post('/dokumen/{calonSantri}', [DokumenController::class, 'store'])->name('dokumen.store');
     Route::delete('/dokumen/{dokumen}', [DokumenController::class, 'destroy'])->name('dokumen.destroy');
 });
 
 // API Routes
-Route::middleware(['auth', 'role:admin'])->prefix('api')->group(function () {
+Route::middleware(['auth', 'role:admin,petugas_pendaftaran,petugas_keuangan'])->prefix('api')->group(function () {
     Route::post('/dokumen/toggle-hardcopy', [DokumenController::class, 'toggleHardcopy']);
-});
-
-// Debug Route
-Route::get('/debug-user', function () {
-    if (auth()->check()) {
-        $user = auth()->user();
-        return "User ID: {$user->id}, Email: {$user->email}, Role: {$user->role}";
-    } else {
-        return "User not authenticated";
-    }
 });
 
 // Santri Routes

@@ -59,4 +59,37 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\CalonSantri::class, 'no_telp', 'phone');
     }
+
+    /**
+     * Check if user has a specific permission
+     */
+    public function hasPermission(string $permissionName): bool
+    {
+        // Admin has all permissions
+        if ($this->role === 'admin') {
+            return true;
+        }
+
+        return \Illuminate\Support\Facades\DB::table('role_permissions')
+            ->join('permissions', 'role_permissions.permission_id', '=', 'permissions.id')
+            ->where('role', $this->role)
+            ->where('permissions.name', $permissionName)
+            ->exists();
+    }
+
+    /**
+     * Check if user has any of the given permissions
+     */
+    public function hasAnyPermission(array $permissionNames): bool
+    {
+        if ($this->role === 'admin') {
+            return true;
+        }
+
+        return \Illuminate\Support\Facades\DB::table('role_permissions')
+            ->join('permissions', 'role_permissions.permission_id', '=', 'permissions.id')
+            ->where('role', $this->role)
+            ->whereIn('permissions.name', $permissionNames)
+            ->exists();
+    }
 }

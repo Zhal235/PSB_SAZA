@@ -23,12 +23,12 @@
             <!-- Tabs untuk Jenjang -->
             <div class="bg-white border-b border-gray-200 px-6 sticky top-24 z-10">
                 <div class="flex space-x-2">
-                    <a href="{{ route('verifikasi-dokumen.index', ['jenjang' => 'MTs']) }}" 
+                    <a href="{{ route('admin.dokumen.index', ['jenjang' => 'MTs']) }}" 
                         class="px-6 py-4 font-semibold border-b-2 transition
                         {{ $jenjang === 'MTs' ? 'border-[#00a0a0] text-[#00a0a0]' : 'border-transparent text-gray-600 hover:text-gray-800' }}">
                         🏫 MTs (Sudah: {{ $mtsSudah }}/{{ $mtsTotal }})
                     </a>
-                    <a href="{{ route('verifikasi-dokumen.index', ['jenjang' => 'SMK']) }}" 
+                    <a href="{{ route('admin.dokumen.index', ['jenjang' => 'SMK']) }}" 
                         class="px-6 py-4 font-semibold border-b-2 transition
                         {{ $jenjang === 'SMK' ? 'border-[#00a0a0] text-[#00a0a0]' : 'border-transparent text-gray-600 hover:text-gray-800' }}">
                         🎓 SMK (Sudah: {{ $smkSudah }}/{{ $smkTotal }})
@@ -39,15 +39,15 @@
             <!-- Filter Hardcopy -->
             <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 sticky top-40 z-10">
                 <div class="flex space-x-3">
-                    <a href="{{ route('verifikasi-dokumen.index', ['jenjang' => $jenjang, 'hardcopy' => 'semua']) }}" 
+                    <a href="{{ route('admin.dokumen.index', ['jenjang' => $jenjang, 'hardcopy' => 'semua']) }}" 
                         class="px-4 py-2 rounded font-semibold transition {{ $hardcopy === 'semua' ? 'text-white' : 'bg-white text-gray-700 border border-gray-300 hover:border-gray-400' }}" style="@if($hardcopy === 'semua') background-color: #00a0a0; @endif">
                         📋 Semua
                     </a>
-                    <a href="{{ route('verifikasi-dokumen.index', ['jenjang' => $jenjang, 'hardcopy' => 'sudah']) }}" 
+                    <a href="{{ route('admin.dokumen.index', ['jenjang' => $jenjang, 'hardcopy' => 'sudah']) }}" 
                         class="px-4 py-2 rounded font-semibold transition {{ $hardcopy === 'sudah' ? 'bg-green-600 text-white' : 'bg-white text-gray-700 border border-gray-300 hover:border-gray-400' }}">
                         ✅ Sudah Serah
                     </a>
-                    <a href="{{ route('verifikasi-dokumen.index', ['jenjang' => $jenjang, 'hardcopy' => 'belum']) }}" 
+                    <a href="{{ route('admin.dokumen.index', ['jenjang' => $jenjang, 'hardcopy' => 'belum']) }}" 
                         class="px-4 py-2 rounded font-semibold transition {{ $hardcopy === 'belum' ? 'bg-orange-600 text-white' : 'bg-white text-gray-700 border border-gray-300 hover:border-gray-400' }}">
                         ⚠️ Belum Serah
                     </a>
@@ -176,10 +176,9 @@
                                                 <span class="text-gray-300">-</span>
                                             @endif
                                         </td>
-                                        
                                         <!-- Action -->
                                         <td class="px-3 py-2 text-center">
-                                            <a href="{{ route('dokumen.create', $santri) }}" class="text-indigo-600 hover:text-indigo-800 font-semibold">
+                                            <a href="{{ route('admin.dokumen.create', $santri) }}" class="text-indigo-600 hover:text-indigo-800 font-semibold">
                                                 📋
                                             </a>
                                         </td>

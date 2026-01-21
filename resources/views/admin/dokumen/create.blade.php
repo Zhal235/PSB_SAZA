@@ -65,7 +65,7 @@
                             <p class="text-xs text-gray-500 text-center mb-3">{{ $dokumen->created_at->format('d/m/Y H:i') }}</p>
                             
                             <!-- Upload Ulang Form - Hidden -->
-                            <form action="{{ route('dokumen.store', $calonSantri) }}" method="POST" enctype="multipart/form-data" class="form-upload hidden" id="form-ulang-{{ $loop->index }}">
+                            <form action="{{ route('admin.dokumen.store', $calonSantri) }}" method="POST" enctype="multipart/form-data" class="form-upload hidden" id="form-ulang-{{ $loop->index }}">
                                 @csrf
                                 <input type="hidden" name="tipe_dokumen" value="{{ $value }}">
                                 <input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png" class="hidden" id="file-ulang-{{ $loop->index }}">
@@ -76,7 +76,7 @@
                             </button>
                         @else
                             <!-- Upload Form - Hidden -->
-                            <form action="{{ route('dokumen.store', $calonSantri) }}" method="POST" enctype="multipart/form-data" class="form-upload hidden" id="form-{{ $loop->index }}">
+                            <form action="{{ route('admin.dokumen.store', $calonSantri) }}" method="POST" enctype="multipart/form-data" class="form-upload hidden" id="form-{{ $loop->index }}">
                                 @csrf
                                 <input type="hidden" name="tipe_dokumen" value="{{ $value }}">
                                 <input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png" class="hidden" id="file-{{ $loop->index }}">
@@ -128,7 +128,7 @@
                             <p class="text-xs text-gray-500 text-center mb-3">{{ $doc->created_at->format('d/m/Y H:i') }}</p>
                             
                             <!-- Delete & Upload Ulang -->
-                            <form action="{{ route('dokumen.destroy', $doc) }}" method="POST" class="inline-block w-full">
+                            <form action="{{ route('admin.dokumen.destroy', $doc) }}" method="POST" class="inline-block w-full">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="w-full bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 font-semibold transition text-xs" onclick="return confirm('Hapus dokumen ini?')">🗑️ Hapus</button>
@@ -147,7 +147,7 @@
                 <div id="addOptionalForm" class="hidden border border-blue-300 rounded-lg p-6 bg-blue-50">
                     <h3 class="text-lg font-bold text-gray-800 mb-4">➕ Tambah Dokumen Opsional</h3>
                     
-                    <form action="{{ route('dokumen.store', $calonSantri) }}" method="POST" enctype="multipart/form-data" class="form-upload space-y-4" id="form-optional">
+                    <form action="{{ route('admin.dokumen.store', $calonSantri) }}" method="POST" enctype="multipart/form-data" class="form-upload space-y-4" id="form-optional">
                         @csrf
                         
                         <div>

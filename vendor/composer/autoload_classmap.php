@@ -6,7 +6,13 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Console\\Commands\\ListPermissions' => $baseDir . '/app/Console/Commands/ListPermissions.php',
+    'App\\Console\\Commands\\ListUsers' => $baseDir . '/app/Console/Commands/ListUsers.php',
+    'App\\Console\\Commands\\ManageRolePermission' => $baseDir . '/app/Console/Commands/ManageRolePermission.php',
+    'App\\Console\\Commands\\SetupRolePermissions' => $baseDir . '/app/Console/Commands/SetupRolePermissions.php',
+    'App\\Console\\Commands\\ShowRolePermissions' => $baseDir . '/app/Console/Commands/ShowRolePermissions.php',
     'App\\Exports\\CalonSantriExport' => $baseDir . '/app/Exports/CalonSantriExport.php',
+    'App\\Http\\Controllers\\Admin\\UserController' => $baseDir . '/app/Http/Controllers/Admin/UserController.php',
     'App\\Http\\Controllers\\AuthController' => $baseDir . '/app/Http/Controllers/AuthController.php',
     'App\\Http\\Controllers\\BankSettingController' => $baseDir . '/app/Http/Controllers/BankSettingController.php',
     'App\\Http\\Controllers\\BuktiPembayaranController' => $baseDir . '/app/Http/Controllers/BuktiPembayaranController.php',
@@ -17,6 +23,7 @@ return array(
     'App\\Http\\Controllers\\FinancialRecordController' => $baseDir . '/app/Http/Controllers/FinancialRecordController.php',
     'App\\Http\\Controllers\\PembayaranController' => $baseDir . '/app/Http/Controllers/PembayaranController.php',
     'App\\Http\\Controllers\\PembayaranItemController' => $baseDir . '/app/Http/Controllers/PembayaranItemController.php',
+    'App\\Http\\Controllers\\Petugas\\CalonSantriController' => $baseDir . '/app/Http/Controllers/Petugas/CalonSantriController.php',
     'App\\Http\\Controllers\\RegisterController' => $baseDir . '/app/Http/Controllers/RegisterController.php',
     'App\\Http\\Controllers\\SantriController' => $baseDir . '/app/Http/Controllers/SantriController.php',
     'App\\Http\\Middleware\\CheckRole' => $baseDir . '/app/Http/Middleware/CheckRole.php',
@@ -30,6 +37,8 @@ return array(
     'App\\Models\\PembayaranRecord' => $baseDir . '/app/Models/PembayaranRecord.php',
     'App\\Models\\PendapatanKeluarga' => $baseDir . '/app/Models/PendapatanKeluarga.php',
     'App\\Models\\Pendidikan' => $baseDir . '/app/Models/Pendidikan.php',
+    'App\\Models\\Permission' => $baseDir . '/app/Models/Permission.php',
+    'App\\Models\\Sekolah' => $baseDir . '/app/Models/Sekolah.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Observers\\CalonSantriObserver' => $baseDir . '/app/Observers/CalonSantriObserver.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
@@ -193,6 +202,7 @@ return array(
     'Database\\Seeders\\PembayaranItemSeeder' => $baseDir . '/database/seeders/PembayaranItemSeeder.php',
     'Database\\Seeders\\PendapatanKeluargaSeeder' => $baseDir . '/database/seeders/PendapatanKeluargaSeeder.php',
     'Database\\Seeders\\PendidikanSeeder' => $baseDir . '/database/seeders/PendidikanSeeder.php',
+    'Database\\Seeders\\PermissionSeeder' => $baseDir . '/database/seeders/PermissionSeeder.php',
     'Database\\Seeders\\UserSeeder' => $baseDir . '/database/seeders/UserSeeder.php',
     'DateError' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/DateError.php',
     'DateException' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/DateException.php',

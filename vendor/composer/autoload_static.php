@@ -123,6 +123,7 @@ class ComposerStaticInitc514d8f7b9fc5970bdd94287905ef584
         'ce9671a430e4846b44e1c68c7611f9f5' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery.php',
         'a1cfe24d14977df6878b9bf804af2d1c' => __DIR__ . '/..' . '/nunomaduro/collision/src/Adapters/Phpunit/Autoload.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
+        'e9de40d5d36793c55fbb2b23b7aca1e2' => __DIR__ . '/../..' . '/app/Helpers/RouteHelper.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -700,7 +701,13 @@ class ComposerStaticInitc514d8f7b9fc5970bdd94287905ef584
     );
 
     public static $classMap = array (
+        'App\\Console\\Commands\\ListPermissions' => __DIR__ . '/../..' . '/app/Console/Commands/ListPermissions.php',
+        'App\\Console\\Commands\\ListUsers' => __DIR__ . '/../..' . '/app/Console/Commands/ListUsers.php',
+        'App\\Console\\Commands\\ManageRolePermission' => __DIR__ . '/../..' . '/app/Console/Commands/ManageRolePermission.php',
+        'App\\Console\\Commands\\SetupRolePermissions' => __DIR__ . '/../..' . '/app/Console/Commands/SetupRolePermissions.php',
+        'App\\Console\\Commands\\ShowRolePermissions' => __DIR__ . '/../..' . '/app/Console/Commands/ShowRolePermissions.php',
         'App\\Exports\\CalonSantriExport' => __DIR__ . '/../..' . '/app/Exports/CalonSantriExport.php',
+        'App\\Http\\Controllers\\Admin\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/UserController.php',
         'App\\Http\\Controllers\\AuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/AuthController.php',
         'App\\Http\\Controllers\\BankSettingController' => __DIR__ . '/../..' . '/app/Http/Controllers/BankSettingController.php',
         'App\\Http\\Controllers\\BuktiPembayaranController' => __DIR__ . '/../..' . '/app/Http/Controllers/BuktiPembayaranController.php',
@@ -711,6 +718,7 @@ class ComposerStaticInitc514d8f7b9fc5970bdd94287905ef584
         'App\\Http\\Controllers\\FinancialRecordController' => __DIR__ . '/../..' . '/app/Http/Controllers/FinancialRecordController.php',
         'App\\Http\\Controllers\\PembayaranController' => __DIR__ . '/../..' . '/app/Http/Controllers/PembayaranController.php',
         'App\\Http\\Controllers\\PembayaranItemController' => __DIR__ . '/../..' . '/app/Http/Controllers/PembayaranItemController.php',
+        'App\\Http\\Controllers\\Petugas\\CalonSantriController' => __DIR__ . '/../..' . '/app/Http/Controllers/Petugas/CalonSantriController.php',
         'App\\Http\\Controllers\\RegisterController' => __DIR__ . '/../..' . '/app/Http/Controllers/RegisterController.php',
         'App\\Http\\Controllers\\SantriController' => __DIR__ . '/../..' . '/app/Http/Controllers/SantriController.php',
         'App\\Http\\Middleware\\CheckRole' => __DIR__ . '/../..' . '/app/Http/Middleware/CheckRole.php',
@@ -724,6 +732,8 @@ class ComposerStaticInitc514d8f7b9fc5970bdd94287905ef584
         'App\\Models\\PembayaranRecord' => __DIR__ . '/../..' . '/app/Models/PembayaranRecord.php',
         'App\\Models\\PendapatanKeluarga' => __DIR__ . '/../..' . '/app/Models/PendapatanKeluarga.php',
         'App\\Models\\Pendidikan' => __DIR__ . '/../..' . '/app/Models/Pendidikan.php',
+        'App\\Models\\Permission' => __DIR__ . '/../..' . '/app/Models/Permission.php',
+        'App\\Models\\Sekolah' => __DIR__ . '/../..' . '/app/Models/Sekolah.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Observers\\CalonSantriObserver' => __DIR__ . '/../..' . '/app/Observers/CalonSantriObserver.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
@@ -887,6 +897,7 @@ class ComposerStaticInitc514d8f7b9fc5970bdd94287905ef584
         'Database\\Seeders\\PembayaranItemSeeder' => __DIR__ . '/../..' . '/database/seeders/PembayaranItemSeeder.php',
         'Database\\Seeders\\PendapatanKeluargaSeeder' => __DIR__ . '/../..' . '/database/seeders/PendapatanKeluargaSeeder.php',
         'Database\\Seeders\\PendidikanSeeder' => __DIR__ . '/../..' . '/database/seeders/PendidikanSeeder.php',
+        'Database\\Seeders\\PermissionSeeder' => __DIR__ . '/../..' . '/database/seeders/PermissionSeeder.php',
         'Database\\Seeders\\UserSeeder' => __DIR__ . '/../..' . '/database/seeders/UserSeeder.php',
         'DateError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateError.php',
         'DateException' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateException.php',
