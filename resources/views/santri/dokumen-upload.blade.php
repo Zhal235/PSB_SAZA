@@ -8,30 +8,30 @@
 @endsection
 
 @section('content')
-    <div class="bg-white rounded-lg shadow max-w-4xl">
-        <div class="p-8">
+    <div class="bg-white rounded-lg shadow">
+        <div class="p-4 lg:p-8">
             <!-- Success Message -->
             @if (session('success'))
-                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6">
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-3 lg:p-4 mb-4 lg:mb-6 text-sm">
                     ✅ {{ session('success') }}
                 </div>
             @endif
 
             <!-- Error Message -->
             @if (session('error'))
-                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6">
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 lg:p-4 mb-4 lg:mb-6 text-sm">
                     ❌ {{ session('error') }}
                 </div>
             @endif
 
             <!-- Info Box -->
-            <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4 mb-6">
-                <p class="text-sm"><strong>ℹ️ Info:</strong> Upload semua dokumen wajib. Gambar akan otomatis dikompres hingga 2MB.</p>
+            <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-3 lg:p-4 mb-4 lg:mb-6">
+                <p class="text-xs lg:text-sm"><strong>ℹ️ Info:</strong> Upload semua dokumen wajib. Gambar akan otomatis dikompres hingga 2MB.</p>
             </div>
 
             <!-- Hardcopy Reminder Box -->
-            <div class="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800 p-4 mb-6">
-                <p class="text-sm font-semibold mb-2">📬 Jangan Lupa Siapkan Hardcopy!</p>
+            <div class="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800 p-3 lg:p-4 mb-4 lg:mb-6">
+                <p class="text-xs lg:text-sm font-semibold mb-2">📬 Jangan Lupa Siapkan Hardcopy!</p>
                 <p class="text-xs mb-3">Selain upload digital, Anda juga perlu menyiapkan hardcopy (fotokopi) dokumen untuk diserahkan ke sekretariat:</p>
                 <ul class="text-xs ml-4 space-y-1 list-disc">
                     <li><strong>5 lembar</strong> fotokopi untuk setiap jenis dokumen</li>
@@ -42,18 +42,18 @@
             </div>
 
             <!-- Upload Grid -->
-            <div class="grid grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
                 @foreach($dokumenTypes as $value => $label)
                     @php
                         $dokumen = $calonSantri->dokumens()->where('tipe_dokumen', $value)->first();
                     @endphp
                     
-                    <div class="border border-gray-300 rounded-lg p-4">
-                        <h3 class="text-sm font-bold text-gray-800">{{ $label }}</h3>
+                    <div class="border border-gray-300 rounded-lg p-3 lg:p-4">
+                        <h3 class="text-xs lg:text-sm font-bold text-gray-800 mb-3">{{ $label }}</h3>
                         
                         @if($dokumen)
                             <!-- Preview Document -->
-                            <div class="bg-gray-100 rounded border border-gray-300 p-2 my-3 h-40 flex items-center justify-center overflow-hidden">
+                            <div class="bg-gray-100 rounded border border-gray-300 p-2 my-3 h-32 lg:h-40 flex items-center justify-center overflow-hidden">
                                 @php
                                     $ext = pathinfo($dokumen->file_path, PATHINFO_EXTENSION);
                                     $isImage = in_array($ext, ['jpg', 'jpeg', 'png']);
@@ -63,7 +63,7 @@
                                     <img src="{{ asset('storage/' . $dokumen->file_path) }}" alt="{{ $label }}" class="max-w-full max-h-full object-contain">
                                 @elseif($fileExists)
                                     <div class="text-center">
-                                        <p class="text-2xl">📄</p>
+                                        <p class="text-xl lg:text-2xl">📄</p>
                                         <p class="text-xs text-gray-600 mt-1">{{ strtoupper($ext) }}</p>
                                     </div>
                                 @else
@@ -83,10 +83,18 @@
                                 <input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png" class="hidden" id="file-ulang-{{ $loop->index }}">
                             </form>
 
-                            <button type="button" class="w-full text-white px-3 py-2 rounded hover:shadow-lg font-semibold transition text-sm" style="background-color: #f0b43c; color: #333;" onclick="showUploadMenu('ulang-{{ $loop->index }}', '{{ $value }}')">
+                            <button type="button" class="w-full text-white px-3 py-3 rounded hover:shadow-lg font-semibold transition text-xs lg:text-sm touch-manipulation" style="background-color: #f0b43c; color: #333;" onclick="showUploadMenu('ulang-{{ $loop->index }}', '{{ $value }}')">
                                 🔄 Upload Ulang
                             </button>
                         @else
+                            <!-- Placeholder untuk preview -->
+                            <div class="bg-gray-100 rounded border border-gray-300 p-2 my-3 h-32 lg:h-40 flex items-center justify-center">
+                                <div class="text-center text-gray-400">
+                                    <p class="text-3xl lg:text-4xl mb-2">📤</p>
+                                    <p class="text-xs">Belum diupload</p>
+                                </div>
+                            </div>
+
                             <!-- Upload Form - Hidden -->
                             <form action="{{ route('santri.dokumen-store') }}" method="POST" enctype="multipart/form-data" class="form-upload hidden" id="form-{{ $loop->index }}">
                                 @csrf
@@ -95,8 +103,8 @@
                             </form>
 
                             <!-- Upload Button -->
-                            <button type="button" class="w-full text-white px-3 py-2 rounded hover:shadow-lg font-semibold transition text-sm" style="background-color: #00a0a0;" onclick="showUploadMenu('{{ $loop->index }}', '{{ $value }}')">
-                                📤 Upload {{ $label }}
+                            <button type="button" class="w-full text-white px-3 py-3 rounded hover:shadow-lg font-semibold transition text-xs lg:text-sm touch-manipulation" style="background-color: #00a0a0;" onclick="showUploadMenu('{{ $loop->index }}', '{{ $value }}')">
+                                📤 Upload
                             </button>
                         @endif
                     </div>
@@ -195,8 +203,8 @@
             </div>
 
             <!-- Buttons -->
-            <div class="flex gap-4 pt-6 border-t mt-6">
-                <a href="{{ route('santri.dashboard') }}" class="bg-gray-400 text-white px-6 py-2 rounded hover:bg-gray-500 font-semibold transition">✅ Selesai</a>
+            <div class="flex gap-4 pt-4 lg:pt-6 border-t mt-4 lg:mt-6">
+                <a href="{{ route('santri.dashboard') }}" class="bg-gray-400 text-white px-4 lg:px-6 py-2 lg:py-2 rounded hover:bg-gray-500 font-semibold transition text-sm">✅ Selesai</a>
             </div>
         </div>
     </div>
@@ -210,19 +218,19 @@
             selectedFormId = 'form-' + formIndex;
 
             uploadMenu = document.createElement('div');
-            uploadMenu.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            uploadMenu.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
             uploadMenu.innerHTML = `
-                <div class="bg-white rounded-lg p-8 max-w-sm w-full mx-4">
-                    <h3 class="text-xl font-bold mb-6 text-gray-800">📤 Upload ${tipeDokumen}</h3>
+                <div class="bg-white rounded-lg p-4 lg:p-8 max-w-sm w-full">
+                    <h3 class="text-lg lg:text-xl font-bold mb-4 lg:mb-6 text-gray-800">📤 Upload Dokumen</h3>
                     
                     <div class="flex flex-col gap-3">
-                        <button type="button" class="flex items-center justify-center gap-3 bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 font-semibold transition" onclick="chooseFile()">
+                        <button type="button" class="flex items-center justify-center gap-3 bg-blue-600 text-white px-4 lg:px-6 py-3 rounded hover:bg-blue-700 font-semibold transition text-sm touch-manipulation" onclick="chooseFile()">
                             📁 Pilih File
                         </button>
-                        <button type="button" class="flex items-center justify-center gap-3 bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 font-semibold transition" onclick="openCameraFromMenu()">
+                        <button type="button" class="flex items-center justify-center gap-3 bg-green-600 text-white px-4 lg:px-6 py-3 rounded hover:bg-green-700 font-semibold transition text-sm touch-manipulation" onclick="openCameraFromMenu()">
                             📷 Ambil Foto
                         </button>
-                        <button type="button" class="flex items-center justify-center gap-3 bg-gray-400 text-white px-6 py-3 rounded hover:bg-gray-500 font-semibold transition" onclick="closeUploadMenu()">
+                        <button type="button" class="flex items-center justify-center gap-3 bg-gray-400 text-white px-4 lg:px-6 py-3 rounded hover:bg-gray-500 font-semibold transition text-sm touch-manipulation" onclick="closeUploadMenu()">
                             ❌ Batal
                         </button>
                     </div>
@@ -242,19 +250,19 @@
             }
 
             uploadMenu = document.createElement('div');
-            uploadMenu.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            uploadMenu.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
             uploadMenu.innerHTML = `
-                <div class="bg-white rounded-lg p-8 max-w-sm w-full mx-4">
-                    <h3 class="text-xl font-bold mb-6 text-gray-800">📤 Upload Dokumen</h3>
+                <div class="bg-white rounded-lg p-4 lg:p-8 max-w-sm w-full">
+                    <h3 class="text-lg lg:text-xl font-bold mb-4 lg:mb-6 text-gray-800">📤 Upload Dokumen</h3>
                     
                     <div class="flex flex-col gap-3">
-                        <button type="button" class="flex items-center justify-center gap-3 bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 font-semibold transition" onclick="chooseFile()">
+                        <button type="button" class="flex items-center justify-center gap-3 bg-blue-600 text-white px-4 lg:px-6 py-3 rounded hover:bg-blue-700 font-semibold transition text-sm touch-manipulation" onclick="chooseFile()">
                             📁 Pilih File
                         </button>
-                        <button type="button" class="flex items-center justify-center gap-3 bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 font-semibold transition" onclick="openCameraFromMenu()">
+                        <button type="button" class="flex items-center justify-center gap-3 bg-green-600 text-white px-4 lg:px-6 py-3 rounded hover:bg-green-700 font-semibold transition text-sm touch-manipulation" onclick="openCameraFromMenu()">
                             📷 Ambil Foto
                         </button>
-                        <button type="button" class="flex items-center justify-center gap-3 bg-gray-400 text-white px-6 py-3 rounded hover:bg-gray-500 font-semibold transition" onclick="closeUploadMenu()">
+                        <button type="button" class="flex items-center justify-center gap-3 bg-gray-400 text-white px-4 lg:px-6 py-3 rounded hover:bg-gray-500 font-semibold transition text-sm touch-manipulation" onclick="closeUploadMenu()">
                             ❌ Batal
                         </button>
                     </div>

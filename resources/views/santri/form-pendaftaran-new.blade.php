@@ -1,0 +1,182 @@
+@extends('layouts.santri')
+
+@section('title', 'Form Pendaftaran')
+@section('page-title', '📋 Form Pendaftaran Santri')
+
+@section('page-subtitle')
+    <p class="text-sm text-gray-600 mt-1">Lengkapi data pendaftaran Anda untuk jenjang: <span class="font-semibold">{{ Auth::user()->jenjang }}</span></p>
+@endsection
+
+@section('content')
+    <!-- Progress Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-6 lg:mb-8">
+        <!-- Progress Card -->
+        <div class="bg-white rounded-lg shadow p-4 lg:p-6">
+            <p class="text-sm text-gray-600 mb-2">Status Pendaftaran</p>
+            @if($calonSantri)
+                <p class="text-xl lg:text-2xl font-bold text-green-600">✅ Sudah Input</p>
+                <p class="text-xs text-gray-500 mt-2">No. Daftar: {{ $calonSantri->no_pendaftaran }}</p>
+            @else
+                <p class="text-xl lg:text-2xl font-bold text-yellow-600">⏳ Belum Input</p>
+                <p class="text-xs text-gray-500 mt-2">Silakan lengkapi form di bawah</p>
+            @endif
+        </div>
+
+        <!-- Info Card -->
+        <div class="bg-white rounded-lg shadow p-4 lg:p-6">
+            <p class="text-sm text-gray-600 mb-2">No. HP Terdaftar</p>
+            <p class="text-xl lg:text-2xl font-bold text-indigo-600">{{ Auth::user()->phone }}</p>
+            <p class="text-xs text-gray-500 mt-2">Data dari akun Anda</p>
+        </div>
+
+        <!-- Jenjang Card -->
+        <div class="bg-white rounded-lg shadow p-4 lg:p-6">
+            <p class="text-sm text-gray-600 mb-2">Jenjang Pilihan</p>
+            <p class="text-xl lg:text-2xl font-bold text-blue-600">{{ Auth::user()->jenjang }}</p>
+            <p class="text-xs text-gray-500 mt-2">Sudah dikonfirmasi</p>
+        </div>
+    </div>
+
+    <!-- Form Section -->
+    <div class="bg-white rounded-lg shadow p-4 lg:p-8">
+        @if($errors->any())
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 lg:p-4 mb-4 lg:mb-6 rounded">
+                <p class="font-semibold text-sm">❌ Error:</p>
+                <ul class="list-disc ml-5 mt-2 text-sm">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        @if(session('success'))
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-3 lg:p-4 mb-4 lg:mb-6 rounded text-sm">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <!-- Progress Steps -->
+        <div class="mb-6 lg:mb-8">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-4">
+                <h2 class="text-lg lg:text-xl font-bold text-gray-800 mb-4 lg:mb-0">Lengkapi Data Pendaftaran</h2>
+                <div class="text-sm text-gray-600 bg-gray-50 px-3 py-1 rounded">
+                    📝 Klik setiap bagian untuk mengisi data
+                </div>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ route('santri.save-data') }}" class="space-y-4 lg:space-y-6">
+            @csrf
+
+            <!-- Step 1: Data Santri -->
+            <div class="accordion-section border border-gray-200 rounded-lg">
+                <div class="accordion-header bg-gradient-to-r from-indigo-50 to-blue-50 p-4 rounded-t-lg cursor-pointer" onclick="toggleSection('step1')">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                            <h3 class="text-base lg:text-lg font-bold text-gray-800">👤 Data Santri</h3>
+                        </div>
+                        <span class="text-indigo-600 font-bold text-xl" id="step1-icon">-</span>
+                    </div>
+                </div>
+                <div id="step1-content" class="accordion-content p-4 lg:p-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">NISN (Opsional)</label>
+                            <input type="text" name="nisn" value="{{ old('nisn', $calonSantri->nisn ?? '') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="NISN jika ada" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">NIK Santri (Opsional)</label>
+                            <input type="text" name="nik_santri" value="{{ old('nik_santri', $calonSantri->nik_santri ?? '') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="NIK jika ada" />
+                        </div>
+                        <div class="lg:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
+                            <input type="text" name="nama" value="{{ old('nama', $calonSantri->nama ?? '') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Masukkan nama lengkap sesuai dokumen" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Kelamin <span class="text-red-500">*</span></label>
+                            <select name="jenis_kelamin" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option value="">-- Pilih --</option>
+                                <option value="laki-laki" {{ old('jenis_kelamin', $calonSantri->jenis_kelamin ?? '') === 'laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                                <option value="perempuan" {{ old('jenis_kelamin', $calonSantri->jenis_kelamin ?? '') === 'perempuan' ? 'selected' : '' }}>Perempuan</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tempat Lahir <span class="text-red-500">*</span></label>
+                            <input type="text" name="tempat_lahir" value="{{ old('tempat_lahir', $calonSantri->tempat_lahir ?? '') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Kota/Kabupaten" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Lahir <span class="text-red-500">*</span></label>
+                            <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir', optional($calonSantri)->tanggal_lahir ? $calonSantri->tanggal_lahir->format('Y-m-d') : '') }}" required onkeydown="return false" onpaste="return false" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Asal Sekolah <span class="text-red-500">*</span></label>
+                            <input type="text" name="asal_sekolah" value="{{ old('asal_sekolah', $calonSantri->asal_sekolah ?? '') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ketik nama sekolah" list="sekolah-list" />
+                            <datalist id="sekolah-list">
+                                @php
+                                    $sekolahs = \App\Models\Sekolah::orderBy('nama')->get();
+                                @endphp
+                                @foreach($sekolahs as $sekolah)
+                                    <option value="{{ $sekolah->nama }}"></option>
+                                @endforeach
+                            </datalist>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Hobi (Opsional)</label>
+                            <input type="text" name="hobi" value="{{ old('hobi', $calonSantri->hobi ?? '') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Hobi/minat" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Cita-cita (Opsional)</label>
+                            <input type="text" name="cita_cita" value="{{ old('cita_cita', $calonSantri->cita_cita ?? '') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Cita-cita" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Continue adding other sections... -->
+            @include('admin.calon-santri.form-fields', [
+                'calonSantri' => $calonSantri,
+                'showNoTelp' => false,
+                'showStatusFields' => false
+            ])
+
+            <!-- Info Box -->
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 lg:p-4 rounded">
+                <p class="text-sm text-blue-700">
+                    <span class="font-semibold">ℹ️ Informasi:</span> Pastikan semua data yang diisi benar dan sesuai dengan dokumen. Data yang Anda input akan diverifikasi oleh admin.
+                </p>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 pt-4 lg:pt-6 border-t">
+                <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded hover:bg-indigo-700 font-semibold transition text-sm">
+                    ✅ @if($calonSantri)Update @else Daftar @endif Sekarang
+                </button>
+                <a href="{{ route('santri.dashboard') }}" class="bg-gray-400 text-white px-6 py-3 rounded hover:bg-gray-500 font-semibold transition text-center text-sm">
+                    ← Kembali
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function toggleSection(stepId) {
+            const content = document.getElementById(stepId + '-content');
+            const icon = document.getElementById(stepId + '-icon');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.textContent = '-';
+            } else {
+                content.classList.add('hidden');
+                icon.textContent = '+';
+            }
+        }
+
+        // Expand first section by default
+        document.addEventListener('DOMContentLoaded', function() {
+            // First section is already open
+        });
+    </script>
+@endsection
