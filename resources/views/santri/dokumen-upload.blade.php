@@ -29,6 +29,18 @@
                 <p class="text-sm"><strong>ℹ️ Info:</strong> Upload semua dokumen wajib. Gambar akan otomatis dikompres hingga 2MB.</p>
             </div>
 
+            <!-- Hardcopy Reminder Box -->
+            <div class="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800 p-4 mb-6">
+                <p class="text-sm font-semibold mb-2">📬 Jangan Lupa Siapkan Hardcopy!</p>
+                <p class="text-xs mb-3">Selain upload digital, Anda juga perlu menyiapkan hardcopy (fotokopi) dokumen untuk diserahkan ke sekretariat:</p>
+                <ul class="text-xs ml-4 space-y-1 list-disc">
+                    <li><strong>5 lembar</strong> fotokopi untuk setiap jenis dokumen</li>
+                    <li>Fotokopi harus jelas, rapi, dan mudah dibaca</li>
+                    <li>Bisa diantar langsung atau dikirim ke sekretariat</li>
+                    <li>Perhatikan jadwal penyerahan yang diumumkan</li>
+                </ul>
+            </div>
+
             <!-- Upload Grid -->
             <div class="grid grid-cols-3 gap-6">
                 @foreach($dokumenTypes as $value => $label)

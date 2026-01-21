@@ -96,6 +96,20 @@
         </ol>
     </div>
 
+    <!-- Hardcopy Reminder Box -->
+    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded mt-6">
+        <p class="text-sm text-yellow-800">
+            <span class="font-semibold">📬 Jangan Lupa Siapkan Hardcopy Dokumen!</span>
+        </p>
+        <p class="text-xs text-yellow-700 mt-2 mb-2">Selain upload digital, Anda perlu menyiapkan hardcopy (fotokopi) untuk diserahkan:</p>
+        <ul class="text-xs text-yellow-700 ml-5 list-disc space-y-1">
+            <li><strong>5 lembar fotokopi</strong> untuk setiap jenis dokumen</li>
+            <li>Fotokopi harus jelas, rapi, dan mudah dibaca</li>
+            <li>Bisa diantar langsung atau dikirim ke sekretariat pesantren</li>
+            <li>Perhatikan jadwal pengumpulan yang diumumkan</li>
+        </ul>
+    </div>
+
     <!-- Modal Checklist Dokumen (hanya untuk akun baru) -->
     @if(!$calonSantri)
         <div id="docsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
