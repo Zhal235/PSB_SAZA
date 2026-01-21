@@ -2,7 +2,6 @@
 
 @section('title', 'Kelola Pembayaran')
 @section('page-title', 'Kelola Pembayaran')
-@section('page-subtitle', '<p class="text-sm text-gray-600 mt-1">Tracking pembayaran calon santri</p>')
 
 @section('content')
     <div class="bg-white rounded-lg shadow overflow-hidden">

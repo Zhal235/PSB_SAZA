@@ -49,21 +49,21 @@
         <!-- Pengaturan Bank (Hanya Admin) -->
         @if(auth()->user()->role === 'admin')
             <a href="{{ route('admin.bank-settings.index') }}" class="block px-4 py-3 rounded-lg text-white hover:bg-white/20 transition-all duration-300 font-semibold @if(Route::is('admin.bank-settings.*')) bg-white/20 @endif">
-                <span class="text-lg">🏦</span> Pengaturan Bank
+                <span class="text-lg">◇</span> Pengaturan Bank
             </a>
         @endif
 
         <!-- Financial Records (hanya untuk admin) -->
         @if(auth()->user()->hasPermission('view-financial-records') || auth()->user()->role === 'admin')
             <a href="{{ route('admin.financial-records.index') }}" class="block px-4 py-3 rounded-lg text-white hover:bg-white/20 transition-all duration-300 font-semibold @if(Route::is('admin.financial-records.*')) bg-white/20 @endif">
-                <span class="text-lg">💰</span> Pencatatan Keuangan
+                <span class="text-lg">◈</span> Pencatatan Keuangan
             </a>
         @endif
 
         <!-- User Petugas (Hanya Admin) -->
         @if(auth()->user()->role === 'admin')
             <a href="{{ route('admin.users.index') }}" class="block px-4 py-3 rounded-lg text-white hover:bg-white/20 transition-all duration-300 font-semibold @if(Route::is('admin.users.*')) bg-white/20 @endif">
-                <span class="text-lg">👥</span> User Petugas
+                <span class="text-lg">⊞</span> User Petugas
             </a>
         @endif
 
