@@ -63,7 +63,7 @@ class PermissionSeeder extends Seeder
 
     private function assignRolePermissions(): void
     {
-        $permissionModel = Permission::class;
+        $db = \Illuminate\Support\Facades\DB::table('role_permissions');
         
         // Admin has all permissions
         $adminPermissions = Permission::all()->pluck('id')->toArray();
@@ -95,7 +95,41 @@ class PermissionSeeder extends Seeder
             'create-financial-records',
         ])->pluck('id')->toArray();
 
-        // Store permissions in role_permissions table using raw query
-        // This will be done manually for now
+        // Delete old role permissions
+        $db->delete();
+
+        // Admin - all permissions
+        foreach ($adminPermissions as $permissionId) {
+            $db->insert([
+                'role' => 'admin',
+                'permission_id' => $permissionId,
+            ]);
+        }
+
+        // Santri - limited permissions
+        foreach ($santriPermissions as $permissionId) {
+            $db->insert([
+                'role' => 'santri',
+                'permission_id' => $permissionId,
+            ]);
+        }
+
+        // Petugas Pendaftaran - registration permissions
+        foreach ($petugas_pendaftaranPermissions as $permissionId) {
+            $db->insert([
+                'role' => 'petugas_pendaftaran',
+                'permission_id' => $permissionId,
+            ]);
+        }
+
+        // Petugas Keuangan - financial permissions
+        foreach ($petugas_keuanganPermissions as $permissionId) {
+            $db->insert([
+                'role' => 'petugas_keuangan',
+                'permission_id' => $permissionId,
+            ]);
+        }
+
+        echo "✓ Role permissions assigned successfully\n";
     }
 }
