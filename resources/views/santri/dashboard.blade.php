@@ -94,17 +94,17 @@
                 <p class="text-xs text-gray-500 mt-1 lg:mt-2">Lihat tagihan & invoice</p>
             </a>
 
-            <!-- 4. Cetak Bukti Daftar -->
+            <!-- 4. Download Bukti Daftar -->
             @if($calonSantri)
-                <a href="{{ route('santri.print-bukti-pendaftaran', $calonSantri) }}" target="_blank" class="p-4 lg:p-6 border-2 border-purple-200 rounded-lg hover:bg-purple-50 hover:border-purple-400 transition text-center">
-                    <div class="text-3xl lg:text-4xl mb-2 lg:mb-3">🖨️</div>
-                    <p class="font-semibold text-gray-800 text-sm lg:text-base">Cetak Bukti Daftar</p>
-                    <p class="text-xs text-gray-500 mt-1 lg:mt-2">Download & print</p>
+                <a href="{{ route('santri.download-bukti-pendaftaran', $calonSantri) }}" class="p-4 lg:p-6 border-2 border-purple-200 rounded-lg hover:bg-purple-50 hover:border-purple-400 transition text-center">
+                    <div class="text-3xl lg:text-4xl mb-2 lg:mb-3">📥</div>
+                    <p class="font-semibold text-gray-800 text-sm lg:text-base">Download Bukti Daftar</p>
+                    <p class="text-xs text-gray-500 mt-1 lg:mt-2">Simpan sebagai PDF</p>
                 </a>
             @else
                 <div class="p-4 lg:p-6 border-2 border-gray-200 rounded-lg bg-gray-50 text-center opacity-60">
-                    <div class="text-3xl lg:text-4xl mb-2 lg:mb-3">🖨️</div>
-                    <p class="font-semibold text-gray-400 text-sm lg:text-base">Cetak Bukti Daftar</p>
+                    <div class="text-3xl lg:text-4xl mb-2 lg:mb-3">📥</div>
+                    <p class="font-semibold text-gray-400 text-sm lg:text-base">Download Bukti Daftar</p>
                     <p class="text-xs text-gray-400 mt-1 lg:mt-2">Belum tersedia</p>
                 </div>
             @endif
@@ -120,7 +120,7 @@
             <li>Lengkapi form pendaftaran dengan data diri yang benar</li>
             <li>Upload dokumen persyaratan yang diminta</li>
             <li>Bayar biaya pendaftaran sesuai dengan tagihan</li>
-            <li>Cetak bukti pendaftaran untuk disimpan</li>
+            <li>Download bukti pendaftaran untuk disimpan</li>
             <li>Ikuti tes seleksi sesuai jadwal yang diumumkan</li>
         </ol>
     </div>

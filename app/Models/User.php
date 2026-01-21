@@ -25,6 +25,7 @@ class User extends Authenticatable
         'role',
         'jenjang',
         'has_selected_jenjang',
+        'is_active',
     ];
 
     /**
@@ -47,6 +48,15 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
+    }
+
+    /**
+     * Get the calon santri data for the user.
+     */
+    public function calonSantri()
+    {
+        return $this->hasOne(\App\Models\CalonSantri::class, 'no_telp', 'phone');
     }
 }

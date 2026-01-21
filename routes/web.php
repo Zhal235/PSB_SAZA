@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\BankSettingController;
 use App\Http\Controllers\BuktiPembayaranController;
 use App\Http\Controllers\CalonSantriController;
@@ -64,6 +65,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/bukti-pembayaran', [BuktiPembayaranController::class, 'index'])->name('bukti-pembayaran.index');
     Route::get('/bukti-pembayaran/{bukti}', [BuktiPembayaranController::class, 'show'])->name('bukti-pembayaran.show');
     Route::post('/bukti-pembayaran/{bukti}/verify', [BuktiPembayaranController::class, 'verify'])->name('bukti-pembayaran.verify');
+    
+    // User Management
+    Route::resource('users', UserController::class);
+    Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
 });
 
 // Dokumen Upload Routes
@@ -79,8 +84,18 @@ Route::middleware(['auth', 'role:admin'])->prefix('api')->group(function () {
     Route::post('/dokumen/toggle-hardcopy', [DokumenController::class, 'toggleHardcopy']);
 });
 
+// Debug Route
+Route::get('/debug-user', function () {
+    if (auth()->check()) {
+        $user = auth()->user();
+        return "User ID: {$user->id}, Email: {$user->email}, Role: {$user->role}";
+    } else {
+        return "User not authenticated";
+    }
+});
+
 // Santri Routes
-Route::middleware(['auth', 'role:calon_santri'])->prefix('santri')->name('santri.')->group(function () {
+Route::middleware(['auth', 'role:calon_santri,santri'])->prefix('santri')->name('santri.')->group(function () {
     Route::get('/select-jenjang', [SantriController::class, 'selectJenjang'])->name('select-jenjang');
     Route::post('/save-jenjang', [SantriController::class, 'saveJenjang'])->name('save-jenjang');
     Route::get('/dashboard', [SantriController::class, 'dashboard'])->name('dashboard');
