@@ -33,12 +33,20 @@
         </div>
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Lahir *</label>
-            <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir', optional($calonSantri)->tanggal_lahir ? $calonSantri->tanggal_lahir->format('Y-m-d') : '') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-            <p class="text-xs text-gray-500 mt-1">Format: dd/mm/yyyy</p>
+            <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir', optional($calonSantri)->tanggal_lahir ? $calonSantri->tanggal_lahir->format('Y-m-d') : '') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" onkeydown="return false" onpaste="return false" />
         </div>
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">Asal Sekolah *</label>
-            <input type="text" name="asal_sekolah" value="{{ old('asal_sekolah', $calonSantri->asal_sekolah ?? '') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="SD/MI atau SMP/MTs" />
+            <input type="text" name="asal_sekolah" value="{{ old('asal_sekolah', $calonSantri->asal_sekolah ?? '') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ketik nama sekolah" list="sekolah-list" />
+            <datalist id="sekolah-list">
+                @php
+                    $sekolahs = \App\Models\Sekolah::orderBy('nama')->get();
+                @endphp
+                @foreach($sekolahs as $sekolah)
+                    <option value="{{ $sekolah->nama }}"></option>
+                @endforeach
+            </datalist>
+            <p class="text-xs text-gray-500 mt-2">Ketik nama sekolah atau pilih dari saran yang tersedia</p>
         </div>
     </div>
 

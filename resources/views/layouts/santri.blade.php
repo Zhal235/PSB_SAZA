@@ -29,6 +29,24 @@
                 <a href="{{ route('santri.dokumen-upload') }}" class="block px-4 py-2 rounded @if(Route::is('santri.dokumen-upload')) @else hover:bg-white/20 @endif transition font-semibold" style="@if(Route::is('santri.dokumen-upload')) background-color: #007a7a; @endif">
                     📄 Upload Dokumen
                 </a>
+                @php
+                    $calonSantri = \App\Models\CalonSantri::where('no_telp', auth()->user()->phone)->first();
+                @endphp
+                @if($calonSantri)
+                    <div class="relative group">
+                        <button class="w-full text-left px-4 py-2 rounded hover:bg-white/20 transition font-semibold" style="color: #f0b43c;">
+                            🖨️ Bukti Pendaftaran
+                        </button>
+                        <div class="hidden group-hover:block absolute left-0 mt-0 w-56 bg-white text-gray-800 rounded shadow-lg z-10">
+                            <a href="{{ route('santri.print-bukti-pendaftaran', $calonSantri) }}" target="_blank" class="block px-4 py-2 hover:bg-gray-100 text-sm">
+                                🖨️ Tampilkan & Print
+                            </a>
+                            <a href="{{ route('santri.download-bukti-pendaftaran', $calonSantri) }}" class="block px-4 py-2 hover:bg-gray-100 text-sm border-t">
+                                📥 Download PDF
+                            </a>
+                        </div>
+                    </div>
+                @endif
             </nav>
 
             <hr class="my-6 border-white/20">

@@ -13,6 +13,10 @@ class PembayaranRecord extends Model
         'paid_at',
         'notes',
         'receipt_number',
+        'proof_image',
+        'proof_status',
+        'proof_notes',
+        'unique_code',
     ];
 
     protected $casts = [

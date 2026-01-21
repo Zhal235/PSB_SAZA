@@ -15,6 +15,9 @@
         <a href="{{ route('verifikasi-dokumen.index') }}" class="block px-4 py-3 rounded-lg text-white hover:bg-white/20 transition-all duration-300 font-semibold @if(Route::is('verifikasi-dokumen.*')) bg-white/20 @endif">
             <span class="text-lg">▢</span> Verifikasi Dokumen
         </a>
+        <a href="{{ route('admin.bukti-pembayaran.index') }}" class="block px-4 py-3 rounded-lg text-white hover:bg-white/20 transition-all duration-300 font-semibold @if(Route::is('admin.bukti-pembayaran.*')) bg-white/20 @endif">
+            <span class="text-lg">✓</span> Verifikasi Bukti Transfer
+        </a>
         <a href="{{ route('admin.pembayaran-items.index') }}" class="block px-4 py-3 rounded-lg text-white hover:bg-white/20 transition-all duration-300 font-semibold @if(Route::is('admin.pembayaran-items.*')) bg-white/20 @endif">
             <span class="text-lg">◆</span> Item Pembayaran
         </a>

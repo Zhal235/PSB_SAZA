@@ -13,6 +13,7 @@ class Pembayaran extends Model
         'paid_amount',
         'remaining_amount',
         'due_date',
+        'unique_code',
     ];
 
     protected $casts = [
@@ -30,6 +31,16 @@ class Pembayaran extends Model
     public function records()
     {
         return $this->hasMany(PembayaranRecord::class);
+    }
+
+    // Generate unique code untuk nominal transfer (2000-3000)
+    public static function generateUniqueCode()
+    {
+        do {
+            $code = str_pad(mt_rand(2000, 3000), 4, '0', STR_PAD_LEFT);
+        } while (self::where('unique_code', $code)->exists());
+        
+        return $code;
     }
 
     // Update status otomatis

@@ -116,7 +116,8 @@ class CalonSantriController extends Controller
             'paid_amount' => 0,
             'remaining_amount' => $totalItems,
             'status' => 'belum_bayar',
-            'due_date' => now()->addDays(7)
+            'due_date' => now()->addDays(7),
+            'unique_code' => \App\Models\Pembayaran::generateUniqueCode()
         ]);
 
         return redirect()->route('dokumen.create', $calonSantri)
@@ -190,6 +191,7 @@ class CalonSantriController extends Controller
                 [
                     'name' => $validated['nama'],
                     'email' => strtolower(str_replace(' ', '.', $validated['nama'])) . '@psb-saza.local',
+                    'password' => Hash::make('12345678'),
                     'role' => 'calon_santri',
                     'jenjang' => $calonSantri->jenjang,
                 ]

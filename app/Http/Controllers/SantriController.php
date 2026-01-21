@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CalonSantri;
+use App\Models\Pembayaran;
 use Illuminate\Http\Request;
 
 class SantriController extends Controller
@@ -128,6 +129,11 @@ class SantriController extends Controller
         $calonSantri = CalonSantri::where('no_telp', auth()->user()->phone)->first();
         $pembayaran = $calonSantri ? $calonSantri->pembayaran()->with('records')->first() : null;
         
+        // Generate unique code jika belum ada
+        if ($pembayaran && !$pembayaran->unique_code) {
+            $pembayaran->update(['unique_code' => Pembayaran::generateUniqueCode()]);
+        }
+        
         // Load active pembayaran items
         $items = \App\Models\PembayaranItem::where('status', 'active')->get();
 
@@ -139,13 +145,124 @@ class SantriController extends Controller
      */
     public function pembayaranInvoice($pembayaranId)
     {
-        $pembayaran = auth()->user()->calonSantri->pembayaran;
+        $calonSantri = CalonSantri::where('no_telp', auth()->user()->phone)->first();
+        $pembayaran = $calonSantri ? $calonSantri->pembayaran : null;
         
         if (!$pembayaran || $pembayaran->id != $pembayaranId) {
             abort(403);
         }
 
         return view('santri.pembayaran-invoice', compact('pembayaran'));
+    }
+
+    /**
+     * Print bukti pendaftaran
+     */
+    public function printBuktiPendaftaran(CalonSantri $calonSantri)
+    {
+        // Verifikasi bahwa calon santri adalah milik user yang login
+        if ($calonSantri->no_telp !== auth()->user()->phone) {
+            abort(403);
+        }
+
+        $pembayaran = $calonSantri->pembayaran;
+        $items = \App\Models\PembayaranItem::where('status', 'active')->get();
+
+        return view('santri.print-bukti-pendaftaran', compact('calonSantri', 'pembayaran', 'items'));
+    }
+
+    /**
+     * Download bukti pendaftaran sebagai PDF
+     */
+    public function downloadBuktiPendaftaran(CalonSantri $calonSantri)
+    {
+        // Verifikasi bahwa calon santri adalah milik user yang login
+        if ($calonSantri->no_telp !== auth()->user()->phone) {
+            abort(403);
+        }
+
+        $pembayaran = $calonSantri->pembayaran;
+        $items = \App\Models\PembayaranItem::where('status', 'active')->get();
+
+        $pdf = \PDF::loadView('santri.print-bukti-pendaftaran', compact('calonSantri', 'pembayaran', 'items'));
+        return $pdf->download('Bukti-Pendaftaran-' . $calonSantri->no_pendaftaran . '.pdf');
+    }
+
+    /**
+     * Upload bukti pembayaran transfer
+     */
+    public function uploadBuktiPembayaran(Request $request, $pembayaranId)
+    {
+        // Query pembayaran dari database
+        $calonSantri = CalonSantri::where('no_telp', auth()->user()->phone)->first();
+        $pembayaran = $calonSantri ? $calonSantri->pembayaran : null;
+        
+        if (!$pembayaran || $pembayaran->id != $pembayaranId) {
+            abort(403);
+        }
+
+        // Hitung sisa pembayaran
+        $totalTagihan = \App\Models\PembayaranItem::where('status', 'active')->sum('nominal');
+        $sisaPembayaran = $totalTagihan - $pembayaran->paid_amount;
+
+        // Validasi berbeda untuk cash dan transfer
+        if ($request->input('payment_method') === 'transfer') {
+            $validated = $request->validate([
+                'payment_method' => 'required|in:cash,transfer',
+                'amount' => 'required|numeric|min:0',
+                'bukti_pembayaran' => 'required|mimes:jpg,jpeg,png,pdf|max:5120',
+            ]);
+        } else {
+            $validated = $request->validate([
+                'payment_method' => 'required|in:cash,transfer',
+                'amount' => 'required|numeric|min:0',
+                'bukti_pembayaran' => 'nullable',
+            ]);
+        }
+
+        // Validasi nominal harus sama dengan sisa pembayaran
+        if ($validated['amount'] != $sisaPembayaran) {
+            return back()->with('error', 'Nominal pembayaran harus sama dengan sisa tagihan: Rp ' . number_format($sisaPembayaran, 0, ',', '.'));
+        }
+
+        $fileName = null;
+
+        // Handle file upload untuk transfer
+        if ($validated['payment_method'] === 'transfer' && $request->hasFile('bukti_pembayaran')) {
+            $file = $request->file('bukti_pembayaran');
+            $fileName = time() . '_' . str_replace(' ', '_', auth()->user()->phone) . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('bukti_pembayaran', $fileName, 'public');
+        }
+
+        // Ambil unique_code dari pembayaran
+        if (!$pembayaran->unique_code) {
+            $pembayaran->update(['unique_code' => Pembayaran::generateUniqueCode()]);
+        }
+
+        // Buat PembayaranRecord
+        $record = $pembayaran->records()->create([
+            'payment_method' => $validated['payment_method'],
+            'amount' => $validated['amount'],
+            'paid_at' => now(),
+            'proof_image' => $fileName,
+            'proof_status' => $validated['payment_method'] === 'transfer' ? 'pending' : 'verified',
+            'unique_code' => $pembayaran->unique_code,
+        ]);
+
+        // Update pembayaran amounts
+        $newPaidAmount = $pembayaran->paid_amount + $validated['amount'];
+        $pembayaran->update([
+            'paid_amount' => $newPaidAmount,
+            'remaining_amount' => $pembayaran->total_amount - $newPaidAmount,
+        ]);
+
+        $pembayaran->updateStatus();
+
+        $message = $validated['payment_method'] === 'transfer' 
+            ? '✅ Bukti pembayaran berhasil diunggah! Menunggu verifikasi admin.'
+            : '✅ Pembayaran tunai tercatat! Terima kasih.';
+
+        return back()->with('success', $message);
     }
 
     /**

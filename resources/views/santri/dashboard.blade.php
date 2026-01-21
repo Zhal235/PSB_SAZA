@@ -55,11 +55,21 @@
     <div class="bg-white rounded-lg shadow p-6">
         <h3 class="text-lg font-bold text-gray-800 mb-6">🚀 Aksi Cepat</h3>
         <div class="grid grid-cols-3 gap-4">
-            <a href="{{ route('santri.form-pendaftaran') }}" class="p-6 border-2 border-indigo-200 rounded-lg hover:bg-indigo-50 hover:border-indigo-400 transition text-center">
-                <div class="text-4xl mb-3">📋</div>
-                <p class="font-semibold text-gray-800">Form Pendaftaran</p>
-                <p class="text-xs text-gray-500 mt-2">@if($calonSantri)Edit @else Isi @endif data diri Anda</p>
-            </a>
+            @if($calonSantri)
+                <!-- Jika sudah ada data, langsung link ke form -->
+                <a href="{{ route('santri.form-pendaftaran') }}" class="p-6 border-2 border-indigo-200 rounded-lg hover:bg-indigo-50 hover:border-indigo-400 transition text-center">
+                    <div class="text-4xl mb-3">📋</div>
+                    <p class="font-semibold text-gray-800">Form Pendaftaran</p>
+                    <p class="text-xs text-gray-500 mt-2">Edit data diri Anda</p>
+                </a>
+            @else
+                <!-- Jika belum ada data, tampilkan modal dulu -->
+                <button onclick="openDocsModal()" class="p-6 border-2 border-indigo-200 rounded-lg hover:bg-indigo-50 hover:border-indigo-400 transition text-center">
+                    <div class="text-4xl mb-3">📋</div>
+                    <p class="font-semibold text-gray-800">Form Pendaftaran</p>
+                    <p class="text-xs text-gray-500 mt-2">Isi data diri Anda</p>
+                </button>
+            @endif
             <a href="{{ route('santri.pembayaran') }}" class="p-6 border-2 border-indigo-200 rounded-lg hover:bg-indigo-50 hover:border-indigo-400 transition text-center">
                 <div class="text-4xl mb-3">💳</div>
                 <p class="font-semibold text-gray-800">Pembayaran</p>
@@ -85,4 +95,71 @@
             <li>Ikuti tes seleksi sesuai jadwal yang diumumkan</li>
         </ol>
     </div>
+
+    <!-- Modal Checklist Dokumen (hanya untuk akun baru) -->
+    @if(!$calonSantri)
+        <div id="docsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg shadow-lg max-w-md w-full mx-4">
+                <!-- Header -->
+                <div class="bg-indigo-600 text-white p-6 rounded-t-lg flex justify-between items-center">
+                    <h2 class="text-xl font-bold">📋 Siapkan Dokumen Anda</h2>
+                    <button onclick="closeDocsModal()" class="text-2xl font-bold hover:text-indigo-200">&times;</button>
+                </div>
+
+                <!-- Content -->
+                <div class="p-6">
+                    <p class="text-gray-700 font-semibold mb-4">Sebelum mengisi form pendaftaran, pastikan Anda telah menyiapkan dokumen-dokumen berikut:</p>
+                    
+                    <div class="space-y-2 mb-6">
+                        <div class="text-gray-700">📄 Fotokopi Akta Kelahiran atau KTP</div>
+                        <div class="text-gray-700">📄 Fotokopi Kartu Keluarga (KK)</div>
+                        <div class="text-gray-700">📄 Raport Sekolah 2 Tahun Terakhir</div>
+                        <div class="text-gray-700">📄 Surat Keterangan Lulus dari Sekolah</div>
+                        <div class="text-gray-700">📄 Foto 4x6 (3 lembar)</div>
+                        <div class="text-gray-700">📄 Sertifikat/Piagam Penghargaan (jika ada)</div>
+                    </div>
+
+                    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded mb-6">
+                        <p class="text-xs text-yellow-700">
+                            <strong>💡 Tips:</strong> Siapkan dokumen asli dan fotokopi. Fotokopi hendaknya jelas dan mudah dibaca.
+                        </p>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex gap-3">
+                        <button onclick="closeDocsModal()" class="flex-1 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 font-semibold transition">
+                            ← Kembali
+                        </button>
+                        <a href="{{ route('santri.form-pendaftaran') }}" class="flex-1 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-semibold transition text-center">
+                            Lanjutkan →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <script>
+        function openDocsModal() {
+            const modal = document.getElementById('docsModal');
+            if (modal) {
+                modal.style.display = 'flex';
+            }
+        }
+
+        function closeDocsModal() {
+            const modal = document.getElementById('docsModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Close modal saat klik background
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('docsModal');
+            if (modal && e.target === modal) {
+                closeDocsModal();
+            }
+        });
+    </script>
 @endsection

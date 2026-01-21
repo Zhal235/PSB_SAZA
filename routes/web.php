@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankSettingController;
+use App\Http\Controllers\BuktiPembayaranController;
 use App\Http\Controllers\CalonSantriController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DokumenController;
@@ -58,6 +59,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/pembayaran/{pembayaran}/payment', [PembayaranController::class, 'storePayment'])->name('pembayaran.storePayment');
     Route::get('/pembayaran/{pembayaran}/invoice', [PembayaranController::class, 'invoice'])->name('pembayaran.invoice');
     Route::get('/pembayaran/{pembayaran}/invoice-pdf', [PembayaranController::class, 'invoicePdf'])->name('pembayaran.invoicePdf');
+
+    // Bukti Pembayaran Management
+    Route::get('/bukti-pembayaran', [BuktiPembayaranController::class, 'index'])->name('bukti-pembayaran.index');
+    Route::get('/bukti-pembayaran/{bukti}', [BuktiPembayaranController::class, 'show'])->name('bukti-pembayaran.show');
+    Route::post('/bukti-pembayaran/{bukti}/verify', [BuktiPembayaranController::class, 'verify'])->name('bukti-pembayaran.verify');
 });
 
 // Dokumen Upload Routes
@@ -82,6 +88,9 @@ Route::middleware(['auth', 'role:calon_santri'])->prefix('santri')->name('santri
     Route::post('/save-data', [SantriController::class, 'savePendaftaran'])->name('save-data');
     Route::get('/pembayaran', [SantriController::class, 'pembayaran'])->name('pembayaran');
     Route::get('/pembayaran/{pembayaran}/invoice', [SantriController::class, 'pembayaranInvoice'])->name('pembayaran-invoice');
+    Route::get('/bukti-pendaftaran/{calonSantri}/print', [SantriController::class, 'printBuktiPendaftaran'])->name('print-bukti-pendaftaran');
+    Route::get('/bukti-pendaftaran/{calonSantri}/download', [SantriController::class, 'downloadBuktiPendaftaran'])->name('download-bukti-pendaftaran');
+    Route::post('/pembayaran/{pembayaran}/upload-bukti', [SantriController::class, 'uploadBuktiPembayaran'])->name('upload-bukti-pembayaran');
     Route::get('/dokumen-upload', [SantriController::class, 'dokumenUpload'])->name('dokumen-upload');
     Route::post('/dokumen-upload', [SantriController::class, 'dokumenStore'])->name('dokumen-store');
 });
