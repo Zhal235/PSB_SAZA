@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\CalonSantri;
 use App\Models\Pembayaran;
 use App\Models\User;
+use App\Exports\CalonSantriExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CalonSantriController extends Controller
 {
@@ -63,12 +65,46 @@ class CalonSantriController extends Controller
             'pekerjaan_ibu' => 'nullable|string|max:100',
             'hp_ibu' => 'nullable|string|max:15',
             'no_telp' => 'required|string|max:15',
+            'phone_type' => 'nullable|in:ayah,ibu',
             'status' => 'required|in:baru,proses,lolos,tidak_lolos',
             'catatan' => 'nullable|string'
         ]);
 
         // Auto-generate nomor pendaftaran
         $validated['no_pendaftaran'] = CalonSantri::generateNoPendaftaran();
+
+        // Tentukan nomor HP yang akan digunakan untuk akun
+        $phoneToUse = null;
+        $phoneType = $request->input('phone_type');
+
+        if ($phoneType === 'ayah' && !empty($validated['hp_ayah'])) {
+            $phoneToUse = $validated['hp_ayah'];
+        } elseif ($phoneType === 'ibu' && !empty($validated['hp_ibu'])) {
+            $phoneToUse = $validated['hp_ibu'];
+        } elseif (!empty($validated['hp_ayah'])) {
+            // Default ke HP ayah jika ada
+            $phoneToUse = $validated['hp_ayah'];
+            $validated['phone_type'] = 'ayah';
+        } elseif (!empty($validated['hp_ibu'])) {
+            // Fallback ke HP ibu
+            $phoneToUse = $validated['hp_ibu'];
+            $validated['phone_type'] = 'ibu';
+        }
+
+        // Buat atau update user dengan HP yang sudah ditentukan
+        if ($phoneToUse) {
+            $user = User::updateOrCreate(
+                ['phone' => $phoneToUse],
+                [
+                    'name' => $validated['nama'],
+                    'email' => strtolower(str_replace(' ', '.', $validated['nama'])) . '@psb-saza.local',
+                    'password' => Hash::make('12345678'),
+                    'role' => 'calon_santri',
+                    'jenjang' => $validated['jenjang'],
+                ]
+            );
+            $validated['user_id'] = $user->id;
+        }
 
         $calonSantri = CalonSantri::create($validated);
 
@@ -84,7 +120,7 @@ class CalonSantriController extends Controller
         ]);
 
         return redirect()->route('dokumen.create', $calonSantri)
-            ->with('success', 'Data calon santri berhasil ditambahkan! Silakan upload dokumen.');
+            ->with('success', 'Data calon santri berhasil ditambahkan! Akun sudah dibuat dengan HP: ' . $phoneToUse . ' dan password default: 12345678');
     }
 
     // Show form edit
@@ -126,9 +162,40 @@ class CalonSantriController extends Controller
             'pekerjaan_ibu' => 'nullable|string|max:100',
             'hp_ibu' => 'nullable|string|max:15',
             'no_telp' => 'required|string|max:15',
+            'phone_type' => 'nullable|in:ayah,ibu',
             'status' => 'required|in:baru,proses,lolos,tidak_lolos',
             'catatan' => 'nullable|string'
         ]);
+
+        // Handle phone type change
+        $phoneType = $request->input('phone_type');
+        $phoneToUse = null;
+
+        if ($phoneType === 'ayah' && !empty($validated['hp_ayah'])) {
+            $phoneToUse = $validated['hp_ayah'];
+        } elseif ($phoneType === 'ibu' && !empty($validated['hp_ibu'])) {
+            $phoneToUse = $validated['hp_ibu'];
+        } elseif (!empty($validated['hp_ayah'])) {
+            $phoneToUse = $validated['hp_ayah'];
+            $validated['phone_type'] = 'ayah';
+        } elseif (!empty($validated['hp_ibu'])) {
+            $phoneToUse = $validated['hp_ibu'];
+            $validated['phone_type'] = 'ibu';
+        }
+
+        // Update atau buat user baru jika nomor HP berubah
+        if ($phoneToUse) {
+            $user = User::updateOrCreate(
+                ['phone' => $phoneToUse],
+                [
+                    'name' => $validated['nama'],
+                    'email' => strtolower(str_replace(' ', '.', $validated['nama'])) . '@psb-saza.local',
+                    'role' => 'calon_santri',
+                    'jenjang' => $calonSantri->jenjang,
+                ]
+            );
+            $validated['user_id'] = $user->id;
+        }
 
         $calonSantri->update($validated);
 
@@ -173,5 +240,14 @@ class CalonSantriController extends Controller
     public function show(CalonSantri $calonSantri)
     {
         return view('admin.calon-santri.show', compact('calonSantri'));
+    }
+
+    // Export ke Excel (untuk SIMPELS)
+    public function export(Request $request)
+    {
+        $jenjang = $request->query('jenjang', 'MTs');
+        $fileName = 'CalonSantri_' . $jenjang . '_' . now()->format('d-m-Y-H-i-s') . '.xlsx';
+        
+        return Excel::download(new CalonSantriExport($jenjang), $fileName);
     }
 }

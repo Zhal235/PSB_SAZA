@@ -40,6 +40,8 @@ class CalonSantri extends Model
         'pekerjaan_ibu',
         'hp_ibu',
         'no_telp',
+        'phone_type',
+        'user_id',
         'status',
         'status_hardcopy',
         'tanggal_serah_hardcopy',
@@ -51,11 +53,11 @@ class CalonSantri extends Model
     ];
 
     /**
-     * Relationship ke User (santri yang mendaftar)
+     * Relationship ke User (santri atau orang tua yang mendaftar)
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'no_telp', 'phone');
+        return $this->belongsTo(User::class);
     }
 
     public function dokumens()

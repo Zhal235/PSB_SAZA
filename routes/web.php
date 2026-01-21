@@ -41,6 +41,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // Calon Santri Management
     Route::resource('calon-santri', CalonSantriController::class);
     Route::post('calon-santri/{calonSantri}/reset-password', [CalonSantriController::class, 'resetPassword'])->name('calon-santri.reset-password');
+    Route::get('calon-santri-export', [CalonSantriController::class, 'export'])->name('calon-santri.export');
 
     // Pembayaran Items Management
     Route::resource('pembayaran-items', PembayaranItemController::class);

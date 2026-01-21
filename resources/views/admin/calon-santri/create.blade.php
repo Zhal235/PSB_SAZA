@@ -234,6 +234,33 @@
                             </div>
                         </div>
 
+                        <!-- Section: Kaitkan Akun -->
+                        <div>
+                            <h3 class="text-xl font-bold text-indigo-600 mb-6 pb-2 border-b-2 border-indigo-600">🔗 Kaitkan Akun (Nomor HP Orang Tua)</h3>
+                            <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4 mb-4">
+                                <p class="text-sm"><strong>ℹ️ Info:</strong> Pilih nomor HP ayah atau ibu untuk dikaitkan dengan akun calon santri. Akun akan dibuat otomatis dengan password default: <strong>12345678</strong></p>
+                            </div>
+                            <div class="grid grid-cols-1 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-3">Kaitkan ke Nomor HP:</label>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center">
+                                            <input type="radio" name="phone_type" value="ayah" class="mr-3" {{ old('phone_type') === 'ayah' ? 'checked' : '' }} />
+                                            <span class="text-sm">📱 Nomor HP Ayah</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="phone_type" value="ibu" class="mr-3" {{ old('phone_type') === 'ibu' ? 'checked' : '' }} />
+                                            <span class="text-sm">📱 Nomor HP Ibu</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="phone_type" value="" class="mr-3" {{ old('phone_type') === null || old('phone_type') === '' ? 'checked' : '' }} />
+                                            <span class="text-sm">❌ Tidak Dikaitkan (Otomatis ke HP Ayah jika ada)</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Section: Status & Catatan -->
                         <div>
                             <h3 class="text-xl font-bold text-indigo-600 mb-6 pb-2 border-b-2 border-indigo-600">📊 Status & Catatan</h3>

@@ -19,9 +19,14 @@
                     <h2 class="text-3xl font-bold" style="color: #007a7a;">Kelola Calon Santri</h2>
                     <p class="text-gray-500 text-sm mt-1">Kelola data calon santri yang mendaftar</p>
                 </div>
-                <a href="{{ route('admin.calon-santri.create') }}" class="text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all duration-300 font-semibold" style="background-color: #00a0a0;">
-                    ➕ Tambah Calon Santri
-                </a>
+                <div class="flex gap-2">
+                    <a href="{{ route('admin.calon-santri.export', ['jenjang' => $jenjang]) }}" class="text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all duration-300 font-semibold bg-green-600 hover:bg-green-700" title="Export ke Excel">
+                        📊 Export Excel
+                    </a>
+                    <a href="{{ route('admin.calon-santri.create') }}" class="text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all duration-300 font-semibold" style="background-color: #00a0a0;">
+                        ➕ Tambah Calon Santri
+                    </a>
+                </div>
             </div>
 
             <!-- Content -->
