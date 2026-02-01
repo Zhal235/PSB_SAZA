@@ -315,12 +315,13 @@ class SantriController extends Controller
             $originalSize = $file->getSize();
             $ext = pathinfo($originalName, PATHINFO_EXTENSION);
             
-            // Buat nama file yang descriptive: nama_santri_tipe_dokumen.ext
+            // Buat nama file yang descriptive dengan timestamp: nama_santri_tipe_dokumen_timestamp.ext
             $safeNamaSantri = preg_replace('/[^a-z0-9]+/i', '_', $calonSantri->nama);
             $safeNamaSantri = trim($safeNamaSantri, '_');
             $safeTipeDokumen = preg_replace('/[^a-z0-9]+/i', '_', $validated['tipe_dokumen']);
             $safeTipeDokumen = trim($safeTipeDokumen, '_');
-            $filename = strtolower($safeNamaSantri . '_' . $safeTipeDokumen . '.' . $ext);
+            $timestamp = time();
+            $filename = strtolower($safeNamaSantri . '_' . $safeTipeDokumen . '_' . $timestamp . '.' . $ext);
 
             \Log::info('=== UPLOAD START (SANTRI) ===');
             \Log::info('File: ' . $originalName . ' (' . round($originalSize / 1024 / 1024, 2) . 'MB)');
@@ -417,6 +418,14 @@ class SantriController extends Controller
             \Log::info('=== UPLOAD SUCCESS (SANTRI) ===');
             \Log::info('Saved as: ' . $path . ' (' . round($fileSize / 1024 / 1024, 2) . 'MB)');
 
+            // Return JSON for AJAX, redirect for normal form
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => '✅ ' . $validated['tipe_dokumen'] . ' berhasil diupload! (' . round($fileSize / 1024 / 1024, 2) . 'MB)'
+                ]);
+            }
+
             return back()->with('success', '✅ ' . $validated['tipe_dokumen'] . ' berhasil! (' . round($fileSize / 1024 / 1024, 2) . 'MB)');
 
         } catch (\Exception $e) {
@@ -424,6 +433,14 @@ class SantriController extends Controller
             \Log::error('Exception: ' . get_class($e));
             \Log::error('Message: ' . $e->getMessage());
             \Log::error('File: ' . $e->getFile() . ':' . $e->getLine());
+
+            // Return JSON for AJAX, redirect for normal form
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'error' => '❌ Error: ' . $e->getMessage()
+                ], 500);
+            }
 
             return back()->with('error', '❌ Error: ' . $e->getMessage());
         }
