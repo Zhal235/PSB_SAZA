@@ -239,6 +239,9 @@ class SantriController extends Controller
             $pembayaran->update(['unique_code' => Pembayaran::generateUniqueCode()]);
         }
 
+        // Generate unique code baru untuk record ini
+        $recordUniqueCode = \App\Models\PembayaranRecord::generateUniqueCode();
+
         // Buat PembayaranRecord
         $record = $pembayaran->records()->create([
             'payment_method' => $validated['payment_method'],
@@ -246,7 +249,7 @@ class SantriController extends Controller
             'paid_at' => now(),
             'proof_image' => $fileName,
             'proof_status' => $validated['payment_method'] === 'transfer' ? 'pending' : 'verified',
-            'unique_code' => $pembayaran->unique_code,
+            'unique_code' => $recordUniqueCode,
         ]);
 
         // Update pembayaran amounts

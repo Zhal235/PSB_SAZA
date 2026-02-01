@@ -122,6 +122,10 @@
                     @php
                         // Cek apakah sudah ada pembayaran yang verified
                         $verifiedPayment = $pembayaran->records()->where('proof_status', 'verified')->first();
+                        // Cek apakah ada pembayaran yang pending
+                        $pendingPayment = $pembayaran->records()->where('proof_status', 'pending')->first();
+                        // Cek apakah ada pembayaran yang rejected (terakhir)
+                        $rejectedPayment = $pembayaran->records()->where('proof_status', 'rejected')->latest()->first();
                     @endphp
 
                     @if($verifiedPayment)
@@ -148,8 +152,48 @@
                                 📄 Lihat Invoice Lengkap
                             </a>
                         </div>
-                    @else
-                        <!-- Tampil form pembayaran jika belum verified -->
+                    @elseif($pendingPayment)
+                        <!-- Tampil jika ada yang masih pending -->
+                        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded mb-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="text-3xl">⏳</span>
+                                <div>
+                                    <p class="text-lg font-bold text-yellow-700">Bukti Pembayaran Sedang Diproses</p>
+                                    <p class="text-sm text-yellow-600">Mohon tunggu verifikasi dari admin</p>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded p-4 space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">Jumlah:</span>
+                                    <span class="font-bold text-yellow-600">Rp {{ number_format($pendingPayment->amount, 0, ',', '.') }}</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">Tanggal Upload:</span>
+                                    <span class="font-semibold text-gray-800">{{ $pendingPayment->paid_at->format('d/m/Y H:i') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    @elseif($rejectedPayment)
+                        <!-- Tampil jika ada yang ditolak - bisa upload ulang -->
+                        <div class="bg-red-50 border-l-4 border-red-500 p-6 rounded mb-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="text-3xl">❌</span>
+                                <div>
+                                    <p class="text-lg font-bold text-red-700">Bukti Pembayaran Ditolak</p>
+                                    <p class="text-sm text-red-600">Silakan upload ulang bukti pembayaran yang benar</p>
+                                </div>
+                            </div>
+                            @if($rejectedPayment->proof_notes)
+                                <div class="bg-white rounded p-4 mb-4">
+                                    <p class="text-sm font-semibold text-gray-700 mb-2">📝 Alasan Penolakan:</p>
+                                    <p class="text-sm text-gray-800">{{ $rejectedPayment->proof_notes }}</p>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
+                    
+                    @if(!$verifiedPayment && !$pendingPayment)
+                        <!-- Tampil form pembayaran jika belum verified dan tidak ada pending -->
                         <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mb-4">
                             <p class="text-sm text-blue-700 font-semibold mb-3">
                                 💳 Metode Pembayaran Tersedia:

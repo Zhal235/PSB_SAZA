@@ -28,4 +28,16 @@ class PembayaranRecord extends Model
     {
         return $this->belongsTo(Pembayaran::class);
     }
+
+    /**
+     * Generate unique code untuk record pembayaran
+     */
+    public static function generateUniqueCode()
+    {
+        do {
+            $code = rand(1000, 9999);
+        } while (self::where('unique_code', $code)->exists());
+
+        return $code;
+    }
 }
