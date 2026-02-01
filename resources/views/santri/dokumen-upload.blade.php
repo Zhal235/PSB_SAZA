@@ -564,6 +564,12 @@
 
                 // Trigger change event
                 fileInputElement.dispatchEvent(new Event('change', { bubbles: true }));
+                
+                // Submit form directly
+                setTimeout(() => {
+                    form.submit();
+                }, 100);
+                
                 console.log('📸 Foto berhasil ditangkap: ' + fileName);
 
             } catch (e) {
