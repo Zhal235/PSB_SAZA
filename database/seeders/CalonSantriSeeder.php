@@ -57,7 +57,7 @@ class CalonSantriSeeder extends Seeder
         // Calon Santri 2
         CalonSantri::create([
             'no_pendaftaran' => 'PSB-2026-00002',
-            'jenjang' => 'SMA',
+            'jenjang' => 'SMK',
             'nisn' => '1234567891',
             'nik_santri' => '3507140612060002',
             'nama' => 'Nur Azizah Putri',

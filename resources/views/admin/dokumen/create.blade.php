@@ -48,7 +48,7 @@
                                     $fileExists = \Storage::disk('public')->exists($dokumen->file_path);
                                 @endphp
                                 @if($fileExists && $isImage)
-                                    <img src="{{ asset('storage/' . $dokumen->file_path) }}" alt="{{ $label }}" class="max-w-full max-h-full object-contain">
+                                    <img src="{{ asset('storage/' . $dokumen->file_path) }}?t={{ $dokumen->updated_at->timestamp }}" alt="{{ $label }}" class="max-w-full max-h-full object-contain">
                                 @elseif($fileExists)
                                     <div class="text-center">
                                         <p class="text-2xl">📄</p>
