@@ -269,12 +269,15 @@ class SantriController extends Controller
             'unique_code' => $recordUniqueCode,
         ]);
 
-        // Update pembayaran amounts
-        $newPaidAmount = $pembayaran->paid_amount + $validated['amount'];
-        $pembayaran->update([
-            'paid_amount' => $newPaidAmount,
-            'remaining_amount' => $pembayaran->total_amount - $newPaidAmount,
-        ]);
+        // Update pembayaran amounts HANYA untuk cash (verified langsung)
+        // Transfer tunggu approve dulu
+        if ($validated['payment_method'] === 'cash') {
+            $newPaidAmount = $pembayaran->paid_amount + $validated['amount'];
+            $pembayaran->update([
+                'paid_amount' => $newPaidAmount,
+                'remaining_amount' => $pembayaran->total_amount - $newPaidAmount,
+            ]);
+        }
 
         $pembayaran->updateStatus();
 

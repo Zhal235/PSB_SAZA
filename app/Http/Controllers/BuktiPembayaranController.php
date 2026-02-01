@@ -56,6 +56,14 @@ class BuktiPembayaranController extends Controller
                 'proof_notes' => $validated['notes'] ?? null,
             ]);
             
+            // Update pembayaran: tambahkan ke paid_amount
+            $pembayaran = $bukti->pembayaran;
+            $newPaidAmount = $pembayaran->paid_amount + $bukti->amount;
+            $pembayaran->update([
+                'paid_amount' => $newPaidAmount,
+                'remaining_amount' => $pembayaran->total_amount - $newPaidAmount,
+            ]);
+            
             // Otomatis buat FinancialRecord (pemasukan) untuk transfer
             FinancialRecord::create([
                 'type' => 'income',
@@ -69,13 +77,12 @@ class BuktiPembayaranController extends Controller
             ]);
             
             // Update pembayaran status
-            $pembayaran = $bukti->pembayaran;
             $pembayaran->updateStatus();
 
             return redirect()->route('admin.bukti-pembayaran.index')
-                ->with('success', '✅ Bukti pembayaran berhasil diverifikasi! Pemasukan transfer otomatis tercatat.');
+                ->with('success', '✅ Bukti pembayaran berhasil diverifikasi! Pembayaran tercatat dan pemasukan transfer dicatat.');
         } else {
-            // Reject: kembalikan nominal ke remaining amount
+            // Reject: tidak perlu reverse karena belum pernah ditambahkan
             $pembayaran = $bukti->pembayaran;
             
             $bukti->update([
@@ -83,11 +90,8 @@ class BuktiPembayaranController extends Controller
                 'proof_notes' => $validated['notes'] ?? 'Ditolak oleh admin',
             ]);
 
-            // Kurangi paid_amount dan kembalikan ke remaining
-            $pembayaran->update([
-                'paid_amount' => $pembayaran->paid_amount - $bukti->amount,
-                'remaining_amount' => $pembayaran->remaining_amount + $bukti->amount,
-            ]);
+            // Tidak perlu kurangi paid_amount karena belum pernah ditambahkan saat pending
+            // paid_amount hanya ditambah saat approve
 
             // Update status pembayaran
             $pembayaran->updateStatus();
