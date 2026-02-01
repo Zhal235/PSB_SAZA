@@ -35,7 +35,7 @@ class PembayaranRecord extends Model
     public static function generateUniqueCode()
     {
         do {
-            $code = rand(1000, 9999);
+            $code = str_pad(mt_rand(2000, 3000), 4, '0', STR_PAD_LEFT);
         } while (self::where('unique_code', $code)->exists());
 
         return $code;
