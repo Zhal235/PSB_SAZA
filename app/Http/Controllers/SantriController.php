@@ -234,15 +234,32 @@ class SantriController extends Controller
             $file->storeAs('bukti_pembayaran', $fileName, 'public');
         }
 
+        // Cek apakah ada record yang rejected untuk di-update (upload ulang)
+        $rejectedRecord = $pembayaran->records()->where('proof_status', 'rejected')->latest()->first();
+
+        if ($rejectedRecord && $validated['payment_method'] === 'transfer') {
+            // Update record yang ditolak dengan bukti baru (kode unik tetap sama)
+            $rejectedRecord->update([
+                'proof_image' => $fileName,
+                'proof_status' => 'pending',
+                'proof_notes' => null,
+                'paid_at' => now(),
+            ]);
+
+            \Log::info('Bukti pembayaran di-upload ulang untuk record ID: ' . $rejectedRecord->id);
+
+            return back()->with('success', '✅ Bukti pembayaran berhasil diunggah ulang! Menunggu verifikasi admin.');
+        }
+
         // Ambil unique_code dari pembayaran
         if (!$pembayaran->unique_code) {
             $pembayaran->update(['unique_code' => Pembayaran::generateUniqueCode()]);
         }
 
-        // Generate unique code baru untuk record ini
+        // Generate unique code baru untuk record baru
         $recordUniqueCode = \App\Models\PembayaranRecord::generateUniqueCode();
 
-        // Buat PembayaranRecord
+        // Buat PembayaranRecord baru
         $record = $pembayaran->records()->create([
             'payment_method' => $validated['payment_method'],
             'amount' => $validated['amount'],

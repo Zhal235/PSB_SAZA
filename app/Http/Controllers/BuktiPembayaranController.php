@@ -75,13 +75,25 @@ class BuktiPembayaranController extends Controller
             return redirect()->route('admin.bukti-pembayaran.index')
                 ->with('success', '✅ Bukti pembayaran berhasil diverifikasi! Pemasukan transfer otomatis tercatat.');
         } else {
+            // Reject: kembalikan nominal ke remaining amount
+            $pembayaran = $bukti->pembayaran;
+            
             $bukti->update([
                 'proof_status' => 'rejected',
                 'proof_notes' => $validated['notes'] ?? 'Ditolak oleh admin',
             ]);
 
+            // Kurangi paid_amount dan kembalikan ke remaining
+            $pembayaran->update([
+                'paid_amount' => $pembayaran->paid_amount - $bukti->amount,
+                'remaining_amount' => $pembayaran->remaining_amount + $bukti->amount,
+            ]);
+
+            // Update status pembayaran
+            $pembayaran->updateStatus();
+
             return redirect()->route('admin.bukti-pembayaran.index')
-                ->with('success', '❌ Bukti pembayaran ditolak. Santri diminta mengunggah kembali.');
+                ->with('success', '❌ Bukti pembayaran ditolak. Pembayaran dibatalkan, santri diminta upload ulang.');
         }
     }
 }
