@@ -22,3 +22,12 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Ignore database files
+/database/database.sqlite
+/database/database.sqlite-journal
+/database/*.sqlite
+/database/*.sqlite-journal
+
+# Ignore all log files
+/storage/logs/*.log
