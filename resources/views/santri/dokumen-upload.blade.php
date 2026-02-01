@@ -577,13 +577,37 @@
                         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
                     }
                     
-                    // Submit form
-                    form.submit();
+                    // Submit form via AJAX to get response first
+                    const formData = new FormData(form);
                     
-                    // Reload page after 2 seconds to show updated content
-                    setTimeout(() => {
-                        location.reload();
-                    }, 2000);
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                        }
+                    })
+                    .then(response => {
+                        console.log('✅ Upload response status:', response.status);
+                        return response.text();
+                    })
+                    .then(data => {
+                        console.log('✅ Upload successful! Reloading page...');
+                        // Reload page after successful upload
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    })
+                    .catch(error => {
+                        console.error('❌ Upload error:', error);
+                        alert('❌ Upload gagal: ' + error.message);
+                        const modal = document.getElementById('uploadLoadingModal');
+                        if (modal) modal.remove();
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = '📤 Upload';
+                        }
+                    });
                 }, 100);
 
             } catch (e) {
