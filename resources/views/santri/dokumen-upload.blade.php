@@ -331,22 +331,36 @@
                 <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
                     <h3 class="text-lg font-bold mb-4">📷 Ambil Foto</h3>
                     
-                    <video id="cameraVideo" class="w-full rounded border-2 border-gray-300 mb-4" style="max-height: 400px; object-fit: cover;"></video>
+                    <div style="position: relative;">
+                        <video id="cameraVideo" class="w-full rounded border-2 border-gray-300 mb-4" style="max-height: 400px; object-fit: cover;"></video>
+                        <div id="cameraLoading" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded" style="display: none;">
+                            <p class="text-white font-semibold">⏳ Kamera Loading...</p>
+                        </div>
+                    </div>
                     
                     <canvas id="cameraCanvas" class="hidden"></canvas>
                     
                     <div class="flex gap-2">
-                        <button type="button" onclick="capturePhoto('${inputId}')" class="flex-1 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 font-semibold">📸 Ambil Foto</button>
+                        <button type="button" id="captureBtn" onclick="capturePhoto('${inputId}')" class="flex-1 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>📸 Ambil Foto</button>
                         <button type="button" onclick="closeCamera()" class="flex-1 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 font-semibold">❌ Batal</button>
                     </div>
                     
                     <p class="text-xs text-gray-500 mt-3 text-center">Posisikan objek dengan jelas di depan kamera</p>
+                    <p id="cameraStatus" class="text-xs text-gray-600 mt-2 text-center">Mengakses kamera...</p>
                 </div>
             `;
             document.body.appendChild(cameraModal);
 
             // Start camera
             const video = document.getElementById('cameraVideo');
+            const loadingDiv = document.getElementById('cameraLoading');
+            const captureBtn = document.getElementById('captureBtn');
+            const statusText = document.getElementById('cameraStatus');
+
+            // Show loading
+            loadingDiv.style.display = 'flex';
+            statusText.textContent = 'Mengakses kamera...';
+
             navigator.mediaDevices.getUserMedia({ 
                 video: { 
                     facingMode: 'environment',
@@ -357,9 +371,53 @@
             }).then(stream => {
                 cameraStream = stream;
                 video.srcObject = stream;
-                video.play();
+
+                // Wait for video to be ready
+                video.onloadedmetadata = function() {
+                    console.log('✅ Video metadata loaded: ' + video.videoWidth + 'x' + video.videoHeight);
+                    video.play();
+                    
+                    // Wait a bit more for actual frame
+                    setTimeout(() => {
+                        loadingDiv.style.display = 'none';
+                        statusText.textContent = '✅ Kamera siap! Tekan "Ambil Foto"';
+                        captureBtn.disabled = false;
+                    }, 500);
+                };
+
+                // Fallback: setTimeout jika onloadedmetadata tidak trigger
+                setTimeout(() => {
+                    if (video.videoWidth && video.videoHeight) {
+                        console.log('✅ Video ready (via timeout)');
+                        if (loadingDiv.style.display !== 'none') {
+                            loadingDiv.style.display = 'none';
+                            statusText.textContent = '✅ Kamera siap! Tekan "Ambil Foto"';
+                            captureBtn.disabled = false;
+                        }
+                    }
+                }, 2000);
+
             }).catch(err => {
-                alert('❌ Gagal akses kamera: ' + err.message);
+                console.error('❌ Error accessing camera:', err);
+                loadingDiv.style.display = 'none';
+                
+                let errorMsg = '';
+                if (err.name === 'NotAllowedError') {
+                    errorMsg = 'Akses kamera ditolak. Periksa permission di settings device Anda.';
+                } else if (err.name === 'NotFoundError') {
+                    errorMsg = 'Kamera tidak ditemukan di device ini.';
+                } else if (err.name === 'NotReadableError') {
+                    errorMsg = 'Kamera sedang digunakan aplikasi lain.';
+                } else {
+                    errorMsg = err.message;
+                }
+                
+                statusText.innerHTML = '❌ ' + errorMsg;
+                statusText.style.color = '#dc2626';
+                captureBtn.textContent = '❌ Gagal';
+                captureBtn.onclick = () => closeCamera();
+                
+                alert('❌ Gagal akses kamera:\n\n' + errorMsg + '\n\nGunakan file upload sebagai alternatif.');
                 closeCamera();
             });
         }
@@ -368,27 +426,113 @@
             const video = document.getElementById('cameraVideo');
             const canvas = document.getElementById('cameraCanvas');
             const ctx = canvas.getContext('2d');
+            const fileInput = document.getElementById(inputId);
 
-            // Set canvas size to match video
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
+            // Verify video is ready
+            if (!video.videoWidth || !video.videoHeight) {
+                console.error('❌ Video belum siap - videoWidth:', video.videoWidth, 'videoHeight:', video.videoHeight);
+                alert('⏳ Tunggu sebentar, kamera masih loading...');
+                return;
+            }
 
-            // Draw video frame to canvas
-            ctx.drawImage(video, 0, 0);
+            try {
+                // Set canvas size to match video
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
 
-            // Convert to blob and set to file input
-            canvas.toBlob(blob => {
-                const file = new File([blob], 'camera-' + Date.now() + '.jpg', { type: 'image/jpeg' });
-                const dataTransfer = new DataTransfer();
-                dataTransfer.items.add(file);
+                console.log('📐 Canvas size: ' + canvas.width + 'x' + canvas.height);
 
-                const fileInput = document.getElementById(inputId);
-                fileInput.files = dataTransfer.files;
-                fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+                // Draw video frame to canvas
+                ctx.drawImage(video, 0, 0);
 
-                closeCamera();
-                console.log('📸 Foto berhasil ditangkap: ' + file.name);
-            }, 'image/jpeg', 0.9);
+                // Verify canvas has content
+                const imageData = ctx.getImageData(0, 0, 1, 1);
+                if (imageData.data[3] === 0) {
+                    console.warn('⚠️ Canvas mungkin kosong, lanjutkan anyway...');
+                }
+
+                // Convert to blob and set to file input
+                canvas.toBlob(blob => {
+                    if (!blob) {
+                        console.error('❌ Gagal membuat blob dari canvas');
+                        alert('❌ Gagal mengambil foto. Coba lagi atau gunakan file upload.');
+                        return;
+                    }
+
+                    console.log('✅ Blob berhasil dibuat: ' + blob.size + ' bytes');
+
+                    try {
+                        // Create FormData untuk di-submit langsung
+                        const formData = new FormData();
+                        const fileName = 'camera-' + Date.now() + '.jpg';
+                        formData.append('file', blob, fileName);
+                        formData.append('tipe_dokumen', document.querySelector('#' + inputId).closest('.form-upload').querySelector('input[name="tipe_dokumen"]').value);
+                        formData.append('_method', 'POST');
+
+                        // Get CSRF token
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || 
+                                         document.querySelector('input[name="_token"]')?.value;
+                        if (csrfToken) {
+                            formData.append('_token', csrfToken);
+                        }
+
+                        console.log('📤 Submitting photo...');
+                        closeCamera();
+
+                        // Submit form
+                        const form = document.getElementById(selectedFormId);
+                        const fileInputElement = form.querySelector('input[type="file"]');
+                        
+                        // Method 1: Try DataTransfer (Modern browsers)
+                        try {
+                            const dataTransfer = new DataTransfer();
+                            const file = new File([blob], fileName, { type: 'image/jpeg' });
+                            dataTransfer.items.add(file);
+                            fileInputElement.files = dataTransfer.files;
+                            console.log('✅ File set via DataTransfer');
+                        } catch (e) {
+                            console.warn('⚠️ DataTransfer tidak tersedia, menggunakan alternative method: ' + e.message);
+                            // Method 2: Use fetch to upload directly
+                            const form = document.getElementById(selectedFormId);
+                            const action = form.getAttribute('action');
+                            
+                            fetch(action, {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('✅ Upload berhasil:', data);
+                                if (data.success || data.message) {
+                                    location.reload();
+                                } else {
+                                    alert('❌ ' + (data.error || 'Gagal upload'));
+                                }
+                            })
+                            .catch(error => {
+                                console.error('❌ Upload error:', error);
+                                alert('❌ Error: ' + error.message);
+                            });
+                            return;
+                        }
+
+                        // Trigger change event
+                        fileInputElement.dispatchEvent(new Event('change', { bubbles: true }));
+                        console.log('📸 Foto berhasil ditangkap: ' + fileName);
+
+                    } catch (e) {
+                        console.error('❌ Error setting file: ' + e.message);
+                        alert('❌ Error: ' + e.message);
+                    }
+                }, 'image/jpeg', 0.9);
+
+            } catch (e) {
+                console.error('❌ Capture error: ' + e.message);
+                alert('❌ Error saat mengambil foto: ' + e.message);
+            }
         }
 
         function closeCamera() {
