@@ -210,6 +210,9 @@
     </div>
 
     <script>
+        // === UPDATED VERSION 2.0 - FORCE RELOAD ===
+        console.log('🚀 Script loaded - NEW VERSION with detailed logging');
+        
         let uploadMenu = null;
         let selectedFormId = null;
 
@@ -428,6 +431,10 @@
             const ctx = canvas.getContext('2d');
             const fileInput = document.getElementById(inputId);
 
+            console.log('🎥 capturePhoto called with inputId:', inputId);
+            console.log('📹 Video element:', video ? 'found' : 'NOT FOUND');
+            console.log('📐 Canvas element:', canvas ? 'found' : 'NOT FOUND');
+
             // Verify video is ready
             if (!video.videoWidth || !video.videoHeight) {
                 console.error('❌ Video belum siap - videoWidth:', video.videoWidth, 'videoHeight:', video.videoHeight);
@@ -444,6 +451,7 @@
 
                 // Draw video frame to canvas
                 ctx.drawImage(video, 0, 0);
+                console.log('✅ Frame drawn to canvas');
 
                 // Pre-resize canvas untuk HP dengan high resolution
                 // Resize ke max 800x800 sebelum compress untuk lebih cepat
@@ -461,16 +469,37 @@
                     resizedCtx.drawImage(canvas, 0, 0, newWidth, newHeight);
                     
                     console.log('📐 Canvas resized to: ' + newWidth + 'x' + newHeight);
+                    console.log('⏳ Waiting for toBlob callback...');
                     
                     // Convert resized canvas to blob (lebih cepat)
-                    resizedCanvas.toBlob(blob => capturePhotoCallback(blob, inputId), 'image/jpeg', 0.6);
+                    resizedCanvas.toBlob(blob => {
+                        console.log('🔔 toBlob callback triggered!');
+                        if (blob) {
+                            console.log('✅ Blob data:', blob.size, 'bytes');
+                        } else {
+                            console.error('❌ Blob is null/undefined!');
+                        }
+                        capturePhotoCallback(blob, inputId);
+                    }, 'image/jpeg', 0.6);
                 } else {
                     // Canvas sudah kecil, langsung convert
-                    canvas.toBlob(blob => capturePhotoCallback(blob, inputId), 'image/jpeg', 0.6);
+                    console.log('✅ Canvas size OK, converting directly');
+                    console.log('⏳ Waiting for toBlob callback...');
+                    
+                    canvas.toBlob(blob => {
+                        console.log('🔔 toBlob callback triggered!');
+                        if (blob) {
+                            console.log('✅ Blob data:', blob.size, 'bytes');
+                        } else {
+                            console.error('❌ Blob is null/undefined!');
+                        }
+                        capturePhotoCallback(blob, inputId);
+                    }, 'image/jpeg', 0.6);
                 }
 
             } catch (e) {
                 console.error('❌ Capture error: ' + e.message);
+                console.error(e);
                 alert('❌ Error saat mengambil foto: ' + e.message);
             }
         }
@@ -484,8 +513,30 @@
             }
 
             console.log('✅ Blob berhasil dibuat: ' + blob.size + ' bytes (' + (blob.size / 1024 / 1024).toFixed(2) + ' MB)');
+            console.log('📝 inputId:', inputId);
+            console.log('📝 selectedFormId:', selectedFormId);
 
             try {
+                // Find the form - first try by selected form ID, then search from file input
+                let form = document.getElementById(selectedFormId);
+                
+                if (!form) {
+                    // Try to find form from file input ID
+                    const fileInput = document.getElementById(inputId);
+                    if (fileInput) {
+                        form = fileInput.closest('form');
+                        console.log('✅ Form found using closest():', form ? form.id : 'null');
+                    }
+                }
+                
+                if (!form) {
+                    console.error('❌ Form tidak ditemukan! selectedFormId:', selectedFormId, 'inputId:', inputId);
+                    alert('❌ Error: Tidak bisa menemukan form upload');
+                    return;
+                }
+                
+                console.log('✅ Form ditemukan:', form.id);
+
                 // Show loading modal
                 const loadingModal = document.createElement('div');
                 loadingModal.id = 'uploadLoadingModal';
@@ -505,7 +556,7 @@
                 const formData = new FormData();
                 const fileName = 'camera-' + Date.now() + '.jpg';
                 formData.append('file', blob, fileName);
-                formData.append('tipe_dokumen', document.querySelector('#' + inputId).closest('.form-upload').querySelector('input[name="tipe_dokumen"]').value);
+                formData.append('tipe_dokumen', form.querySelector('input[name="tipe_dokumen"]').value);
                 formData.append('_method', 'POST');
 
                 // Get CSRF token
@@ -513,108 +564,55 @@
                                  document.querySelector('input[name="_token"]')?.value;
                 if (csrfToken) {
                     formData.append('_token', csrfToken);
+                    console.log('✅ CSRF token found');
+                } else {
+                    console.warn('⚠️ No CSRF token found');
                 }
 
-                console.log('📤 Submitting photo...');
+                console.log('📤 Submitting photo to:', form.action);
                 closeCamera();
 
-                // Submit form
-                const form = document.getElementById(selectedFormId);
                 const fileInputElement = form.querySelector('input[type="file"]');
+                const action = form.getAttribute('action');
                 
-                // Method 1: Try DataTransfer (Modern browsers)
-                try {
-                    const dataTransfer = new DataTransfer();
-                    const file = new File([blob], fileName, { type: 'image/jpeg' });
-                    dataTransfer.items.add(file);
-                    fileInputElement.files = dataTransfer.files;
-                    console.log('✅ File set via DataTransfer');
-                } catch (e) {
-                    console.warn('⚠️ DataTransfer tidak tersedia, menggunakan alternative method: ' + e.message);
-                    // Method 2: Use fetch to upload directly
-                    const form = document.getElementById(selectedFormId);
-                    const action = form.getAttribute('action');
-                    
-                    fetch(action, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('✅ Upload berhasil:', data);
-                        const modal = document.getElementById('uploadLoadingModal');
-                        if (modal) modal.remove();
-                        if (data.success || data.message) {
-                            location.reload();
-                        } else {
-                            alert('❌ ' + (data.error || 'Gagal upload'));
-                        }
-                    })
-                    .catch(error => {
-                        console.error('❌ Upload error:', error);
-                        const modal = document.getElementById('uploadLoadingModal');
-                        if (modal) modal.remove();
-                        alert('❌ Error: ' + error.message);
-                    });
-                    return;
-                }
-
-                // Trigger change event
-                fileInputElement.dispatchEvent(new Event('change', { bubbles: true }));
-                
-                console.log('📸 Foto berhasil ditangkap: ' + fileName);
-                console.log('📤 Submitting form:', form.id);
-                
-                // Use setTimeout to ensure change event is processed first
-                setTimeout(() => {
-                    // Show loading state
-                    const submitBtn = form.querySelector('button[type="submit"]');
-                    if (submitBtn) {
-                        submitBtn.disabled = true;
-                        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+                // Submit form via AJAX
+                fetch(action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
                     }
-                    
-                    // Submit form via AJAX to get response first
-                    const formData = new FormData(form);
-                    
-                    fetch(form.action, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                        }
-                    })
-                    .then(response => {
-                        console.log('✅ Upload response status:', response.status);
-                        return response.text();
-                    })
-                    .then(data => {
-                        console.log('✅ Upload successful! Reloading page...');
-                        // Reload page after successful upload
-                        setTimeout(() => {
-                            location.reload();
-                        }, 1000);
-                    })
-                    .catch(error => {
-                        console.error('❌ Upload error:', error);
-                        alert('❌ Upload gagal: ' + error.message);
-                        const modal = document.getElementById('uploadLoadingModal');
-                        if (modal) modal.remove();
-                        if (submitBtn) {
-                            submitBtn.disabled = false;
-                            submitBtn.innerHTML = '📤 Upload';
-                        }
-                    });
-                }, 100);
+                })
+                .then(response => {
+                    console.log('✅ Upload response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('✅ Upload successful!', data);
+                    const modal = document.getElementById('uploadLoadingModal');
+                    if (modal) modal.remove();
+                    // Reload page after successful upload
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                })
+                .catch(error => {
+                    console.error('❌ Upload error:', error);
+                    const modal = document.getElementById('uploadLoadingModal');
+                    if (modal) modal.remove();
+                    alert('❌ Upload gagal: ' + error.message);
+                });
 
             } catch (e) {
-                console.error('❌ Error setting file: ' + e.message);
+                console.error('❌ Error in callback: ' + e.message);
+                console.error(e);
                 alert('❌ Error: ' + e.message);
                 const modal = document.getElementById('uploadLoadingModal');
                 if (modal) modal.remove();
+            }
         }
 
         function closeCamera() {

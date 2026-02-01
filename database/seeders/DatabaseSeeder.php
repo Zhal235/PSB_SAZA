@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             PekerjaanSeeder::class,
             PendapatanKeluargaSeeder::class,
             UserSeeder::class,
+            CalonSantriSeeder::class,
         ]);
     }
 }

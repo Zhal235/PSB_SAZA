@@ -314,19 +314,128 @@
             const video = document.getElementById('cameraVideo');
             const canvas = document.getElementById('cameraCanvas');
             const ctx = canvas.getContext('2d');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            ctx.drawImage(video, 0, 0);
-            canvas.toBlob(blob => {
-                const file = new File([blob], 'camera-' + Date.now() + '.jpg', { type: 'image/jpeg' });
-                const dataTransfer = new DataTransfer();
-                dataTransfer.items.add(file);
-                const fileInput = document.getElementById(inputId);
-                fileInput.files = dataTransfer.files;
-                fileInput.dispatchEvent(new Event('change', { bubbles: true }));
-                closeCamera();
-                console.log('📸 Foto berhasil ditangkap: ' + file.name);
-            }, 'image/jpeg', 0.9);
+
+            console.log('🎥 capturePhoto called - inputId:', inputId);
+            console.log('📹 Video:', video ? video.videoWidth + 'x' + video.videoHeight : 'NOT FOUND');
+
+            if (!video.videoWidth || !video.videoHeight) {
+                console.error('❌ Video belum siap');
+                alert('⏳ Tunggu sebentar, kamera masih loading...');
+                return;
+            }
+
+            try {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                console.log('📐 Canvas size:', canvas.width + 'x' + canvas.height);
+                
+                ctx.drawImage(video, 0, 0);
+                console.log('✅ Frame drawn');
+
+                // Pre-resize untuk optimize
+                const maxSize = 800;
+                if (canvas.width > maxSize || canvas.height > maxSize) {
+                    console.log('📉 Resizing...');
+                    const ratio = Math.min(maxSize / canvas.width, maxSize / canvas.height);
+                    const newWidth = Math.floor(canvas.width * ratio);
+                    const newHeight = Math.floor(canvas.height * ratio);
+                    
+                    const resizedCanvas = document.createElement('canvas');
+                    resizedCanvas.width = newWidth;
+                    resizedCanvas.height = newHeight;
+                    const resizedCtx = resizedCanvas.getContext('2d');
+                    resizedCtx.drawImage(canvas, 0, 0, newWidth, newHeight);
+                    
+                    console.log('📐 Resized to:', newWidth + 'x' + newHeight);
+                    console.log('⏳ Converting to blob...');
+                    
+                    resizedCanvas.toBlob(blob => {
+                        console.log('🔔 Blob callback triggered!', blob ? blob.size + ' bytes' : 'NULL');
+                        handleCapturedBlob(blob, inputId);
+                    }, 'image/jpeg', 0.6);
+                } else {
+                    console.log('⏳ Converting to blob...');
+                    canvas.toBlob(blob => {
+                        console.log('🔔 Blob callback triggered!', blob ? blob.size + ' bytes' : 'NULL');
+                        handleCapturedBlob(blob, inputId);
+                    }, 'image/jpeg', 0.6);
+                }
+            } catch (e) {
+                console.error('❌ Capture error:', e);
+                alert('❌ Error: ' + e.message);
+            }
+        }
+
+        function handleCapturedBlob(blob, inputId) {
+            if (!blob) {
+                console.error('❌ Blob is null!');
+                alert('❌ Gagal capture foto');
+                return;
+            }
+
+            console.log('✅ Processing blob:', blob.size, 'bytes');
+            closeCamera();
+
+            try {
+                const form = document.getElementById(selectedFormId);
+                if (!form) {
+                    console.error('❌ Form tidak ditemukan:', selectedFormId);
+                    alert('❌ Error: Form tidak ditemukan');
+                    return;
+                }
+
+                console.log('✅ Form found:', form.id);
+
+                // Show loading
+                const loadingModal = document.createElement('div');
+                loadingModal.id = 'uploadLoadingModal';
+                loadingModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+                loadingModal.innerHTML = `
+                    <div class="bg-white rounded-lg p-8 max-w-sm w-full mx-4 text-center">
+                        <p class="text-lg font-bold mb-4">⏳ Uploading...</p>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-indigo-600 h-2 rounded-full animate-pulse" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(loadingModal);
+
+                // Create FormData
+                const formData = new FormData();
+                const fileName = 'camera-' + Date.now() + '.jpg';
+                formData.append('file', blob, fileName);
+                formData.append('tipe_dokumen', form.querySelector('input[name="tipe_dokumen"]').value);
+                formData.append('_token', document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || form.querySelector('input[name="_token"]')?.value);
+
+                console.log('📤 Uploading to:', form.action);
+
+                // Upload via AJAX
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                .then(response => {
+                    console.log('✅ Response status:', response.status);
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('✅ Upload success!', data);
+                    const modal = document.getElementById('uploadLoadingModal');
+                    if (modal) modal.remove();
+                    setTimeout(() => location.reload(), 1000);
+                })
+                .catch(error => {
+                    console.error('❌ Upload error:', error);
+                    const modal = document.getElementById('uploadLoadingModal');
+                    if (modal) modal.remove();
+                    alert('❌ Upload gagal: ' + error.message);
+                });
+            } catch (e) {
+                console.error('❌ Error:', e);
+                alert('❌ Error: ' + e.message);
+            }
         }
 
         function closeCamera() {

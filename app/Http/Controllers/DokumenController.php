@@ -189,6 +189,14 @@ class DokumenController extends Controller
             \Log::info('=== UPLOAD SUCCESS ===');
             \Log::info('Saved as: ' . $path . ' (' . round($fileSize / 1024 / 1024, 2) . 'MB)');
 
+            // Return JSON for AJAX, redirect for normal form
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => '✅ ' . $validated['tipe_dokumen'] . ' berhasil diupload! (' . round($fileSize / 1024 / 1024, 2) . 'MB)'
+                ]);
+            }
+
             return back()->with('success', '✅ ' . $validated['tipe_dokumen'] . ' berhasil! (' . round($fileSize / 1024 / 1024, 2) . 'MB)');
 
         } catch (\Exception $e) {
@@ -196,6 +204,14 @@ class DokumenController extends Controller
             \Log::error('Exception: ' . get_class($e));
             \Log::error('Message: ' . $e->getMessage());
             \Log::error('File: ' . $e->getFile() . ':' . $e->getLine());
+
+            // Return JSON for AJAX, redirect for normal form
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'error' => '❌ Error: ' . $e->getMessage()
+                ], 500);
+            }
 
             return back()->with('error', '❌ Error: ' . $e->getMessage());
         }
