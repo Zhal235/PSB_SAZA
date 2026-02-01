@@ -194,7 +194,10 @@
         let selectedFormId = null;
 
         function showUploadMenu(formIndex, tipeDokumen) {
-            selectedFormId = 'form-' + formIndex;
+            // formIndex bisa berupa '0' atau 'ulang-0', jadi pastikan ada prefix 'form-'
+            selectedFormId = formIndex.startsWith('form-') ? formIndex : 'form-' + formIndex;
+            console.log('📝 showUploadMenu called - formIndex:', formIndex, 'selectedFormId:', selectedFormId);
+            
             uploadMenu = document.createElement('div');
             uploadMenu.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
             uploadMenu.innerHTML = `
