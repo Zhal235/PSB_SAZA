@@ -452,6 +452,7 @@
                 }
 
                 // Convert to blob and set to file input
+                // Quality 0.6 = smaller file size, still good quality
                 canvas.toBlob(blob => {
                     if (!blob) {
                         console.error('❌ Gagal membuat blob dari canvas');
@@ -459,7 +460,7 @@
                         return;
                     }
 
-                    console.log('✅ Blob berhasil dibuat: ' + blob.size + ' bytes');
+                    console.log('✅ Blob berhasil dibuat: ' + blob.size + ' bytes (' + (blob.size / 1024 / 1024).toFixed(2) + ' MB)');
 
                     try {
                         // Create FormData untuk di-submit langsung
@@ -527,7 +528,7 @@
                         console.error('❌ Error setting file: ' + e.message);
                         alert('❌ Error: ' + e.message);
                     }
-                }, 'image/jpeg', 0.9);
+                }, 'image/jpeg', 0.6);  // Quality 0.6 untuk ukuran lebih kecil
 
             } catch (e) {
                 console.error('❌ Capture error: ' + e.message);

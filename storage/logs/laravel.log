@@ -9179,3 +9179,10 @@ Did you mean this?
 #26 C:/Users/Rhezal Maulana/Documents/GitHub/PSB_SAZA/artisan(16): Illuminate/Foundation/Application->handleCommand()
 #27 {main}
 "} 
+[2026-02-01 02:48:44] local.INFO: === UPLOAD START (SANTRI) ===  
+[2026-02-01 02:48:44] local.INFO: File: WhatsApp Image 2026-01-31 at 12.41.15.jpeg (0.03MB)  
+[2026-02-01 02:48:44] local.INFO: Tipe dokumen: Foto  
+[2026-02-01 02:48:44] local.INFO: File content size: 0.03MB  
+[2026-02-01 02:48:44] local.INFO: Deleting old document: dokumen_santri/geri_nurdiansyah_foto.png  
+[2026-02-01 02:48:44] local.INFO: === UPLOAD SUCCESS (SANTRI) ===  
+[2026-02-01 02:48:44] local.INFO: Saved as: dokumen_santri/geri_nurdiansyah_foto.jpeg (0.03MB)  

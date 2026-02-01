@@ -78,15 +78,32 @@
                 <!-- Login Button -->
                 <button
                     type="submit"
-                    class="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-200"
+                    class="w-full bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-200"
                 >
-                    Masuk
+                    🔐 Masuk
                 </button>
             </form>
 
+            <!-- Divider -->
+            <div class="my-6 flex items-center">
+                <div class="flex-1 border-t border-gray-300"></div>
+                <span class="px-3 text-gray-500 text-sm">atau</span>
+                <div class="flex-1 border-t border-gray-300"></div>
+            </div>
+
+            <!-- Register Button -->
+            <a href="{{ route('register') }}" class="w-full block">
+                <button
+                    type="button"
+                    class="w-full bg-green-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200"
+                >
+                    📝 Buat Akun Baru
+                </button>
+            </a>
+
             <!-- Footer -->
             <div class="mt-6 text-center text-sm text-gray-600">
-                <p>Belum punya akun? <a href="{{ route('register') }}" class="text-indigo-600 hover:text-indigo-700 font-medium">Daftar di sini</a></p>
+                <p>Sudah punya akun? <a href="{{ route('login') }}" class="text-indigo-600 hover:text-indigo-700 font-medium font-semibold">Masuk di sini</a></p>
             </div>
         </div>
 
