@@ -9749,3 +9749,10 @@ Did you mean this?
 [2026-02-01 03:51:38] local.INFO: Deleting old document: dokumen_santri/ahmad_rizki_pratama_ijazah.jpg  
 [2026-02-01 03:51:38] local.INFO: === UPLOAD SUCCESS ===  
 [2026-02-01 03:51:38] local.INFO: Saved as: dokumen_santri/ahmad_rizki_pratama_ijazah.jpg (0.02MB)  
+[2026-02-01 03:57:49] local.INFO: === UPLOAD START ===  
+[2026-02-01 03:57:49] local.INFO: File: camera-1769918269293.jpg (0.02MB)  
+[2026-02-01 03:57:49] local.INFO: Tipe dokumen: Foto  
+[2026-02-01 03:57:49] local.INFO: File content size: 0.02MB  
+[2026-02-01 03:57:49] local.INFO: Deleting old document: dokumen_santri/ahmad_rizki_pratama_foto.jpg  
+[2026-02-01 03:57:49] local.INFO: === UPLOAD SUCCESS ===  
+[2026-02-01 03:57:49] local.INFO: Saved as: dokumen_santri/ahmad_rizki_pratama_foto.jpg (0.02MB)  

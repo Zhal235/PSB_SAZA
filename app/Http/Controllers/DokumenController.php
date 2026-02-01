@@ -87,12 +87,13 @@ class DokumenController extends Controller
             $originalSize = $file->getSize();
             $ext = pathinfo($originalName, PATHINFO_EXTENSION);
             
-            // Buat nama file yang descriptive: nama_santri_tipe_dokumen.ext
+            // Buat nama file yang descriptive dengan timestamp: nama_santri_tipe_dokumen_timestamp.ext
             $safeNamaSantri = preg_replace('/[^a-z0-9]+/i', '_', $calonSantri->nama);
             $safeNamaSantri = trim($safeNamaSantri, '_');
             $safeTipeDokumen = preg_replace('/[^a-z0-9]+/i', '_', $validated['tipe_dokumen']);
             $safeTipeDokumen = trim($safeTipeDokumen, '_');
-            $filename = strtolower($safeNamaSantri . '_' . $safeTipeDokumen . '.' . $ext);
+            $timestamp = time();
+            $filename = strtolower($safeNamaSantri . '_' . $safeTipeDokumen . '_' . $timestamp . '.' . $ext);
 
             \Log::info('=== UPLOAD START ===');
             \Log::info('File: ' . $originalName . ' (' . round($originalSize / 1024 / 1024, 2) . 'MB)');
