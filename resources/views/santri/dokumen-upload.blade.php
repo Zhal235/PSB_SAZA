@@ -565,12 +565,26 @@
                 // Trigger change event
                 fileInputElement.dispatchEvent(new Event('change', { bubbles: true }));
                 
-                // Submit form directly
-                setTimeout(() => {
-                    form.submit();
-                }, 100);
-                
                 console.log('📸 Foto berhasil ditangkap: ' + fileName);
+                console.log('📤 Submitting form:', form.id);
+                
+                // Use setTimeout to ensure change event is processed first
+                setTimeout(() => {
+                    // Show loading state
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+                    }
+                    
+                    // Submit form
+                    form.submit();
+                    
+                    // Reload page after 2 seconds to show updated content
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                }, 100);
 
             } catch (e) {
                 console.error('❌ Error setting file: ' + e.message);
