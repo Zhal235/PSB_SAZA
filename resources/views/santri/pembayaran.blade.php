@@ -452,10 +452,36 @@
             </a>
         </div>
     @else
+        @php
+            // Check field mana yang belum diisi
+            $missingFields = [];
+            if (!$calonSantri || empty($calonSantri->nama)) $missingFields[] = 'Nama Lengkap';
+            if (!$calonSantri || empty($calonSantri->jenis_kelamin)) $missingFields[] = 'Jenis Kelamin';
+            if (!$calonSantri || empty($calonSantri->tempat_lahir)) $missingFields[] = 'Tempat Lahir';
+            if (!$calonSantri || empty($calonSantri->tanggal_lahir)) $missingFields[] = 'Tanggal Lahir';
+            if (!$calonSantri || empty($calonSantri->alamat)) $missingFields[] = 'Alamat';
+            if (!$calonSantri || empty($calonSantri->nama_ayah)) $missingFields[] = 'Nama Ayah';
+            if (!$calonSantri || empty($calonSantri->nama_ibu)) $missingFields[] = 'Nama Ibu';
+            if (!$calonSantri || empty($calonSantri->hp_ayah)) $missingFields[] = 'HP Ayah';
+            if (!$calonSantri || empty($calonSantri->hp_ibu)) $missingFields[] = 'HP Ibu';
+        @endphp
+        
         <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-6 rounded">
-            <p class="font-semibold">⚠️ Belum Ada Data Pembayaran</p>
-            <p class="text-sm mt-2">Silakan lengkapi form pendaftaran terlebih dahulu untuk melihat detail pembayaran Anda.</p>
-            <a href="{{ route('santri.form-pendaftaran') }}" class="text-yellow-900 hover:underline font-semibold mt-3 inline-block">
+            <p class="font-semibold text-lg mb-3">⚠️ Belum Ada Data Pembayaran</p>
+            <p class="text-sm mb-4">Silakan lengkapi form pendaftaran terlebih dahulu untuk melihat detail pembayaran Anda.</p>
+            
+            @if(count($missingFields) > 0)
+                <div class="bg-white rounded p-4 mb-4">
+                    <p class="text-sm font-semibold text-gray-800 mb-2">📝 Data yang belum dilengkapi:</p>
+                    <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+                        @foreach($missingFields as $field)
+                            <li>{{ $field }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            
+            <a href="{{ route('santri.form-pendaftaran') }}" class="inline-block bg-yellow-600 text-white px-6 py-2 rounded hover:bg-yellow-700 font-semibold mt-2">
                 → Lengkapi Form Pendaftaran
             </a>
         </div>

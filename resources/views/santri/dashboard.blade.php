@@ -32,12 +32,11 @@
             @if($pembayaran)
                 @if($pembayaran->status === 'lunas')
                     <p class="text-2xl lg:text-3xl font-bold text-green-600">✅ Lunas</p>
-                @elseif($pembayaran->status === 'cicilan')
-                    <p class="text-2xl lg:text-3xl font-bold text-yellow-600">🔄 Cicilan</p>
+                    <p class="text-xs text-gray-500 mt-2">Pembayaran telah selesai</p>
                 @else
-                    <p class="text-2xl lg:text-3xl font-bold text-red-600">❌ Belum Bayar</p>
+                    <p class="text-2xl lg:text-3xl font-bold text-red-600">❌ Belum Lunas</p>
+                    <p class="text-xs text-gray-500 mt-2">Sisa: Rp {{ number_format($pembayaran->remaining_amount, 0, ',', '.') }}</p>
                 @endif
-                <p class="text-xs text-gray-500 mt-2">Rp {{ number_format($pembayaran->remaining_amount, 0, ',', '.') }}</p>
             @else
                 <p class="text-2xl lg:text-3xl font-bold text-gray-400">-</p>
                 <p class="text-xs text-gray-500 mt-2">Belum ada data</p>
