@@ -156,7 +156,6 @@
                     <div class="space-y-2 mb-6 text-sm">
                         <div class="text-gray-700">📄 Fotokopi Akta Kelahiran atau KTP</div>
                         <div class="text-gray-700">📄 Fotokopi Kartu Keluarga (KK)</div>
-                        <div class="text-gray-700">📄 Raport Sekolah 2 Tahun Terakhir</div>
                         <div class="text-gray-700">📄 Surat Keterangan Lulus dari Sekolah</div>
                         <div class="text-gray-700">📄 Foto 4x6 (3 lembar)</div>
                         <div class="text-gray-700">📄 Sertifikat/Piagam Penghargaan (jika ada)</div>

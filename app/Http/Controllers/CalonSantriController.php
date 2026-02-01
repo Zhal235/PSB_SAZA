@@ -104,6 +104,7 @@ class CalonSantriController extends Controller
                 ]
             );
             $validated['user_id'] = $user->id;
+            $validated['no_telp'] = $phoneToUse; // Set no_telp dengan nomor yang sama dengan user phone
         }
 
         $calonSantri = CalonSantri::create($validated);
@@ -197,6 +198,7 @@ class CalonSantriController extends Controller
                 ]
             );
             $validated['user_id'] = $user->id;
+            $validated['no_telp'] = $phoneToUse; // Set no_telp dengan nomor yang sama dengan user phone
         }
 
         $calonSantri->update($validated);
