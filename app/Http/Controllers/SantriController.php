@@ -137,7 +137,7 @@ class SantriController extends Controller
         // Load active pembayaran items
         $items = \App\Models\PembayaranItem::where('status', 'active')->get();
 
-        return view('santri.pembayaran', compact('pembayaran', 'items'));
+        return view('santri.pembayaran', compact('calonSantri', 'pembayaran', 'items'));
     }
 
     /**
