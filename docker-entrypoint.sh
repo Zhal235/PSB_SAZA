@@ -58,8 +58,11 @@ if [ -z "$APP_KEY" ]; then
     echo "[INFO] APP_KEY not set, generating new key..."
     NEW_KEY=$(php artisan key:generate --show --no-interaction)
     sed -i "s|^APP_KEY=.*|APP_KEY=${NEW_KEY}|" /var/www/.env
+    export APP_KEY="$NEW_KEY"
     echo "[WARN] Generated APP_KEY: ${NEW_KEY}"
     echo "[WARN] Save this key in Dokploy environment variables: APP_KEY=${NEW_KEY}"
+else
+    sed -i "s|^APP_KEY=.*|APP_KEY=${APP_KEY}|" /var/www/.env
 fi
 
 # Wait for MySQL to be ready
