@@ -66,4 +66,3 @@ volumes:
 networks:
   psb-network:
     driver: bridge
-    driver: bridge
