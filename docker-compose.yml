@@ -8,8 +8,6 @@ services:
     container_name: psb-saza
     restart: unless-stopped
     working_dir: /var/www
-    ports:
-      - "80:80"
     volumes:
       - psb-storage:/var/www/storage/app
       - psb-cache:/var/www/bootstrap/cache
