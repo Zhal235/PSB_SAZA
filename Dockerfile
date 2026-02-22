@@ -35,7 +35,7 @@ COPY . /var/www
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Install Node dependencies and build frontend assets
-RUN npm install && npm run build && rm -rf node_modules
+RUN npm install && NODE_OPTIONS="--max-old-space-size=4096" npm run build && rm -rf node_modules
 
 # Set up Nginx
 COPY nginx.conf /etc/nginx/sites-available/default
