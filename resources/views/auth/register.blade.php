@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Akun - PSB SAZA</title>
+    <title>Daftar Akun - PSB Pesantren Modern Salsabiila Zainia</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center">
@@ -12,7 +12,7 @@
         <div class="bg-white rounded-lg shadow-lg p-8">
             <!-- Logo/Header -->
             <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold text-indigo-600">PSB SAZA</h1>
+                <h1 class="text-3xl font-bold text-indigo-600">PSB Pesantren Modern Salsabiila Zainia</h1>
                 <p class="text-gray-600 text-sm mt-2">Pendaftaran Santri Baru</p>
             </div>
 
@@ -134,7 +134,7 @@
 
         <!-- Additional Info -->
         <div class="text-center mt-6 text-gray-600 text-sm">
-            <p>© 2026 PSB SAZA - Semua Hak Dilindungi</p>
+            <p>© 2026 PSB Pesantren Modern Salsabiila Zainia - Semua Hak Dilindungi</p>
         </div>
     </div>
 </body>

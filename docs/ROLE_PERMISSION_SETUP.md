@@ -2,7 +2,7 @@
 
 ## 📋 Overview
 
-Sistem manajemen role dan permission yang lengkap dan fleksibel untuk PSB SAZA.
+Sistem manajemen role dan permission yang lengkap dan fleksibel untuk PSB Pesantren Modern Salsabiila Zainia.
 
 **Fitur:**
 - ✅ 5 Role yang sudah didefinisikan

@@ -1,7 +1,7 @@
 <!-- Sidebar - Teal BSI -->
 <div class="w-64 text-white p-6 flex flex-col shadow-2xl" style="background-color: #00a0a0;">
     <div class="mb-8 border-b border-white/30 pb-4">
-        <h1 class="text-3xl font-bold drop-shadow-md">PSB SAZA</h1>
+        <h1 class="text-3xl font-bold drop-shadow-md">PSB Pesantren Modern Salsabiila Zainia</h1>
         <p class="text-white/80 text-sm mt-1 font-medium">Sistem Pendaftaran Santri</p>
     </div>
 

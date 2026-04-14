@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>@yield('title') - PSB SAZA</title>
+    <title>@yield('title') - PSB Pesantren Modern Salsabiila Zainia</title>
     <script src="https://cdn.tailwindcss.com"></script>
     @stack('styles')
 </head>
 <body class="bg-gray-50">
     <!-- Mobile Menu Toggle -->
     <div class="lg:hidden bg-white shadow-md p-4 flex justify-between items-center" style="border-bottom: 4px solid #00a0a0;">
-        <h1 class="text-xl font-bold" style="color: #007a7a;">PSB SAZA</h1>
+        <h1 class="text-xl font-bold" style="color: #007a7a;">PSB Pesantren Modern Salsabiila Zainia</h1>
         <button onclick="toggleMobileMenu()" class="p-2 rounded" style="background-color: #00a0a0; color: white;">
             <span id="menuIcon">☰</span>
         </button>
@@ -20,7 +20,7 @@
         <!-- Sidebar (Desktop + Mobile Overlay) -->
         <div id="sidebar" class="fixed lg:relative inset-y-0 left-0 z-50 w-64 text-white p-6 flex flex-col overflow-y-auto shadow-lg transform -translate-x-full lg:translate-x-0 transition-transform duration-300" style="background-color: #00a0a0;">
             <div class="mb-8 border-b border-white/20 pb-4">
-                <h1 class="text-2xl font-bold">PSB SAZA</h1>
+                <h1 class="text-2xl font-bold">PSB Pesantren Modern Salsabiila Zainia</h1>
                 <p class="text-white/80 text-sm mt-1">Portal Santri</p>
             </div>
 

@@ -1,8 +1,8 @@
-# 💰 Sistem Pembayaran PSB SAZA - Dokumentasi Lengkap
+# 💰 Sistem Pembayaran PSB Pesantren Modern Salsabiila Zainia - Dokumentasi Lengkap
 
 ## 📋 Overview
 
-Sistem pembayaran komprehensif untuk PSB (Pendaftaran Santri Baru) SAZA dengan fitur:
+Sistem pembayaran komprehensif untuk PSB (Pendaftaran Santri Baru) Pesantren Modern Salsabiila Zainia dengan fitur:
 - ✅ Management item pembayaran (wajib/optional, cicilan)
 - ✅ Tracking pembayaran per santri
 - ✅ History pembayaran lengkap

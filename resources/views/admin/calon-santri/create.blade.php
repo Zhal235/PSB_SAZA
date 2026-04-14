@@ -60,24 +60,24 @@
 
                             <div class="grid grid-cols-4 gap-4 mt-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Kelamin *</label>
-                                    <select name="jenis_kelamin" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Kelamin</label>
+                                    <select name="jenis_kelamin" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                                         <option value="">-- Pilih --</option>
                                         <option value="laki-laki" {{ old('jenis_kelamin') === 'laki-laki' ? 'selected' : '' }}>Laki-laki</option>
                                         <option value="perempuan" {{ old('jenis_kelamin') === 'perempuan' ? 'selected' : '' }}>Perempuan</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tempat Lahir *</label>
-                                    <input type="text" name="tempat_lahir" value="{{ old('tempat_lahir') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Kota/Kabupaten" />
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tempat Lahir</label>
+                                    <input type="text" name="tempat_lahir" value="{{ old('tempat_lahir') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Kota/Kabupaten" />
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Lahir *</label>
-                                    <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Lahir</label>
+                                    <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Asal Sekolah *</label>
-                                    <input type="text" name="asal_sekolah" value="{{ old('asal_sekolah') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="{{ $jenjang === 'MTs' ? 'SD/MI ...' : 'SMP/MTs ...' }}" />
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Asal Sekolah</label>
+                                    <input type="text" name="asal_sekolah" value="{{ old('asal_sekolah') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="{{ $jenjang === 'MTs' ? 'SD/MI ...' : 'SMP/MTs ...' }}" />
                                 </div>
                             </div>
 
@@ -97,8 +97,8 @@
                         <div>
                             <h3 class="text-xl font-bold text-indigo-600 mb-6 pb-2 border-b-2 border-indigo-600">🏠 Alamat Lengkap</h3>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Alamat Lengkap *</label>
-                                <textarea name="alamat" required rows="2" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Masukkan alamat lengkap">{{ old('alamat') }}</textarea>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Alamat Lengkap</label>
+                                <textarea name="alamat" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Masukkan alamat lengkap">{{ old('alamat') }}</textarea>
                             </div>
 
                             <div class="grid grid-cols-3 gap-4 mt-4">
@@ -126,8 +126,8 @@
                                     <input type="text" name="kode_pos" value="{{ old('kode_pos') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Opsional" />
                                 </div>
                                 <div class="col-span-2">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">No. Telepon *</label>
-                                    <input type="text" name="no_telp" value="{{ old('no_telp') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="08xxxxxxxxxx" />
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">No. Telepon</label>
+                                    <input type="text" name="no_telp" value="{{ old('no_telp') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="08xxxxxxxxxx" />
                                 </div>
                             </div>
                         </div>
@@ -162,7 +162,7 @@
                             <div class="grid grid-cols-3 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Nama Ayah *</label>
-                                    <input type="text" name="nama_ayah" value="{{ old('nama_ayah') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Nama lengkap ayah" />
+                                    <input type="text" name="nama_ayah" value="{{ old('nama_ayah') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Nama lengkap ayah" />
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">NIK Ayah</label>
@@ -201,7 +201,7 @@
                             <div class="grid grid-cols-3 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Nama Ibu *</label>
-                                    <input type="text" name="nama_ibu" value="{{ old('nama_ibu') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Nama lengkap ibu" />
+                                    <input type="text" name="nama_ibu" value="{{ old('nama_ibu') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Nama lengkap ibu" />
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">NIK Ibu</label>

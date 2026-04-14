@@ -1,4 +1,4 @@
-# 📚 PSB SAZA Documentation Index
+# 📚 PSB Pesantren Modern Salsabiila Zainia Documentation Index
 
 **Last Updated:** 21 Januari 2026
 

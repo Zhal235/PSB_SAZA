@@ -15,12 +15,13 @@ use App\Http\Controllers\SantriController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+    // Jika sudah login, redirect ke dashboard
     if (auth()->check()) {
         // Semua role redirect ke admin dashboard (akses diatur by permissions di sidebar)
         return redirect()->route('admin.dashboard');
     }
-    // Jika belum login, redirect ke halaman login
-    return redirect()->route('login');
+    // Jika belum login, tampilkan landing page
+    return view('landing');
 });
 
 // Auth Routes

@@ -1,4 +1,4 @@
-# PSB SAZA - Sistem Penerimaan Santri Baru
+# PSB Pesantren Modern Salsabiila Zainia - Sistem Penerimaan Santri Baru
 
 Aplikasi web untuk mengelola penerimaan santri baru dengan fitur admin panel dan santri portal.
 
@@ -234,8 +234,8 @@ php artisan view:clear
 
 ## 📄 License
 
-© 2026 PSB SAZA - Semua Hak Dilindungi
+© 2026 PSB Pesantren Modern Salsabiila Zainia - Semua Hak Dilindungi
 
 ## 👨‍💻 Author
 
-Dikembangkan dengan ❤️ untuk PSB SAZA
+Dikembangkan dengan ❤️ untuk PSB Pesantren Modern Salsabiila Zainia

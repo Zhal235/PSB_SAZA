@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice - PSB SAZA</title>
+    <title>Invoice - PSB Pesantren Modern Salsabiila Zainia</title>
     <style>
         * {
             margin: 0;
@@ -208,8 +208,8 @@
             <!-- Header -->
             <div class="header">
                 <div class="header-left">
-                    <h1>PSB SAZA</h1>
-                    <p>Pendaftaran Santri Aza</p>
+                    <h1>PSB Pesantren Modern Salsabiila Zainia</h1>
+                    <p>Pendaftaran Santri Baru</p>
                     <p style="margin-top: 5px; font-size: 11px;">Jl. Contoh No. 123, Bandung</p>
                 </div>
                 <div>
@@ -258,7 +258,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Tagihan Pembayaran PSB SAZA Tahun {{ now()->format('Y') }}</td>
+                        <td>Tagihan Pembayaran PSB Pesantren Modern Salsabiila Zainia Tahun {{ now()->format('Y') }}</td>
                         <td class="text-right"><strong>Rp {{ number_format($pembayaran->total_amount, 0, ',', '.') }}</strong></td>
                     </tr>
                 </tbody>
@@ -304,7 +304,7 @@
             <div class="notes">
                 <strong>💳 Petunjuk Pembayaran:</strong>
                 <p style="margin-top: 10px;">
-                    1. Transfer ke rekening PSB SAZA: BCA 1234567890 (Atas Nama Pesantren SAZA)<br>
+                    1. Transfer ke rekening PSB Pesantren Modern Salsabiila Zainia: BCA 1234567890 (Atas Nama Pesantren Modern Salsabiila Zainia)<br>
                     2. Atau bayar langsung ke kantor bagian keuangan<br>
                     3. Setelah pembayaran, mohon kirimkan bukti transfer ke WhatsApp admin<br>
                     4. Invoice ini berlaku sebagai bukti tagihan
@@ -313,7 +313,7 @@
 
             <!-- Footer -->
             <div class="footer">
-                <p>Invoice ini dihasilkan secara otomatis oleh sistem PSB SAZA</p>
+                <p>Invoice ini dihasilkan secara otomatis oleh sistem PSB Pesantren Modern Salsabiila Zainia</p>
                 <p>{{ now()->format('d/m/Y H:i') }}</p>
             </div>
         </div>

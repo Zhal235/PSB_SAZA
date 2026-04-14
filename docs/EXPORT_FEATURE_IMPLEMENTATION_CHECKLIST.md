@@ -1,6 +1,6 @@
 # ✅ Export Feature Implementation Checklist
 
-## Project: PSB SAZA - Export Calon Santri ke Excel
+## Project: PSB Pesantren Modern Salsabiila Zainia - Export Calon Santri ke Excel
 ## Date: 21 January 2026
 ## Status: ✅ COMPLETE & PRODUCTION READY
 

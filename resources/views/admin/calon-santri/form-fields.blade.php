@@ -20,24 +20,24 @@
 
     <div class="grid grid-cols-4 gap-4 mt-4">
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Kelamin *</label>
-            <select name="jenis_kelamin" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Kelamin</label>
+            <select name="jenis_kelamin" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <option value="">-- Pilih --</option>
                 <option value="laki-laki" {{ old('jenis_kelamin', $calonSantri->jenis_kelamin ?? '') === 'laki-laki' ? 'selected' : '' }}>Laki-laki</option>
                 <option value="perempuan" {{ old('jenis_kelamin', $calonSantri->jenis_kelamin ?? '') === 'perempuan' ? 'selected' : '' }}>Perempuan</option>
             </select>
         </div>
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Tempat Lahir *</label>
-            <input type="text" name="tempat_lahir" value="{{ old('tempat_lahir', $calonSantri->tempat_lahir ?? '') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Kota/Kabupaten" />
+            <label class="block text-sm font-medium text-gray-700 mb-2">Tempat Lahir</label>
+            <input type="text" name="tempat_lahir" value="{{ old('tempat_lahir', $calonSantri->tempat_lahir ?? '') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Kota/Kabupaten" />
         </div>
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Lahir *</label>
-            <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir', optional($calonSantri)->tanggal_lahir ? $calonSantri->tanggal_lahir->format('Y-m-d') : '') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" onkeydown="return false" onpaste="return false" />
+            <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Lahir</label>
+            <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir', optional($calonSantri)->tanggal_lahir ? $calonSantri->tanggal_lahir->format('Y-m-d') : '') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" onkeydown="return false" onpaste="return false" />
         </div>
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Asal Sekolah *</label>
-            <input type="text" name="asal_sekolah" value="{{ old('asal_sekolah', $calonSantri->asal_sekolah ?? '') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ketik nama sekolah" list="sekolah-list" />
+            <label class="block text-sm font-medium text-gray-700 mb-2">Asal Sekolah</label>
+            <input type="text" name="asal_sekolah" value="{{ old('asal_sekolah', $calonSantri->asal_sekolah ?? '') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ketik nama sekolah" list="sekolah-list" />
             <datalist id="sekolah-list">
                 @php
                     $sekolahs = \App\Models\Sekolah::orderBy('nama')->get();
@@ -66,18 +66,18 @@
 <div>
     <h3 class="text-xl font-bold text-indigo-600 mb-6 pb-2 border-b-2 border-indigo-600">🏠 Alamat Lengkap</h3>
     <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Alamat Lengkap *</label>
-        <textarea name="alamat" required rows="2" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Masukkan alamat lengkap">{{ old('alamat', $calonSantri->alamat ?? '') }}</textarea>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Alamat Lengkap</label>
+        <textarea name="alamat" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Masukkan alamat lengkap">{{ old('alamat', $calonSantri->alamat ?? '') }}</textarea>
     </div>
 
     <div class="grid grid-cols-3 gap-4 mt-4">
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Provinsi *</label>
-            <input type="text" name="provinsi" value="{{ old('provinsi', $calonSantri->provinsi ?? '') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Provinsi" />
+            <label class="block text-sm font-medium text-gray-700 mb-2">Provinsi</label>
+            <input type="text" name="provinsi" value="{{ old('provinsi', $calonSantri->provinsi ?? '') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Provinsi" />
         </div>
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Kabupaten *</label>
-            <input type="text" name="kabupaten" value="{{ old('kabupaten', $calonSantri->kabupaten ?? '') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Kabupaten/Kota" />
+            <label class="block text-sm font-medium text-gray-700 mb-2">Kabupaten</label>
+            <input type="text" name="kabupaten" value="{{ old('kabupaten', $calonSantri->kabupaten ?? '') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Kabupaten/Kota" />
         </div>
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">Kecamatan</label>
@@ -96,8 +96,8 @@
         </div>
         @if($showNoTelp ?? true)
             <div class="col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-2">No. Telepon *</label>
-                <input type="text" name="no_telp" value="{{ old('no_telp', $calonSantri->no_telp ?? auth()->user()->phone ?? '') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="08xxxxxxxxxx" />
+                <label class="block text-sm font-medium text-gray-700 mb-2">No. Telepon</label>
+                <input type="text" name="no_telp" value="{{ old('no_telp', $calonSantri->no_telp ?? auth()->user()->phone ?? '') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="08xxxxxxxxxx" />
             </div>
         @endif
     </div>
@@ -135,8 +135,8 @@
     <h3 class="text-xl font-bold text-indigo-600 mb-6 pb-2 border-b-2 border-indigo-600">👨 Data Ayah</h3>
     <div class="grid grid-cols-3 gap-4">
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Ayah *</label>
-            <input type="text" name="nama_ayah" value="{{ old('nama_ayah', $calonSantri->nama_ayah ?? '') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Nama lengkap ayah" />
+            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Ayah</label>
+            <input type="text" name="nama_ayah" value="{{ old('nama_ayah', $calonSantri->nama_ayah ?? '') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Nama lengkap ayah" />
         </div>
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">NIK Ayah</label>
@@ -180,8 +180,8 @@
     <h3 class="text-xl font-bold text-indigo-600 mb-6 pb-2 border-b-2 border-indigo-600">👩 Data Ibu</h3>
     <div class="grid grid-cols-3 gap-4">
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Ibu *</label>
-            <input type="text" name="nama_ibu" value="{{ old('nama_ibu', $calonSantri->nama_ibu ?? '') }}" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Nama lengkap ibu" />
+            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Ibu</label>
+            <input type="text" name="nama_ibu" value="{{ old('nama_ibu', $calonSantri->nama_ibu ?? '') }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Nama lengkap ibu" />
         </div>
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">NIK Ibu</label>
@@ -226,8 +226,8 @@
         <h3 class="text-xl font-bold text-indigo-600 mb-6 pb-2 border-b-2 border-indigo-600">📊 Status & Catatan</h3>
         <div class="grid grid-cols-2 gap-4">
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Status *</label>
-                <select name="status" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     <option value="">-- Pilih --</option>
                     <option value="baru" {{ old('status', $calonSantri->status ?? '') === 'baru' ? 'selected' : '' }}>Baru</option>
                     <option value="proses" {{ old('status', $calonSantri->status ?? '') === 'proses' ? 'selected' : '' }}>Proses</option>
