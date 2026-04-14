@@ -55,11 +55,11 @@
                                 </div>
                                 <div>
                                     <p class="text-gray-600 text-sm font-semibold">Tanggal Lahir</p>
-                                    <p class="text-gray-800 text-lg">{{ $calonSantri->tanggal_lahir->format('d F Y') }}</p>
+                                    <p class="text-gray-800 text-lg">{{ $calonSantri->tanggal_lahir?->format('d F Y') }}</p>
                                 </div>
                                 <div>
                                     <p class="text-gray-600 text-sm font-semibold">Umur</p>
-                                    <p class="text-gray-800 text-lg">{{ $calonSantri->tanggal_lahir->diff(\Carbon\Carbon::now())->y }} tahun</p>
+                                    <p class="text-gray-800 text-lg">{{ $calonSantri->tanggal_lahir ? $calonSantri->tanggal_lahir->diff(\Carbon\Carbon::now())->y . ' tahun' : '-' }}</p>
                                 </div>
                             </div>
                         </div>

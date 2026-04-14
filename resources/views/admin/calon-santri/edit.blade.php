@@ -55,7 +55,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Lahir</label>
-                                    <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir', $calonSantri->tanggal_lahir->format('Y-m-d')) }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                                    <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir', $calonSantri->tanggal_lahir?->format('Y-m-d')) }}" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Asal Sekolah</label>
