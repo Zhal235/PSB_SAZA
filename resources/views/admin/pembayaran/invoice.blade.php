@@ -1,217 +1,62 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice - PSB Pesantren Modern Salsabiila Zainia</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Arial', sans-serif;
-            background: white;
-            color: #333;
-            line-height: 1.6;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .invoice {
-            border: 1px solid #ddd;
-            padding: 30px;
-            background: white;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #4f46e5;
-            padding-bottom: 20px;
-        }
-        .header-left h1 {
-            color: #4f46e5;
-            font-size: 28px;
-            margin-bottom: 5px;
-        }
-        .header-left p {
-            color: #666;
-            font-size: 12px;
-        }
-        .invoice-title {
-            text-align: right;
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-        }
-        .invoice-number {
-            text-align: right;
-            color: #666;
-            font-size: 12px;
-            margin-top: 5px;
-        }
-        .invoice-date {
-            text-align: right;
-            color: #666;
-            font-size: 12px;
-            margin-top: 3px;
-        }
-        .info-section {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-        }
-        .info-section div {
-            width: 48%;
-        }
-        .info-label {
-            font-weight: bold;
-            color: #4f46e5;
-            font-size: 12px;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-        .info-content {
-            color: #333;
-            font-size: 13px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        table thead {
-            background: #4f46e5;
-            color: white;
-        }
-        table th {
-            padding: 12px;
-            text-align: left;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        table td {
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-            font-size: 13px;
-        }
-        table tbody tr:hover {
-            background: #f9f5ff;
-        }
-        .total-section {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 30px;
-        }
-        .total-box {
-            width: 350px;
-            border: 2px solid #4f46e5;
-            padding: 15px;
-            background: #f0f4ff;
-        }
-        .total-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 13px;
-        }
-        .total-row.highlight {
-            border-top: 1px solid #4f46e5;
-            padding-top: 10px;
-            margin-top: 10px;
-            font-weight: bold;
-            font-size: 16px;
-            color: #4f46e5;
-        }
-        .status-badge {
-            display: inline-block;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        .status-lunas {
-            background: #d1fae5;
-            color: #065f46;
-        }
-        .status-cicilan {
-            background: #fef3c7;
-            color: #92400e;
-        }
-        .status-belum {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-        .notes {
-            background: #f5f5f5;
-            padding: 15px;
-            border-left: 4px solid #4f46e5;
-            margin-bottom: 20px;
-            font-size: 12px;
-            color: #555;
-        }
-        .footer {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #ddd;
-            text-align: center;
-            color: #666;
-            font-size: 11px;
-        }
-        .print-button {
-            text-align: right;
-            margin-bottom: 20px;
-        }
-        .print-button button {
-            background: #4f46e5;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: bold;
-        }
-        @media print {
-            .print-button {
-                display: none;
-            }
-            body {
-                background: white;
-            }
-            .invoice {
-                border: none;
-                box-shadow: none;
-            }
-        }
-        .text-right {
-            text-align: right;
-        }
-        .text-center {
-            text-align: center;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f3f4f6; color: #333; line-height: 1.6; }
+        .container { max-width: 860px; margin: 0 auto; padding: 20px; }
+        .invoice { border: 1px solid #ddd; padding: 30px; background: white; }
+        .kop-image { width: 65%; display: block; margin: 0 auto 8px auto; }
+        .kop-divider { border: none; border-top: 2px solid #333; margin-bottom: 6px; }
+        .invoice-subtitle { text-align: center; font-size: 15px; font-weight: bold; color: #333; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #4f46e5; padding-bottom: 12px; }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; }
+        .invoice-title { text-align: right; font-size: 22px; font-weight: bold; color: #4f46e5; }
+        .invoice-number, .invoice-date { text-align: right; color: #666; font-size: 12px; margin-top: 3px; }
+        .info-section { display: flex; justify-content: space-between; margin-bottom: 25px; gap: 20px; }
+        .info-section > div { width: 48%; }
+        .info-label { font-weight: bold; color: #4f46e5; font-size: 12px; text-transform: uppercase; margin-bottom: 6px; }
+        .info-content { color: #333; font-size: 13px; }
+        .info-content p { margin-bottom: 3px; }
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; white-space: nowrap; margin-top: 8px; }
+        .status-lunas  { background: #d1fae5; color: #065f46; }
+        .status-cicilan { background: #fef3c7; color: #92400e; }
+        .status-belum  { background: #fee2e2; color: #991b1b; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        table thead { background: #4f46e5; color: white; }
+        table th { padding: 10px 12px; text-align: left; font-size: 12px; }
+        table td { padding: 10px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
+        .total-section { display: flex; justify-content: flex-end; margin-bottom: 25px; }
+        .total-box { width: 340px; border: 2px solid #4f46e5; padding: 15px; background: #f0f4ff; }
+        .total-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
+        .total-row.highlight { border-top: 1px solid #4f46e5; padding-top: 10px; margin-top: 8px; font-weight: bold; font-size: 15px; color: #4f46e5; }
+        .notes { background: #f5f5f5; padding: 12px 15px; border-left: 4px solid #4f46e5; margin-bottom: 15px; font-size: 12px; color: #555; }
+        .notes p { margin-top: 4px; }
+        .footer { margin-top: 25px; padding-top: 15px; border-top: 1px solid #ddd; text-align: center; color: #666; font-size: 11px; }
+        .print-button { text-align: right; margin-bottom: 15px; }
+        .print-button button { background: #4f46e5; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 13px; font-weight: bold; }
+        @media print { .print-button { display: none; } body { background: white; } .invoice { border: none; } }
+        .text-right { text-align: right; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="print-button">
-            <button onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+            <button onclick="window.print()">&#128438; Cetak / Simpan PDF</button>
         </div>
-
         <div class="invoice">
-            <!-- Header -->
+
+            @if(isset($kopImagePath))
+                <img src="{{ $kopImagePath }}" class="kop-image" alt="Kop Surat">
+                <hr class="kop-divider">
+            @endif
+
+            <div class="invoice-subtitle">Pendaftaran Santri Baru</div>
+
             <div class="header">
-                <div class="header-left">
-                    <h1>PSB Pesantren Modern Salsabiila Zainia</h1>
-                    <p>Pendaftaran Santri Baru</p>
-                    <p style="margin-top: 5px; font-size: 11px;">Jl. Contoh No. 123, Bandung</p>
-                </div>
+                <div></div>
                 <div>
                     <div class="invoice-title">INVOICE</div>
                     <div class="invoice-number">No. INV-{{ $pembayaran->id }}-{{ now()->format('mYd') }}</div>
@@ -219,10 +64,9 @@
                 </div>
             </div>
 
-            <!-- Info Section -->
             <div class="info-section">
                 <div>
-                    <div class="info-label">📋 Data Calon Santri</div>
+                    <div class="info-label">&#128203; Data Calon Santri</div>
                     <div class="info-content">
                         <p><strong>{{ $pembayaran->calonSantri->nama }}</strong></p>
                         <p>No. Pendaftaran: {{ $pembayaran->calonSantri->no_pendaftaran }}</p>
@@ -232,39 +76,54 @@
                     </div>
                 </div>
                 <div>
-                    <div class="info-label">🎯 Rincian Tagihan</div>
+                    <div class="info-label">&#127919; Rincian Tagihan</div>
                     <div class="info-content">
                         <p><strong>Jatuh Tempo:</strong> {{ $pembayaran->due_date ? $pembayaran->due_date->format('d/m/Y') : '-' }}</p>
-                        <div style="margin-top: 10px;">
+                        <p>
                             @if($pembayaran->status === 'lunas')
-                                <span class="status-badge status-lunas">✅ LUNAS</span>
+                                <span class="status-badge status-lunas">&#10003; LUNAS</span>
                             @elseif($pembayaran->status === 'cicilan')
-                                <span class="status-badge status-cicilan">🔄 CICILAN</span>
+                                <span class="status-badge status-cicilan">~ CICILAN</span>
                             @else
-                                <span class="status-badge status-belum">❌ BELUM BAYAR</span>
+                                <span class="status-badge status-belum">&#10007; BELUM BAYAR</span>
                             @endif
-                        </div>
+                        </p>
                     </div>
                 </div>
             </div>
 
-            <!-- Items Table -->
             <table>
                 <thead>
                     <tr>
+                        <th style="width: 5%;">No</th>
                         <th>Deskripsi</th>
                         <th class="text-right">Jumlah (Rp)</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Tagihan Pembayaran PSB Pesantren Modern Salsabiila Zainia Tahun {{ now()->format('Y') }}</td>
-                        <td class="text-right"><strong>Rp {{ number_format($pembayaran->total_amount, 0, ',', '.') }}</strong></td>
-                    </tr>
+                    @if(isset($items) && $items->count() > 0)
+                        @foreach($items as $item)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>
+                                    {{ $item->nama }}
+                                    @if($item->deskripsi)
+                                        <br><small style="color: #888;">{{ $item->deskripsi }}</small>
+                                    @endif
+                                </td>
+                                <td class="text-right">Rp {{ number_format($item->nominal, 0, ',', '.') }}</td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td>1</td>
+                            <td>Tagihan Pembayaran PSB Pesantren Modern Salsabiila Zainia Tahun {{ now()->format('Y') }}</td>
+                            <td class="text-right">Rp {{ number_format($pembayaran->total_amount, 0, ',', '.') }}</td>
+                        </tr>
+                    @endif
                 </tbody>
             </table>
 
-            <!-- Total Section -->
             <div class="total-section">
                 <div class="total-box">
                     <div class="total-row">
@@ -282,40 +141,45 @@
                 </div>
             </div>
 
-            <!-- Payment History -->
             @if($pembayaran->records->count() > 0)
                 <div class="notes">
-                    <strong>📋 Riwayat Pembayaran:</strong>
-                    <div style="margin-top: 10px;">
+                    <strong>&#128203; Riwayat Pembayaran:</strong>
+                    <div style="margin-top: 6px;">
                         @foreach($pembayaran->records as $record)
-                            <p>
-                                {{ $record->paid_at->format('d/m/Y') }} - Rp {{ number_format($record->amount, 0, ',', '.') }} 
-                                ({{ ucfirst($record->payment_method) }})
-                                @if($record->receipt_number)
-                                    - Kwitansi: {{ $record->receipt_number }}
-                                @endif
-                            </p>
+                            <p>{{ $record->paid_at->format('d/m/Y') }} - Rp {{ number_format($record->amount, 0, ',', '.') }} ({{ ucfirst($record->payment_method) }})@if($record->receipt_number) - Kwitansi: {{ $record->receipt_number }}@endif</p>
                         @endforeach
                     </div>
                 </div>
             @endif
 
-            <!-- Payment Instructions -->
             <div class="notes">
-                <strong>💳 Petunjuk Pembayaran:</strong>
-                <p style="margin-top: 10px;">
-                    1. Transfer ke rekening PSB Pesantren Modern Salsabiila Zainia: BCA 1234567890 (Atas Nama Pesantren Modern Salsabiila Zainia)<br>
-                    2. Atau bayar langsung ke kantor bagian keuangan<br>
-                    3. Setelah pembayaran, mohon kirimkan bukti transfer ke WhatsApp admin<br>
-                    4. Invoice ini berlaku sebagai bukti tagihan
-                </p>
+                <strong>&#128179; Petunjuk Pembayaran:</strong>
+                <div style="margin-top: 6px;">
+                    @if(isset($bankSettings) && $bankSettings->count() > 0)
+                        @foreach($bankSettings as $bank)
+                            <p>{{ $loop->iteration }}. Transfer ke rekening: {{ $bank->bank_name }} {{ $bank->account_number }} (Atas Nama {{ $bank->account_holder }})@if($bank->description) - {{ $bank->description }}@endif</p>
+                        @endforeach
+                        <p>{{ $bankSettings->count() + 1 }}. Atau bayar langsung ke kantor bagian keuangan</p>
+                        @php $firstBank = $bankSettings->first(); @endphp
+                        @if($firstBank && $firstBank->phone)
+                            <p>{{ $bankSettings->count() + 2 }}. Setelah pembayaran, kirimkan bukti transfer ke WhatsApp admin: {{ $firstBank->phone }}</p>
+                        @else
+                            <p>{{ $bankSettings->count() + 2 }}. Setelah pembayaran, kirimkan bukti transfer ke WhatsApp admin</p>
+                        @endif
+                        <p>{{ $bankSettings->count() + 3 }}. Invoice ini berlaku sebagai bukti tagihan</p>
+                    @else
+                        <p>1. Bayar langsung ke kantor bagian keuangan</p>
+                        <p>2. Setelah pembayaran, kirimkan bukti transfer ke WhatsApp admin</p>
+                        <p>3. Invoice ini berlaku sebagai bukti tagihan</p>
+                    @endif
+                </div>
             </div>
 
-            <!-- Footer -->
             <div class="footer">
                 <p>Invoice ini dihasilkan secara otomatis oleh sistem PSB Pesantren Modern Salsabiila Zainia</p>
                 <p>{{ now()->format('d/m/Y H:i') }}</p>
             </div>
+
         </div>
     </div>
 </body>

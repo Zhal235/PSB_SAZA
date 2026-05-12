@@ -30,6 +30,21 @@
                     <input type="text" name="nama" value="{{ old('nama') }}" placeholder="Contoh: Pendaftaran, SPP, Seragam" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
                 </div>
 
+                <!-- Tipe Item (Pembayaran/Perlengkapan) -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Kategori Item *</label>
+                    <div class="flex gap-6">
+                        <label class="flex items-center gap-2">
+                            <input type="radio" name="item_type" value="pembayaran" {{ old('item_type', 'pembayaran') == 'pembayaran' ? 'checked' : '' }}>
+                            <span class="text-indigo-600 font-semibold">💳 Pembayaran (SPP, Pendaftaran, dll)</span>
+                        </label>
+                        <label class="flex items-center gap-2">
+                            <input type="radio" name="item_type" value="perlengkapan" {{ old('item_type') == 'perlengkapan' ? 'checked' : '' }}>
+                            <span class="text-amber-600 font-semibold">📦 Perlengkapan (Seragam, Sepatu, dll)</span>
+                        </label>
+                    </div>
+                </div>
+
                 <!-- Deskripsi -->
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Deskripsi (opsional)</label>
@@ -39,7 +54,7 @@
                 <!-- Nominal -->
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Nominal (Rp) *</label>
-                    <input type="number" name="nominal" value="{{ old('nominal') }}" placeholder="0" step="1000" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    <input type="number" name="nominal" value="{{ old('nominal') }}" placeholder="0" step="any" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
                 </div>
 
                 <!-- Wajib/Optional -->

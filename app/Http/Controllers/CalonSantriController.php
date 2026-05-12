@@ -67,7 +67,9 @@ class CalonSantriController extends Controller
             'no_telp' => 'nullable|string|max:15',
             'phone_type' => 'nullable|in:ayah,ibu',
             'status' => 'nullable|in:baru,proses,lolos,tidak_lolos',
-            'catatan' => 'nullable|string'
+            'catatan' => 'nullable|string',
+            'items' => 'nullable|array',
+            'items.*' => 'integer|exists:pembayaran_items,id',
         ]);
 
         // Auto-generate nomor pendaftaran
@@ -107,19 +109,56 @@ class CalonSantriController extends Controller
             $validated['no_telp'] = $phoneToUse; // Set no_telp dengan nomor yang sama dengan user phone
         }
 
+        // Extract items sebelum create calon santri
+        $selectedItems = $request->input('items', []);
+        
+        // Tambahkan item wajib secara otomatis
+        $requiredItems = \App\Models\PembayaranItem::where('status', 'active')
+            ->where('is_required', true)
+            ->pluck('id')
+            ->toArray();
+        
+        // Merge required items dengan selected items
+        $allSelectedItems = array_unique(array_merge($selectedItems, $requiredItems));
+        
         $calonSantri = CalonSantri::create($validated);
 
+        // Hitung total dari selected items
+        $totalAmount = 0;
+        if (!empty($allSelectedItems)) {
+            foreach ($allSelectedItems as $itemId) {
+                $item = \App\Models\PembayaranItem::find($itemId);
+                if ($item) {
+                    $totalAmount += $item->nominal;
+                }
+            }
+        }
+
         // Otomatis buat pembayaran record
-        $totalItems = \App\Models\PembayaranItem::where('status', 'active')->sum('nominal');
-        Pembayaran::create([
+        $pembayaran = Pembayaran::create([
             'calon_santri_id' => $calonSantri->id,
-            'total_amount' => $totalItems,
+            'total_amount' => $totalAmount,
             'paid_amount' => 0,
-            'remaining_amount' => $totalItems,
+            'remaining_amount' => $totalAmount,
             'status' => 'belum_bayar',
             'due_date' => now()->addDays(7),
             'unique_code' => \App\Models\Pembayaran::generateUniqueCode()
         ]);
+
+        // Simpan item details
+        if (!empty($allSelectedItems)) {
+            foreach ($allSelectedItems as $itemId) {
+                $item = \App\Models\PembayaranItem::find($itemId);
+                if ($item) {
+                    $pembayaran->itemDetails()->create([
+                        'pembayaran_item_id' => $itemId,
+                        'quantity' => 1,
+                        'unit_price' => $item->nominal,
+                        'subtotal' => $item->nominal,
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('admin.dokumen.create', $calonSantri)
             ->with('success', 'Data calon santri berhasil ditambahkan! Akun sudah dibuat dengan HP: ' . $phoneToUse . ' dan password default: 12345678');
@@ -128,6 +167,7 @@ class CalonSantriController extends Controller
     // Show form edit
     public function edit(CalonSantri $calonSantri)
     {
+        $calonSantri->load('pembayaran.itemDetails.pembayaranItem');
         return view('admin.calon-santri.edit', compact('calonSantri'));
     }
 
@@ -166,7 +206,9 @@ class CalonSantriController extends Controller
             'no_telp' => 'nullable|string|max:15',
             'phone_type' => 'nullable|in:ayah,ibu',
             'status' => 'nullable|in:baru,proses,lolos,tidak_lolos',
-            'catatan' => 'nullable|string'
+            'catatan' => 'nullable|string',
+            'items' => 'nullable|array',
+            'items.*' => 'integer|exists:pembayaran_items,id',
         ]);
 
         // Handle phone type change
@@ -201,7 +243,49 @@ class CalonSantriController extends Controller
             $validated['no_telp'] = $phoneToUse; // Set no_telp dengan nomor yang sama dengan user phone
         }
 
+        // Extract items sebelum update
+        $selectedItems = $request->input('items', []);
+        
+        // Tambahkan item wajib secara otomatis
+        $requiredItems = \App\Models\PembayaranItem::where('status', 'active')
+            ->where('is_required', true)
+            ->pluck('id')
+            ->toArray();
+        
+        // Merge required items dengan selected items
+        $allSelectedItems = array_unique(array_merge($selectedItems, $requiredItems));
+
         $calonSantri->update($validated);
+
+        // Update pembayaran items
+        $pembayaran = $calonSantri->pembayaran;
+        if ($pembayaran) {
+            // Delete existing item details
+            $pembayaran->itemDetails()->delete();
+
+            // Hitung total dari selected items
+            $totalAmount = 0;
+            if (!empty($allSelectedItems)) {
+                foreach ($allSelectedItems as $itemId) {
+                    $item = \App\Models\PembayaranItem::find($itemId);
+                    if ($item) {
+                        $totalAmount += $item->nominal;
+                        $pembayaran->itemDetails()->create([
+                            'pembayaran_item_id' => $itemId,
+                            'quantity' => 1,
+                            'unit_price' => $item->nominal,
+                            'subtotal' => $item->nominal,
+                        ]);
+                    }
+                }
+            }
+
+            // Update total amount di pembayaran
+            $pembayaran->update([
+                'total_amount' => $totalAmount,
+                'remaining_amount' => $totalAmount - $pembayaran->paid_amount,
+            ]);
+        }
 
         return redirect()->route('admin.dokumen.create', $calonSantri)
             ->with('success', 'Data calon santri berhasil diperbarui! Silakan update dokumen.');

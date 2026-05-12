@@ -10,7 +10,8 @@
 @section('content')
     @if($pembayaran)
         @php
-            $totalTagihan = $items ? $items->sum('nominal') : $pembayaran->total_amount;
+            // Gunakan total dari database (hasil dari itemDetails yang dipilih)
+            $totalTagihan = $pembayaran->total_amount;
         @endphp
 
         <!-- Summary Cards -->
@@ -49,41 +50,43 @@
 
         <!-- Breakdown Tagihan -->
         <div class="bg-white rounded-lg shadow p-6 mb-8">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">📋 Rincian Tagihan</h3>
+            <h3 class="text-lg font-bold text-gray-800 mb-4">📋 Rincian Tagihan (Item yang Dipilih)</h3>
             
-            @if($items && $items->count() > 0)
+            @if($pembayaran->itemDetails && $pembayaran->itemDetails->count() > 0)
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead class="bg-gray-100 border-b">
                             <tr>
                                 <th class="px-4 py-3 text-left">Item</th>
-                                <th class="px-4 py-3 text-center">Wajib</th>
+                                <th class="px-4 py-3 text-center">Kategori</th>
+                                <th class="px-4 py-3 text-center">Qty</th>
                                 <th class="px-4 py-3 text-right">Nominal</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y">
-                            @foreach($items as $item)
+                            @foreach($pembayaran->itemDetails as $detail)
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-4 py-3">
-                                        <div class="font-semibold text-gray-800">{{ $item->nama }}</div>
-                                        @if($item->deskripsi)
-                                            <p class="text-xs text-gray-600 mt-1">{{ $item->deskripsi }}</p>
+                                        <div class="font-semibold text-gray-800">{{ $detail->pembayaranItem->nama }}</div>
+                                        @if($detail->pembayaranItem->deskripsi)
+                                            <p class="text-xs text-gray-600 mt-1">{{ $detail->pembayaranItem->deskripsi }}</p>
                                         @endif
                                     </td>
                                     <td class="px-4 py-3 text-center">
-                                        @if($item->is_required)
-                                            <span class="text-red-600 font-bold">✓ Wajib</span>
+                                        @if($detail->pembayaranItem->item_type === 'perlengkapan')
+                                            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded">📦 Perlengkapan</span>
                                         @else
-                                            <span class="text-blue-600 text-xs">Optional</span>
+                                            <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded">💳 Pembayaran</span>
                                         @endif
                                     </td>
+                                    <td class="px-4 py-3 text-center">{{ $detail->quantity }}</td>
                                     <td class="px-4 py-3 text-right font-semibold text-indigo-600">
-                                        Rp {{ number_format($item->nominal, 0, ',', '.') }}
+                                        Rp {{ number_format($detail->subtotal, 0, ',', '.') }}
                                     </td>
                                 </tr>
                             @endforeach
                             <tr class="bg-gray-50 font-bold">
-                                <td colspan="2" class="px-4 py-3 text-right">Total:</td>
+                                <td colspan="3" class="px-4 py-3 text-right">Total:</td>
                                 <td class="px-4 py-3 text-right text-indigo-600 text-lg">
                                     Rp {{ number_format($totalTagihan, 0, ',', '.') }}
                                 </td>
@@ -91,6 +94,55 @@
                         </tbody>
                     </table>
                 </div>
+            @else
+                <div class="text-center py-8 text-gray-500">
+                    <p>Belum ada item yang dipilih. Silakan pilih item di bawah.</p>
+                </div>
+            @endif
+
+            <!-- Pilih Perlengkapan Optional -->
+            @php
+                $allActiveItems = \App\Models\PembayaranItem::where('status', 'active')->get();
+                $optionalItems = $allActiveItems->filter(function($item) {
+                    return $item->item_type === 'perlengkapan' && !$item->is_required;
+                });
+                $selectedItemIds = $pembayaran->itemDetails->pluck('pembayaran_item_id')->toArray();
+            @endphp
+
+            @if($optionalItems->count() > 0)
+                    <div class="mt-6 p-4 bg-amber-50 border-l-4 border-amber-500 rounded">
+                        <h4 class="font-bold text-amber-900 mb-4 flex items-center gap-2">
+                            📦 Pilih Perlengkapan (Optional)
+                        </h4>
+                        
+                        <form method="POST" action="{{ route('santri.updateSelectedItems', $pembayaran) }}" class="space-y-3">
+                            @csrf
+                            @method('PUT')
+
+                            @foreach($optionalItems as $item)
+                                <label class="flex items-start gap-3 p-3 bg-white border border-amber-200 rounded cursor-pointer hover:bg-amber-50 transition">
+                                    <input type="checkbox" name="items[]" value="{{ $item->id }}" 
+                                        class="mt-1" 
+                                        {{ in_array($item->id, $selectedItemIds) ? 'checked' : '' }}>
+                                    
+                                    <div class="flex-1">
+                                        <p class="font-semibold text-gray-800">{{ $item->nama }}</p>
+                                        @if($item->deskripsi)
+                                            <p class="text-xs text-gray-600 mt-1">{{ $item->deskripsi }}</p>
+                                        @endif
+                                        <p class="text-sm font-bold text-amber-600 mt-2">
+                                            Rp {{ number_format($item->nominal, 0, ',', '.') }}
+                                        </p>
+                                    </div>
+                                </label>
+                            @endforeach
+
+                            <button type="submit" class="w-full bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700 font-semibold transition mt-4">
+                                ✅ Simpan Pilihan
+                            </button>
+                        </form>
+                    </div>
+                @endif
 
                 <!-- Payment Status Summary -->
                 <div class="mt-6 space-y-4">
@@ -365,15 +417,9 @@
                     </div>
                     @endif
                 </div>
-            @else
-                <div class="text-center py-6 text-gray-500">
-                    <p>Belum ada item pembayaran yang aktif</p>
-                </div>
-            @endif
-        </div>
 
-        <!-- Riwayat Pembayaran -->
-        <div class="bg-white rounded-lg shadow p-6">
+                <!-- Riwayat Pembayaran -->
+                <div class="bg-white rounded-lg shadow p-6">
             <h3 class="text-lg font-bold text-gray-800 mb-4">📊 Riwayat Pembayaran</h3>
             
             @if($pembayaran->records->count() > 0)

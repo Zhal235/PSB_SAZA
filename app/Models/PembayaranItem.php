@@ -14,6 +14,7 @@ class PembayaranItem extends Model
         'can_cicil',
         'cicil_month',
         'status',
+        'item_type',
     ];
 
     protected $casts = [
@@ -22,8 +23,8 @@ class PembayaranItem extends Model
         'can_cicil' => 'boolean',
     ];
 
-    public function pembayaranDetails()
+    public function itemDetails()
     {
-        return $this->hasMany(PembayaranDetail::class);
+        return $this->hasMany(PembayaranItemDetail::class);
     }
 }

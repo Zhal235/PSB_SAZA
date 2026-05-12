@@ -9,6 +9,9 @@
 
 @section('top-bar-action')
     <div class="flex gap-3">
+        <a href="{{ route('admin.pembayaran.editItems', $pembayaran) }}" class="bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700 font-semibold">
+            📦 Ubah Item
+        </a>
         <a href="{{ route('admin.pembayaran.invoice', $pembayaran) }}" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 font-semibold" target="_blank">
             📄 Lihat Invoice
         </a>
@@ -54,7 +57,59 @@
             </div>
         </div>
 
-        <!-- Input Pembayaran -->
+        <!-- Daftar Item yang Dipilih -->
+        @php
+            $pembayaran->load('itemDetails.pembayaranItem');
+        @endphp
+        
+        @if($pembayaran->itemDetails->count() > 0)
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">📦 Item yang Dipilih</h3>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-100 border-b">
+                            <tr>
+                                <th class="px-4 py-2 text-left">Nama Item</th>
+                                <th class="px-4 py-2 text-center">Kategori</th>
+                                <th class="px-4 py-2 text-center">Qty</th>
+                                <th class="px-4 py-2 text-right">Harga Satuan</th>
+                                <th class="px-4 py-2 text-right">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            @foreach($pembayaran->itemDetails as $detail)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-3 font-semibold text-gray-700">
+                                        {{ $detail->pembayaranItem->nama }}
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        @if($detail->pembayaranItem->item_type === 'perlengkapan')
+                                            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded">📦 Perlengkapan</span>
+                                        @else
+                                            <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded">💳 Pembayaran</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-4 py-3 text-center">{{ $detail->quantity }}</td>
+                                    <td class="px-4 py-3 text-right text-gray-700">
+                                        Rp {{ number_format($detail->unit_price, 0, ',', '.') }}
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-semibold text-indigo-600">
+                                        Rp {{ number_format($detail->subtotal, 0, ',', '.') }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                            <tr class="bg-gray-50 font-bold">
+                                <td colspan="4" class="px-4 py-3 text-right">TOTAL:</td>
+                                <td class="px-4 py-3 text-right text-indigo-600">
+                                    Rp {{ number_format($pembayaran->itemDetails->sum('subtotal'), 0, ',', '.') }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endif
         @if($pembayaran->remaining_amount > 0)
             <div class="bg-white rounded-lg shadow p-6">
                 <h3 class="text-lg font-bold text-gray-800 mb-4">💵 Input Pembayaran</h3>

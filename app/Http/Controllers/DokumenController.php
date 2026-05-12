@@ -231,6 +231,48 @@ class DokumenController extends Controller
         return response()->json(['success' => true]);
     }
 
+    // Buat record dokumen untuk hardcopy yang tidak ada file upload
+    public function createHardcopy(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'calon_santri_id' => 'required|exists:calon_santris,id',
+                'tipe_dokumen' => 'required|string',
+                'hardcopy_diterima' => 'required|boolean'
+            ]);
+
+            $calonSantri = CalonSantri::findOrFail($validated['calon_santri_id']);
+            
+            // Cek apakah sudah ada dokumen dengan tipe yang sama
+            $existing = Dokumen::where('calon_santri_id', $calonSantri->id)
+                ->where('tipe_dokumen', $validated['tipe_dokumen'])
+                ->first();
+
+            if ($existing) {
+                // Update yang ada
+                $existing->update([
+                    'hardcopy_diterima' => $validated['hardcopy_diterima'],
+                    'tanggal_terima_hardcopy' => $validated['hardcopy_diterima'] ? now() : null
+                ]);
+            } else {
+                // Buat dokumen baru tanpa file
+                Dokumen::create([
+                    'calon_santri_id' => $calonSantri->id,
+                    'tipe_dokumen' => $validated['tipe_dokumen'],
+                    'file_path' => null,
+                    'original_filename' => 'Hardcopy - ' . $validated['tipe_dokumen'],
+                    'file_size' => 0,
+                    'hardcopy_diterima' => $validated['hardcopy_diterima'],
+                    'tanggal_terima_hardcopy' => $validated['hardcopy_diterima'] ? now() : null
+                ]);
+            }
+
+            return response()->json(['success' => true, 'message' => 'Dokumen hardcopy berhasil dicatat']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+        }
+    }
+
     // Hapus dokumen
     public function destroy(Dokumen $dokumen)
     {

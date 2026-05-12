@@ -204,7 +204,8 @@
 
             <!-- Buttons -->
             <div class="flex gap-4 pt-4 lg:pt-6 border-t mt-4 lg:mt-6">
-                <a href="{{ route('santri.dashboard') }}" class="bg-gray-400 text-white px-4 lg:px-6 py-2 lg:py-2 rounded hover:bg-gray-500 font-semibold transition text-sm">✅ Selesai</a>
+                <a href="{{ route('santri.pembayaran') }}" class="flex-1 bg-indigo-600 text-white px-4 lg:px-6 py-2 lg:py-2 rounded hover:bg-indigo-700 font-semibold transition text-sm text-center">⏭️ Lanjut ke Pembayaran</a>
+                <a href="{{ route('santri.dashboard') }}" class="flex-1 bg-gray-400 text-white px-4 lg:px-6 py-2 lg:py-2 rounded hover:bg-gray-500 font-semibold transition text-sm text-center">✅ Selesai Nanti</a>
             </div>
         </div>
     </div>

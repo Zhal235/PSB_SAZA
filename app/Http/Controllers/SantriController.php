@@ -127,7 +127,7 @@ class SantriController extends Controller
     public function pembayaran()
     {
         $calonSantri = CalonSantri::where('no_telp', auth()->user()->phone)->first();
-        $pembayaran = $calonSantri ? $calonSantri->pembayaran()->with('records')->first() : null;
+        $pembayaran = $calonSantri ? $calonSantri->pembayaran()->with('records', 'itemDetails.pembayaranItem')->first() : null;
         
         // Generate unique code jika belum ada
         if ($pembayaran && !$pembayaran->unique_code) {
@@ -165,10 +165,9 @@ class SantriController extends Controller
             abort(403);
         }
 
-        $pembayaran = $calonSantri->pembayaran;
-        $items = \App\Models\PembayaranItem::where('status', 'active')->get();
+        $pembayaran = $calonSantri->pembayaran()->with('itemDetails.pembayaranItem')->first();
 
-        return view('santri.print-bukti-pendaftaran', compact('calonSantri', 'pembayaran', 'items'));
+        return view('santri.print-bukti-pendaftaran', compact('calonSantri', 'pembayaran'));
     }
 
     /**
@@ -181,10 +180,9 @@ class SantriController extends Controller
             abort(403);
         }
 
-        $pembayaran = $calonSantri->pembayaran;
-        $items = \App\Models\PembayaranItem::where('status', 'active')->get();
+        $pembayaran = $calonSantri->pembayaran()->with('itemDetails.pembayaranItem')->first();
 
-        $pdf = \PDF::loadView('santri.print-bukti-pendaftaran', compact('calonSantri', 'pembayaran', 'items'));
+        $pdf = \PDF::loadView('santri.print-bukti-pendaftaran', compact('calonSantri', 'pembayaran'));
         return $pdf->download('Bukti-Pendaftaran-' . $calonSantri->no_pendaftaran . '.pdf');
     }
 
@@ -516,5 +514,58 @@ class SantriController extends Controller
         } catch (\Exception $e) {
             \Log::error('GD compression error: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Update selected optional items untuk santri
+     */
+    public function updateSelectedItems(Request $request, Pembayaran $pembayaran)
+    {
+        // Verifikasi bahwa pembayaran adalah milik user yang login
+        $calonSantri = CalonSantri::where('no_telp', auth()->user()->phone)->first();
+        if (!$calonSantri || $pembayaran->calon_santri_id !== $calonSantri->id) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'items' => 'nullable|array',
+            'items.*' => 'integer|exists:pembayaran_items,id',
+        ]);
+
+        // Delete existing item details
+        $pembayaran->itemDetails()->delete();
+
+        // Tambahkan item wajib secara otomatis
+        $requiredItems = \App\Models\PembayaranItem::where('status', 'active')
+            ->where('is_required', true)
+            ->pluck('id')
+            ->toArray();
+        
+        // Merge required items dengan selected items
+        $selectedItems = $validated['items'] ?? [];
+        $allSelectedItems = array_unique(array_merge($selectedItems, $requiredItems));
+
+        // Add new item details
+        if (!empty($allSelectedItems)) {
+            foreach ($allSelectedItems as $itemId) {
+                $item = \App\Models\PembayaranItem::find($itemId);
+                
+                $pembayaran->itemDetails()->create([
+                    'pembayaran_item_id' => $itemId,
+                    'quantity' => 1,
+                    'unit_price' => $item->nominal,
+                    'subtotal' => $item->nominal,
+                ]);
+            }
+        }
+
+        // Recalculate total amount
+        $totalAmount = $pembayaran->itemDetails->sum('subtotal');
+        $pembayaran->update([
+            'total_amount' => $totalAmount,
+            'remaining_amount' => $totalAmount - $pembayaran->paid_amount,
+        ]);
+
+        return back()->with('success', '✅ Pilihan perlengkapan berhasil disimpan!');
     }
 }

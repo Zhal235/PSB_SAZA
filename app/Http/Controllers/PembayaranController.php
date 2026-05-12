@@ -17,7 +17,7 @@ class PembayaranController extends Controller
     public function index()
     {
         // Ambil pembayaran terbaru untuk setiap calon santri (avoid duplicate)
-        $pembayarans = Pembayaran::with('calonSantri')
+        $pembayarans = Pembayaran::with('calonSantri', 'itemDetails')
             ->orderBy('updated_at', 'desc')
             ->get()
             ->groupBy('calon_santri_id')
@@ -26,15 +26,11 @@ class PembayaranController extends Controller
             })
             ->values();
         
-        // Hitung total dari active items untuk setiap pembayaran
+        // Hitung total dari itemDetails yang dipilih
         $pembayarans = $pembayarans->map(function($pembayaran) {
-            $items = \App\Models\PembayaranItem::where('status', 'active')->get();
-            $totalFromItems = $items->sum('nominal');
-            
-            // Gunakan total dari items jika ada, jika tidak gunakan dari db
-            $pembayaran->calculated_total = $totalFromItems ?: $pembayaran->total_amount;
-            $pembayaran->calculated_remaining = $pembayaran->calculated_total - $pembayaran->paid_amount;
-            
+            // Gunakan total dari database yang sudah dihitung
+            $pembayaran->calculated_total = $pembayaran->total_amount;
+            $pembayaran->calculated_remaining = $pembayaran->total_amount - $pembayaran->paid_amount;
             return $pembayaran;
         });
         
@@ -46,14 +42,9 @@ class PembayaranController extends Controller
      */
     public function show(Pembayaran $pembayaran)
     {
-        $pembayaran->load('calonSantri', 'records');
+        $pembayaran->load('calonSantri', 'records', 'itemDetails.pembayaranItem');
         
-        // Hitung total dari active items
-        $items = \App\Models\PembayaranItem::where('status', 'active')->get();
-        $totalFromItems = $items->sum('nominal');
-        
-        // Gunakan total dari items jika ada
-        $pembayaran->total_amount = $totalFromItems ?: $pembayaran->total_amount;
+        // Gunakan total_amount yang sudah tersimpan di database (hasil dari itemDetails)
         $pembayaran->remaining_amount = $pembayaran->total_amount - $pembayaran->paid_amount;
         
         return view('admin.pembayaran.show', compact('pembayaran'));
@@ -112,8 +103,20 @@ class PembayaranController extends Controller
         // Gunakan total dari items jika ada
         $pembayaran->total_amount = $totalFromItems ?: $pembayaran->total_amount;
         $pembayaran->remaining_amount = $pembayaran->total_amount - $pembayaran->paid_amount;
+
+        // Sinkronkan status dengan nilai yang sudah dihitung ulang
+        if ($pembayaran->remaining_amount <= 0) {
+            $pembayaran->status = 'lunas';
+        } elseif ($pembayaran->paid_amount > 0) {
+            $pembayaran->status = 'cicilan';
+        } else {
+            $pembayaran->status = 'belum_bayar';
+        }
+
+        $bankSettings = \App\Models\BankSetting::where('is_active', true)->get();
+        $kopImagePath = asset('images/KOP.png');
         
-        return view('admin.pembayaran.invoice', compact('pembayaran'));
+        return view('admin.pembayaran.invoice', compact('pembayaran', 'bankSettings', 'kopImagePath', 'items'));
     }
 
     /**
@@ -122,8 +125,25 @@ class PembayaranController extends Controller
     public function invoicePdf(Pembayaran $pembayaran)
     {
         $pembayaran->load('calonSantri', 'records');
+
+        $items = \App\Models\PembayaranItem::where('status', 'active')->get();
+        $totalFromItems = $items->sum('nominal');
+
+        $pembayaran->total_amount = $totalFromItems ?: $pembayaran->total_amount;
+        $pembayaran->remaining_amount = $pembayaran->total_amount - $pembayaran->paid_amount;
+
+        if ($pembayaran->remaining_amount <= 0) {
+            $pembayaran->status = 'lunas';
+        } elseif ($pembayaran->paid_amount > 0) {
+            $pembayaran->status = 'cicilan';
+        } else {
+            $pembayaran->status = 'belum_bayar';
+        }
+
+        $bankSettings = \App\Models\BankSetting::where('is_active', true)->get();
+        $kopImagePath = 'file://' . public_path('images/KOP.png');
         
-        $html = view('admin.pembayaran.invoice', compact('pembayaran'))->render();
+        $html = view('admin.pembayaran.invoice', compact('pembayaran', 'bankSettings', 'kopImagePath', 'items'))->render();
         
         // Menggunakan library bawaannya
         $pdf = \PDF::loadHTML($html)
@@ -131,5 +151,65 @@ class PembayaranController extends Controller
             ->setOrientation('portrait');
         
         return $pdf->download('invoice-' . $pembayaran->calonSantri->nama . '-' . date('Y-m-d') . '.pdf');
+    }
+
+    /**
+     * Show form untuk edit items yang dibeli
+     */
+    public function editItems(Pembayaran $pembayaran)
+    {
+        $pembayaran->load('calonSantri', 'itemDetails.pembayaranItem');
+        
+        $activeItems = \App\Models\PembayaranItem::where('status', 'active')->get();
+        $selectedItemIds = $pembayaran->itemDetails->pluck('pembayaran_item_id')->toArray();
+        
+        return view('admin.pembayaran.edit-items', compact('pembayaran', 'activeItems', 'selectedItemIds'));
+    }
+
+    /**
+     * Update items yang dibeli santri
+     */
+    public function updateItems(Request $request, Pembayaran $pembayaran)
+    {
+        $validated = $request->validate([
+            'items' => 'nullable|array',
+            'items.*' => 'integer|exists:pembayaran_items,id',
+        ]);
+
+        // Tambahkan item wajib secara otomatis
+        $requiredItems = \App\Models\PembayaranItem::where('status', 'active')
+            ->where('is_required', true)
+            ->pluck('id')
+            ->toArray();
+        
+        // Merge required items dengan selected items
+        $selectedItems = $validated['items'] ?? [];
+        $allSelectedItems = array_unique(array_merge($selectedItems, $requiredItems));
+
+        // Delete existing item details
+        $pembayaran->itemDetails()->delete();
+
+        // Add new item details
+        if (!empty($allSelectedItems)) {
+            foreach ($allSelectedItems as $itemId) {
+                $item = \App\Models\PembayaranItem::find($itemId);
+                
+                $pembayaran->itemDetails()->create([
+                    'pembayaran_item_id' => $itemId,
+                    'quantity' => 1,
+                    'unit_price' => $item->nominal,
+                    'subtotal' => $item->nominal,
+                ]);
+            }
+        }
+
+        // Recalculate total amount
+        $totalAmount = $pembayaran->itemDetails->sum('subtotal');
+        $pembayaran->update([
+            'total_amount' => $totalAmount,
+            'remaining_amount' => $totalAmount - $pembayaran->paid_amount,
+        ]);
+
+        return redirect()->route('admin.pembayaran.show', $pembayaran)->with('success', '✅ Item berhasil diperbarui!');
     }
 }

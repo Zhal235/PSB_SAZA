@@ -33,6 +33,11 @@ class Pembayaran extends Model
         return $this->hasMany(PembayaranRecord::class);
     }
 
+    public function itemDetails()
+    {
+        return $this->hasMany(PembayaranItemDetail::class);
+    }
+
     // Generate unique code untuk nominal transfer (2000-3000)
     public static function generateUniqueCode()
     {

@@ -36,6 +36,7 @@ class PembayaranItemController extends Controller
             'is_required' => 'boolean',
             'can_cicil' => 'boolean',
             'cicil_month' => 'nullable|numeric|min:1|max:12',
+            'item_type' => 'required|in:pembayaran,perlengkapan',
         ]);
 
         PembayaranItem::create($validated);
@@ -64,6 +65,7 @@ class PembayaranItemController extends Controller
             'can_cicil' => 'boolean',
             'cicil_month' => 'nullable|numeric|min:1|max:12',
             'status' => 'required|in:active,inactive',
+            'item_type' => 'required|in:pembayaran,perlengkapan',
         ]);
 
         $pembayaranItem->update($validated);
@@ -78,5 +80,26 @@ class PembayaranItemController extends Controller
     {
         $pembayaranItem->delete();
         return back()->with('success', '✅ Item pembayaran berhasil dihapus!');
+    }
+
+    /**
+     * Show santri yang membeli item tertentu
+     */
+    public function showSantriByItem(PembayaranItem $pembayaranItem)
+    {
+        $santris = $pembayaranItem->itemDetails()
+            ->with(['pembayaran.calonSantri'])
+            ->get()
+            ->map(function($detail) {
+                return [
+                    'santri' => $detail->pembayaran->calonSantri,
+                    'pembayaran' => $detail->pembayaran,
+                    'quantity' => $detail->quantity,
+                    'unit_price' => $detail->unit_price,
+                    'subtotal' => $detail->subtotal,
+                ];
+            });
+
+        return view('admin.pembayaran.items.santri', compact('pembayaranItem', 'santris'));
     }
 }

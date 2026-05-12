@@ -16,6 +16,7 @@
             <thead class="bg-gray-100 border-b">
                 <tr>
                     <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Nama Item</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Kategori</th>
                     <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Nominal</th>
                     <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Wajib</th>
                     <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Cicil</th>
@@ -30,6 +31,17 @@
                             <div class="font-semibold text-gray-800">{{ $item->nama }}</div>
                             @if($item->deskripsi)
                                 <p class="text-xs text-gray-600 mt-1">{{ Str::limit($item->deskripsi, 50) }}</p>
+                            @endif
+                        </td>
+                        <td class="px-6 py-4">
+                            @if($item->item_type === 'perlengkapan')
+                                <span class="inline-block bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-semibold">
+                                    📦 Perlengkapan
+                                </span>
+                            @else
+                                <span class="inline-block bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-semibold">
+                                    💳 Pembayaran
+                                </span>
                             @endif
                         </td>
                         <td class="px-6 py-4">
@@ -72,6 +84,9 @@
                         </td>
                         <td class="px-6 py-4 text-center">
                             <div class="flex gap-2 justify-center">
+                                <a href="{{ route('admin.pembayaran-items.show-santri', $item) }}" class="text-green-600 hover:text-green-800 font-semibold" title="Lihat santri yang membeli item ini">
+                                    👥 Santri
+                                </a>
                                 <a href="{{ route('admin.pembayaran-items.edit', $item) }}" class="text-blue-600 hover:text-blue-800 font-semibold">
                                     ✏️ Edit
                                 </a>
@@ -87,7 +102,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                        <td colspan="7" class="px-6 py-8 text-center text-gray-500">
                             Belum ada item pembayaran. <a href="{{ route('admin.pembayaran-items.create') }}" class="text-indigo-600 hover:underline font-semibold">Tambah sekarang</a>
                         </td>
                     </tr>

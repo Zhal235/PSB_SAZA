@@ -44,6 +44,7 @@ Route::middleware(['auth', 'role:admin,petugas_pendaftaran,petugas_keuangan'])->
 
     // Pembayaran Items Management
     Route::resource('pembayaran-items', PembayaranItemController::class);
+    Route::get('pembayaran-items/{pembayaranItem}/santri', [PembayaranItemController::class, 'showSantriByItem'])->name('pembayaran-items.show-santri');
 
     // Bank Settings Management
     Route::resource('bank-settings', BankSettingController::class);
@@ -57,6 +58,8 @@ Route::middleware(['auth', 'role:admin,petugas_pendaftaran,petugas_keuangan'])->
     Route::post('/pembayaran/{pembayaran}/payment', [PembayaranController::class, 'storePayment'])->name('pembayaran.storePayment');
     Route::get('/pembayaran/{pembayaran}/invoice', [PembayaranController::class, 'invoice'])->name('pembayaran.invoice');
     Route::get('/pembayaran/{pembayaran}/invoice-pdf', [PembayaranController::class, 'invoicePdf'])->name('pembayaran.invoicePdf');
+    Route::get('/pembayaran/{pembayaran}/edit-items', [PembayaranController::class, 'editItems'])->name('pembayaran.editItems');
+    Route::put('/pembayaran/{pembayaran}/update-items', [PembayaranController::class, 'updateItems'])->name('pembayaran.updateItems');
 
     // Bukti Pembayaran Management
     Route::get('/bukti-pembayaran', [BuktiPembayaranController::class, 'index'])->name('bukti-pembayaran.index');
@@ -72,6 +75,7 @@ Route::middleware(['auth', 'role:admin,petugas_pendaftaran,petugas_keuangan'])->
     Route::get('/dokumen/{calonSantri}/upload', [DokumenController::class, 'create'])->name('dokumen.create');
     Route::post('/dokumen/{calonSantri}', [DokumenController::class, 'store'])->name('dokumen.store');
     Route::delete('/dokumen/{dokumen}', [DokumenController::class, 'destroy'])->name('dokumen.destroy');
+    Route::post('/dokumen/create-hardcopy', [DokumenController::class, 'createHardcopy'])->name('dokumen.create-hardcopy');
 });
 
 // API Routes
@@ -87,6 +91,7 @@ Route::middleware(['auth', 'role:calon_santri,santri'])->prefix('santri')->name(
     Route::get('/form-pendaftaran', [SantriController::class, 'formPendaftaran'])->name('form-pendaftaran');
     Route::post('/save-data', [SantriController::class, 'savePendaftaran'])->name('save-data');
     Route::get('/pembayaran', [SantriController::class, 'pembayaran'])->name('pembayaran');
+    Route::put('/pembayaran/{pembayaran}/update-items', [SantriController::class, 'updateSelectedItems'])->name('updateSelectedItems');
     Route::get('/pembayaran/{pembayaran}/invoice', [SantriController::class, 'pembayaranInvoice'])->name('pembayaran-invoice');
     Route::get('/bukti-pendaftaran/{calonSantri}/print', [SantriController::class, 'printBuktiPendaftaran'])->name('print-bukti-pendaftaran');
     Route::get('/bukti-pendaftaran/{calonSantri}/download', [SantriController::class, 'downloadBuktiPendaftaran'])->name('download-bukti-pendaftaran');

@@ -269,6 +269,92 @@
                             </div>
                         </div>
 
+                        <!-- Section: Pilih Item Pembayaran -->
+                        <div>
+                            <h3 class="text-xl font-bold text-indigo-600 mb-6 pb-2 border-b-2 border-indigo-600">📦 Pilih Item Pembayaran & Perlengkapan</h3>
+                            <div class="bg-amber-50 border-l-4 border-amber-500 text-amber-900 p-4 mb-4">
+                                <p class="text-sm"><strong>ℹ️ Info:</strong> Centang item pembayaran yang akan dibayar santri. Item yang ditandai wajib akan otomatis termasuk.</p>
+                            </div>
+                            
+                            @php
+                                $items = \App\Models\PembayaranItem::where('status', 'active')->get();
+                                $requiredItems = $items->where('is_required', true);
+                                $optionalItems = $items->where('is_required', false);
+                                $pembayaran = $calonSantri->pembayaran;
+                                $selectedItemIds = $pembayaran ? $pembayaran->itemDetails->pluck('pembayaran_item_id')->toArray() : [];
+                            @endphp
+
+                            <!-- Item Wajib -->
+                            @if($requiredItems->count() > 0)
+                                <div class="mb-6">
+                                    <h4 class="font-bold text-red-600 mb-3 flex items-center gap-2">
+                                        ✓ <span>Item Wajib (Otomatis Dipilih)</span>
+                                    </h4>
+                                    <div class="space-y-2 bg-red-50 p-4 rounded border border-red-200">
+                                        @foreach($requiredItems as $item)
+                                            <div class="flex items-start gap-3 p-2">
+                                                <input type="checkbox" name="items[]" value="{{ $item->id }}" checked disabled 
+                                                    class="mt-1 w-4 h-4 accent-red-600">
+                                                <div>
+                                                    <p class="font-semibold text-gray-800">{{ $item->nama }}</p>
+                                                    @if($item->deskripsi)
+                                                        <p class="text-xs text-gray-600">{{ $item->deskripsi }}</p>
+                                                    @endif
+                                                    <p class="text-sm font-bold text-red-600 mt-1">
+                                                        Rp {{ number_format($item->nominal, 0, ',', '.') }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
+                            <!-- Item Optional -->
+                            @if($optionalItems->count() > 0)
+                                <div>
+                                    <h4 class="font-bold text-blue-600 mb-3 flex items-center gap-2">
+                                        ◯ <span>Item Optional (Pilih Sesuai Kebutuhan)</span>
+                                    </h4>
+                                    <div class="space-y-2">
+                                        @foreach($optionalItems as $item)
+                                            <label class="flex items-start gap-3 p-3 border border-gray-200 rounded hover:bg-blue-50 transition cursor-pointer">
+                                                <input type="checkbox" name="items[]" value="{{ $item->id }}" 
+                                                    class="mt-1 w-4 h-4 accent-blue-600"
+                                                    {{ in_array($item->id, $selectedItemIds) ? 'checked' : '' }}>
+                                                <div>
+                                                    <div class="flex justify-between items-start gap-4">
+                                                        <div>
+                                                            <p class="font-semibold text-gray-800">{{ $item->nama }}</p>
+                                                            @if($item->deskripsi)
+                                                                <p class="text-xs text-gray-600 mt-1">{{ $item->deskripsi }}</p>
+                                                            @endif
+                                                        </div>
+                                                        <span class="inline-block px-2 py-1 bg-{{ $item->item_type === 'perlengkapan' ? 'amber' : 'indigo' }}-100 text-{{ $item->item_type === 'perlengkapan' ? 'amber' : 'indigo' }}-700 rounded text-xs font-semibold whitespace-nowrap">
+                                                            @if($item->item_type === 'perlengkapan')
+                                                                📦 Perlengkapan
+                                                            @else
+                                                                💳 Pembayaran
+                                                            @endif
+                                                        </span>
+                                                    </div>
+                                                    <p class="text-sm font-bold text-blue-600 mt-2">
+                                                        Rp {{ number_format($item->nominal, 0, ',', '.') }}
+                                                    </p>
+                                                </div>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if($items->count() === 0)
+                                <div class="text-center py-8 text-gray-500">
+                                    <p>Belum ada item pembayaran aktif. Silakan tambahkan di menu Manage Item Pembayaran</p>
+                                </div>
+                            @endif
+                        </div>
+
                         <!-- Buttons -->
                         <div class="flex gap-4 pt-6 border-t">
                             <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700 font-semibold transition">
