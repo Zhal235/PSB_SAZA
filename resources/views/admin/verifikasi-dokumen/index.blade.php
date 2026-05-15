@@ -55,37 +55,37 @@
             </div>
 
             <!-- Content -->
-            <div class="p-6">
+            <div class="p-4">
                 @if($calonSantri->count() > 0)
                     <div class="bg-white rounded-lg shadow overflow-x-auto">
-                        <table class="w-full text-left text-sm">
+                        <table class="w-full text-left text-xs">
                             <thead>
                                 <tr class="bg-gray-200 text-gray-700 border-b-2 border-gray-400">
-                                    <th class="px-4 py-3 sticky left-0 bg-gray-200 z-10 w-32">No. Daftar</th>
-                                    <th class="px-4 py-3 sticky left-32 bg-gray-200 z-10 w-48">Nama</th>
-                                    <th class="px-4 py-3 w-40">Sekolah</th>
-                                    <th colspan="2" class="px-3 py-3 text-center border-l border-gray-400">Foto</th>
-                                    <th colspan="2" class="px-3 py-3 text-center border-l border-gray-400">Ijazah</th>
-                                    <th colspan="2" class="px-3 py-3 text-center border-l border-gray-400">Akte</th>
-                                    <th colspan="2" class="px-3 py-3 text-center border-l border-gray-400">KTP Ayah</th>
-                                    <th colspan="2" class="px-3 py-3 text-center border-l border-gray-400">KTP Ibu</th>
-                                    <th colspan="2" class="px-3 py-3 text-center border-l border-gray-400">KK</th>
-                                    <th class="px-3 py-3 text-center">Aksi</th>
+                                    <th class="px-3 py-2 sticky left-0 bg-gray-200 z-10">No. Daftar</th>
+                                    <th class="px-3 py-2 sticky left-20 bg-gray-200 z-10">Nama</th>
+                                    <th class="px-3 py-2">Sekolah</th>
+                                    <th colspan="2" class="px-2 py-2 text-center border-l border-gray-400">Foto</th>
+                                    <th colspan="2" class="px-2 py-2 text-center border-l border-gray-400">Ijazah</th>
+                                    <th colspan="2" class="px-2 py-2 text-center border-l border-gray-400">Akte</th>
+                                    <th colspan="2" class="px-2 py-2 text-center border-l border-gray-400">KTP Ayah</th>
+                                    <th colspan="2" class="px-2 py-2 text-center border-l border-gray-400">KTP Ibu</th>
+                                    <th colspan="2" class="px-2 py-2 text-center border-l border-gray-400">KK</th>
+                                    <th class="px-3 py-2 text-center">Aksi</th>
                                 </tr>
                                 <tr class="bg-gray-100 text-gray-600 border-b border-gray-300">
                                     <th colspan="3"></th>
-                                    <th class="px-3 py-2 text-center border-l border-gray-300 text-xs font-semibold">Upload</th>
-                                    <th class="px-3 py-2 text-center text-xs font-semibold">Diterima</th>
-                                    <th class="px-3 py-2 text-center border-l border-gray-300 text-xs font-semibold">Upload</th>
-                                    <th class="px-3 py-2 text-center text-xs font-semibold">Diterima</th>
-                                    <th class="px-3 py-2 text-center border-l border-gray-300 text-xs font-semibold">Upload</th>
-                                    <th class="px-3 py-2 text-center text-xs font-semibold">Diterima</th>
-                                    <th class="px-3 py-2 text-center border-l border-gray-300 text-xs font-semibold">Upload</th>
-                                    <th class="px-3 py-2 text-center text-xs font-semibold">Diterima</th>
-                                    <th class="px-3 py-2 text-center border-l border-gray-300 text-xs font-semibold">Upload</th>
-                                    <th class="px-3 py-2 text-center text-xs font-semibold">Diterima</th>
-                                    <th class="px-3 py-2 text-center border-l border-gray-300 text-xs font-semibold">Upload</th>
-                                    <th class="px-3 py-2 text-center text-xs font-semibold">Diterima</th>
+                                    <th class="px-2 py-1 text-center border-l border-gray-300 text-xs font-semibold">Upload</th>
+                                    <th class="px-2 py-1 text-center text-xs font-semibold">Diterima</th>
+                                    <th class="px-2 py-1 text-center border-l border-gray-300 text-xs font-semibold">Upload</th>
+                                    <th class="px-2 py-1 text-center text-xs font-semibold">Diterima</th>
+                                    <th class="px-2 py-1 text-center border-l border-gray-300 text-xs font-semibold">Upload</th>
+                                    <th class="px-2 py-1 text-center text-xs font-semibold">Diterima</th>
+                                    <th class="px-2 py-1 text-center border-l border-gray-300 text-xs font-semibold">Upload</th>
+                                    <th class="px-2 py-1 text-center text-xs font-semibold">Diterima</th>
+                                    <th class="px-2 py-1 text-center border-l border-gray-300 text-xs font-semibold">Upload</th>
+                                    <th class="px-2 py-1 text-center text-xs font-semibold">Diterima</th>
+                                    <th class="px-2 py-1 text-center border-l border-gray-300 text-xs font-semibold">Upload</th>
+                                    <th class="px-2 py-1 text-center text-xs font-semibold">Diterima</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -100,61 +100,61 @@
                                         $kkDoc = $santri->dokumens->where('tipe_dokumen', 'Kartu Keluarga')->first();
                                     @endphp
                                     
-                                    <tr class="border-b hover:bg-gray-50">
-                                        <td class="px-4 py-3 font-bold text-indigo-600 sticky left-0 bg-white z-10 w-32">{{ $santri->no_pendaftaran }}</td>
-                                        <td class="px-4 py-3 font-semibold sticky left-32 bg-white z-10 w-48">{{ substr($santri->nama, 0, 25) }}</td>
-                                        <td class="px-4 py-3 text-sm w-40">{{ substr($santri->asal_sekolah ?? '-', 0, 15) }}</td>
+                                    <tr class="border-b hover:bg-gray-50 text-xs">
+                                        <td class="px-3 py-2 font-bold text-indigo-600 sticky left-0 bg-white z-10">{{ $santri->no_pendaftaran }}</td>
+                                        <td class="px-3 py-2 font-semibold sticky left-20 bg-white z-10">{{ substr($santri->nama, 0, 12) }}</td>
+                                        <td class="px-3 py-2">{{ substr($santri->asal_sekolah ?? '-', 0, 10) }}</td>
                                         
                                         <!-- Foto -->
-                                        <td class="px-3 py-3 text-center border-l border-gray-300 text-sm">{{ $fotoDoc ? 'Ya' : 'Tidak' }}</td>
-                                        <td class="px-3 py-3 text-center">
-                                            <button onclick="toggleOrCreateHardcopy('{{ $santri->id }}', 'Foto', {{ $fotoDoc ? $fotoDoc->id : 'null' }}, {{ $fotoDoc && $fotoDoc->hardcopy_diterima ? 'true' : 'false' }})" class="px-3 py-2 rounded text-xs font-semibold transition {{ ($fotoDoc && $fotoDoc->hardcopy_diterima) ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                                        <td class="px-2 py-2 text-center border-l border-gray-300">{{ $fotoDoc ? 'Ya' : 'Tidak' }}</td>
+                                        <td class="px-2 py-2 text-center">
+                                            <button onclick="toggleOrCreateHardcopy('{{ $santri->id }}', 'Foto', {{ $fotoDoc ? $fotoDoc->id : 'null' }}, {{ $fotoDoc && $fotoDoc->hardcopy_diterima ? 'true' : 'false' }})" class="px-2 py-1 rounded text-xs font-semibold transition {{ ($fotoDoc && $fotoDoc->hardcopy_diterima) ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
                                                 {{ ($fotoDoc && $fotoDoc->hardcopy_diterima) ? 'Ya' : 'Tidak' }}
                                             </button>
                                         </td>
 
                                         <!-- Ijazah -->
-                                        <td class="px-3 py-3 text-center border-l border-gray-300 text-sm">{{ $ijazahDoc ? 'Ya' : 'Tidak' }}</td>
-                                        <td class="px-3 py-3 text-center">
-                                            <button onclick="toggleOrCreateHardcopy('{{ $santri->id }}', 'Ijazah', {{ $ijazahDoc ? $ijazahDoc->id : 'null' }}, {{ $ijazahDoc && $ijazahDoc->hardcopy_diterima ? 'true' : 'false' }})" class="px-3 py-2 rounded text-xs font-semibold transition {{ ($ijazahDoc && $ijazahDoc->hardcopy_diterima) ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                                        <td class="px-2 py-2 text-center border-l border-gray-300">{{ $ijazahDoc ? 'Ya' : 'Tidak' }}</td>
+                                        <td class="px-2 py-2 text-center">
+                                            <button onclick="toggleOrCreateHardcopy('{{ $santri->id }}', 'Ijazah', {{ $ijazahDoc ? $ijazahDoc->id : 'null' }}, {{ $ijazahDoc && $ijazahDoc->hardcopy_diterima ? 'true' : 'false' }})" class="px-2 py-1 rounded text-xs font-semibold transition {{ ($ijazahDoc && $ijazahDoc->hardcopy_diterima) ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
                                                 {{ ($ijazahDoc && $ijazahDoc->hardcopy_diterima) ? 'Ya' : 'Tidak' }}
                                             </button>
                                         </td>
 
                                         <!-- Akte -->
-                                        <td class="px-3 py-3 text-center border-l border-gray-300 text-sm">{{ $akteDoc ? 'Ya' : 'Tidak' }}</td>
-                                        <td class="px-3 py-3 text-center">
-                                            <button onclick="toggleOrCreateHardcopy('{{ $santri->id }}', 'Akte Kelahiran', {{ $akteDoc ? $akteDoc->id : 'null' }}, {{ $akteDoc && $akteDoc->hardcopy_diterima ? 'true' : 'false' }})" class="px-3 py-2 rounded text-xs font-semibold transition {{ ($akteDoc && $akteDoc->hardcopy_diterima) ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                                        <td class="px-2 py-2 text-center border-l border-gray-300">{{ $akteDoc ? 'Ya' : 'Tidak' }}</td>
+                                        <td class="px-2 py-2 text-center">
+                                            <button onclick="toggleOrCreateHardcopy('{{ $santri->id }}', 'Akte Kelahiran', {{ $akteDoc ? $akteDoc->id : 'null' }}, {{ $akteDoc && $akteDoc->hardcopy_diterima ? 'true' : 'false' }})" class="px-2 py-1 rounded text-xs font-semibold transition {{ ($akteDoc && $akteDoc->hardcopy_diterima) ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
                                                 {{ ($akteDoc && $akteDoc->hardcopy_diterima) ? 'Ya' : 'Tidak' }}
                                             </button>
                                         </td>
-                                        
+
                                         <!-- KTP Ayah -->
-                                        <td class="px-3 py-3 text-center border-l border-gray-300 text-sm">{{ $ktpAyahDoc ? 'Ya' : 'Tidak' }}</td>
-                                        <td class="px-3 py-3 text-center">
-                                            <button onclick="toggleOrCreateHardcopy('{{ $santri->id }}', 'KTP Ayah', {{ $ktpAyahDoc ? $ktpAyahDoc->id : 'null' }}, {{ $ktpAyahDoc && $ktpAyahDoc->hardcopy_diterima ? 'true' : 'false' }})" class="px-3 py-2 rounded text-xs font-semibold transition {{ ($ktpAyahDoc && $ktpAyahDoc->hardcopy_diterima) ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                                        <td class="px-2 py-2 text-center border-l border-gray-300">{{ $ktpAyahDoc ? 'Ya' : 'Tidak' }}</td>
+                                        <td class="px-2 py-2 text-center">
+                                            <button onclick="toggleOrCreateHardcopy('{{ $santri->id }}', 'KTP Ayah', {{ $ktpAyahDoc ? $ktpAyahDoc->id : 'null' }}, {{ $ktpAyahDoc && $ktpAyahDoc->hardcopy_diterima ? 'true' : 'false' }})" class="px-2 py-1 rounded text-xs font-semibold transition {{ ($ktpAyahDoc && $ktpAyahDoc->hardcopy_diterima) ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
                                                 {{ ($ktpAyahDoc && $ktpAyahDoc->hardcopy_diterima) ? 'Ya' : 'Tidak' }}
                                             </button>
                                         </td>
 
                                         <!-- KTP Ibu -->
-                                        <td class="px-3 py-3 text-center border-l border-gray-300 text-sm">{{ $ktpIbuDoc ? 'Ya' : 'Tidak' }}</td>
-                                        <td class="px-3 py-3 text-center">
-                                            <button onclick="toggleOrCreateHardcopy('{{ $santri->id }}', 'KTP Ibu', {{ $ktpIbuDoc ? $ktpIbuDoc->id : 'null' }}, {{ $ktpIbuDoc && $ktpIbuDoc->hardcopy_diterima ? 'true' : 'false' }})" class="px-3 py-2 rounded text-xs font-semibold transition {{ ($ktpIbuDoc && $ktpIbuDoc->hardcopy_diterima) ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                                        <td class="px-2 py-2 text-center border-l border-gray-300">{{ $ktpIbuDoc ? 'Ya' : 'Tidak' }}</td>
+                                        <td class="px-2 py-2 text-center">
+                                            <button onclick="toggleOrCreateHardcopy('{{ $santri->id }}', 'KTP Ibu', {{ $ktpIbuDoc ? $ktpIbuDoc->id : 'null' }}, {{ $ktpIbuDoc && $ktpIbuDoc->hardcopy_diterima ? 'true' : 'false' }})" class="px-2 py-1 rounded text-xs font-semibold transition {{ ($ktpIbuDoc && $ktpIbuDoc->hardcopy_diterima) ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
                                                 {{ ($ktpIbuDoc && $ktpIbuDoc->hardcopy_diterima) ? 'Ya' : 'Tidak' }}
                                             </button>
                                         </td>
 
                                         <!-- KK -->
-                                        <td class="px-3 py-3 text-center border-l border-gray-300 text-sm">{{ $kkDoc ? 'Ya' : 'Tidak' }}</td>
-                                        <td class="px-3 py-3 text-center">
-                                            <button onclick="toggleOrCreateHardcopy('{{ $santri->id }}', 'Kartu Keluarga', {{ $kkDoc ? $kkDoc->id : 'null' }}, {{ $kkDoc && $kkDoc->hardcopy_diterima ? 'true' : 'false' }})" class="px-3 py-2 rounded text-xs font-semibold transition {{ ($kkDoc && $kkDoc->hardcopy_diterima) ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                                        <td class="px-2 py-2 text-center border-l border-gray-300">{{ $kkDoc ? 'Ya' : 'Tidak' }}</td>
+                                        <td class="px-2 py-2 text-center">
+                                            <button onclick="toggleOrCreateHardcopy('{{ $santri->id }}', 'Kartu Keluarga', {{ $kkDoc ? $kkDoc->id : 'null' }}, {{ $kkDoc && $kkDoc->hardcopy_diterima ? 'true' : 'false' }})" class="px-2 py-1 rounded text-xs font-semibold transition {{ ($kkDoc && $kkDoc->hardcopy_diterima) ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
                                                 {{ ($kkDoc && $kkDoc->hardcopy_diterima) ? 'Ya' : 'Tidak' }}
                                             </button>
                                         </td>
                                         <!-- Action -->
-                                        <td class="px-3 py-3 text-center">
-                                            <a href="{{ route('admin.dokumen.create', $santri) }}" class="text-indigo-600 hover:text-indigo-800 font-semibold text-sm">
+                                        <td class="px-3 py-2 text-center">
+                                            <a href="{{ route('admin.dokumen.create', $santri) }}" class="text-indigo-600 hover:text-indigo-800 font-semibold">
                                                 Upload
                                             </a>
                                         </td>
@@ -177,25 +177,30 @@
             const newStatus = !JSON.parse(currentStatus);
             
             // Jika dokumen belum ada, buat dokumen baru tanpa file
-            if (dokumenId === null) {
-                fetch(`/admin/dokumen/create-hardcopy`, {
+            if (dokumenId === null || dokumenId === 'null') {
+                const payload = {
+                    calon_santri_id: parseInt(santriId),
+                    tipe_dokumen: tipeDokumen,
+                    hardcopy_diterima: newStatus
+                };
+                
+                console.log('Creating hardcopy with payload:', payload);
+                
+                fetch(`/api/dokumen/create-hardcopy`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
                     },
-                    body: JSON.stringify({
-                        calon_santri_id: santriId,
-                        tipe_dokumen: tipeDokumen,
-                        hardcopy_diterima: newStatus
-                    })
+                    body: JSON.stringify(payload)
                 })
                 .then(response => response.json())
                 .then(data => {
+                    console.log('Response:', data);
                     if (data.success) {
                         location.reload();
                     } else {
-                        alert('Gagal membuat record dokumen HC: ' + (data.message || ''));
+                        alert('Gagal: ' + (data.message || JSON.stringify(data.errors)));
                     }
                 })
                 .catch(error => {
@@ -204,23 +209,28 @@
                 });
             } else {
                 // Jika dokumen sudah ada, toggle status
+                const payload = {
+                    dokumen_id: parseInt(dokumenId),
+                    hardcopy_diterima: newStatus
+                };
+                
+                console.log('Toggling hardcopy with payload:', payload);
+                
                 fetch(`/api/dokumen/toggle-hardcopy`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
                     },
-                    body: JSON.stringify({
-                        dokumen_id: dokumenId,
-                        hardcopy_diterima: newStatus
-                    })
+                    body: JSON.stringify(payload)
                 })
                 .then(response => response.json())
                 .then(data => {
+                    console.log('Response:', data);
                     if (data.success) {
                         location.reload();
                     } else {
-                        alert('Gagal update status hardcopy');
+                        alert('Gagal update status hardcopy: ' + (data.message || ''));
                     }
                 })
                 .catch(error => {

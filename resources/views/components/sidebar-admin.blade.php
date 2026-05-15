@@ -12,56 +12,56 @@
         </a>
 
         <!-- Kelola Pendaftar -->
-        @if(auth()->user()->hasPermission('view-calon-santri') || auth()->user()->role === 'admin')
+        @if(auth()->user()->hasPermission('view-calon-santri') || auth()->user()->hasRole('admin'))
             <a href="{{ route('admin.calon-santri.index') }}" class="block px-4 py-3 rounded-lg text-white hover:bg-white/20 transition-all duration-300 font-semibold @if(Route::is('admin.calon-santri.*')) bg-white/20 @endif">
                 <span class="text-lg">⊙</span> Kelola Pendaftar
             </a>
         @endif
 
         <!-- Verifikasi Dokumen -->
-        @if(auth()->user()->hasPermission('verify-dokumen') || auth()->user()->role === 'admin')
+        @if(auth()->user()->hasPermission('verify-dokumen') || auth()->user()->hasRole('admin'))
             <a href="{{ route('admin.dokumen.index') }}" class="block px-4 py-3 rounded-lg text-white hover:bg-white/20 transition-all duration-300 font-semibold @if(Route::is('admin.dokumen.*')) bg-white/20 @endif">
                 <span class="text-lg">▢</span> Verifikasi Dokumen
             </a>
         @endif
 
         <!-- Verifikasi Bukti Pembayaran -->
-        @if(auth()->user()->role === 'admin' || auth()->user()->role === 'petugas_keuangan')
+        @if(auth()->user()->hasAnyRole(['admin', 'petugas_keuangan']))
             <a href="{{ route('admin.bukti-pembayaran.index') }}" class="block px-4 py-3 rounded-lg text-white hover:bg-white/20 transition-all duration-300 font-semibold @if(Route::is('admin.bukti-pembayaran.*')) bg-white/20 @endif">
                 <span class="text-lg">✓</span> Verifikasi Bukti Transfer
             </a>
         @endif
 
         <!-- Item Pembayaran (Hanya Admin) -->
-        @if(auth()->user()->role === 'admin')
+        @if(auth()->user()->hasRole('admin'))
             <a href="{{ route('admin.pembayaran-items.index') }}" class="block px-4 py-3 rounded-lg text-white hover:bg-white/20 transition-all duration-300 font-semibold @if(Route::is('admin.pembayaran-items.*')) bg-white/20 @endif">
                 <span class="text-lg">◆</span> Item Pembayaran
             </a>
         @endif
 
         <!-- Kelola Pembayaran -->
-        @if(auth()->user()->hasPermission('view-pembayaran') || auth()->user()->role === 'admin')
+        @if(auth()->user()->hasPermission('view-pembayaran') || auth()->user()->hasRole('admin'))
             <a href="{{ route('admin.pembayaran.index') }}" class="block px-4 py-3 rounded-lg text-white hover:bg-white/20 transition-all duration-300 font-semibold @if(Route::is('admin.pembayaran.*')) bg-white/20 @endif">
                 <span class="text-lg">⬢</span> Kelola Pembayaran
             </a>
         @endif
 
         <!-- Pengaturan Bank (Hanya Admin) -->
-        @if(auth()->user()->role === 'admin')
+        @if(auth()->user()->hasRole('admin'))
             <a href="{{ route('admin.bank-settings.index') }}" class="block px-4 py-3 rounded-lg text-white hover:bg-white/20 transition-all duration-300 font-semibold @if(Route::is('admin.bank-settings.*')) bg-white/20 @endif">
                 <span class="text-lg">◇</span> Pengaturan Bank
             </a>
         @endif
 
         <!-- Financial Records (hanya untuk admin) -->
-        @if(auth()->user()->hasPermission('view-financial-records') || auth()->user()->role === 'admin')
+        @if(auth()->user()->hasPermission('view-financial-records') || auth()->user()->hasRole('admin'))
             <a href="{{ route('admin.financial-records.index') }}" class="block px-4 py-3 rounded-lg text-white hover:bg-white/20 transition-all duration-300 font-semibold @if(Route::is('admin.financial-records.*')) bg-white/20 @endif">
                 <span class="text-lg">◈</span> Pencatatan Keuangan
             </a>
         @endif
 
         <!-- User Petugas (Hanya Admin) -->
-        @if(auth()->user()->role === 'admin')
+        @if(auth()->user()->hasRole('admin'))
             <a href="{{ route('admin.users.index') }}" class="block px-4 py-3 rounded-lg text-white hover:bg-white/20 transition-all duration-300 font-semibold @if(Route::is('admin.users.*')) bg-white/20 @endif">
                 <span class="text-lg">⊞</span> User Petugas
             </a>

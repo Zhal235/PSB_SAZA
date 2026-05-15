@@ -10,6 +10,8 @@ class Dokumen extends Model
         'calon_santri_id',
         'tipe_dokumen',
         'file_path',
+        'original_filename',
+        'file_size',
         'hardcopy_diterima',
         'tanggal_terima_hardcopy'
     ];

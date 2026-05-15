@@ -14,12 +14,16 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        // Get roles
+        $adminRole = \App\Models\Role::where('name', 'admin')->first();
+        $calonSantriRole = \App\Models\Role::where('name', 'calon_santri')->first();
+
         // Admin User
         User::create([
             'name' => 'Administrator',
             'email' => 'admin@psb-saza.local',
             'password' => Hash::make('password123'),
-            'role' => 'admin'
+            'role_id' => $adminRole?->id ?? 1,
         ]);
 
         // Sample Calon Santri
@@ -27,14 +31,14 @@ class UserSeeder extends Seeder
             'name' => 'Ahmad Ridho',
             'email' => 'ahmad@example.com',
             'password' => Hash::make('password123'),
-            'role' => 'calon_santri'
+            'role_id' => $calonSantriRole?->id ?? 4,
         ]);
 
         User::create([
             'name' => 'Siti Nurhaliza',
             'email' => 'siti@example.com',
             'password' => Hash::make('password123'),
-            'role' => 'calon_santri'
+            'role_id' => $calonSantriRole?->id ?? 4,
         ]);
     }
 }

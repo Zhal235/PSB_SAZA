@@ -46,15 +46,24 @@
 
                 <!-- Role -->
                 <div>
-                    <label for="role" class="block text-sm font-medium text-gray-700 mb-2">Role <span class="text-red-500">*</span></label>
-                    <select name="role" id="role" required 
+                    <label for="role_id" class="block text-sm font-medium text-gray-700 mb-2">Role <span class="text-red-500">*</span></label>
+                    <select name="role_id" id="role_id" required 
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">-- Pilih Role --</option>
-                        <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>👑 Admin</option>
-                        <option value="petugas_pendaftaran" {{ old('role', $user->role) === 'petugas_pendaftaran' ? 'selected' : '' }}>📋 Petugas Pendaftaran</option>
-                        <option value="petugas_keuangan" {{ old('role', $user->role) === 'petugas_keuangan' ? 'selected' : '' }}>💰 Petugas Keuangan</option>
+                        @foreach($roles as $role)
+                            <option value="{{ $role->id }}" {{ old('role_id', $user->role_id) == $role->id ? 'selected' : '' }}>
+                                @if($role->name === 'admin') 👑 
+                                @elseif($role->name === 'petugas_pendaftaran') 📋 
+                                @elseif($role->name === 'petugas_keuangan') 💰 
+                                @endif
+                                {{ $role->display_name }}
+                            </option>
+                        @endforeach
                     </select>
-                    @error('role')
+                    <p class="text-xs text-gray-500 mt-1">
+                        Pilih role sesuai tugas dan tanggung jawab user
+                    </p>
+                    @error('role_id')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>

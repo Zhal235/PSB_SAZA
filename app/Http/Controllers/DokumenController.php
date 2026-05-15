@@ -221,55 +221,92 @@ class DokumenController extends Controller
     // Toggle status hardcopy per dokumen
     public function toggleHardcopy(Request $request)
     {
-        $dokumen = Dokumen::findOrFail($request->dokumen_id);
-        
-        $dokumen->update([
-            'hardcopy_diterima' => $request->hardcopy_diterima,
-            'tanggal_terima_hardcopy' => $request->hardcopy_diterima ? now() : null
-        ]);
+        try {
+            $validated = $request->validate([
+                'dokumen_id' => 'required|integer|exists:dokumens,id',
+                'hardcopy_diterima' => 'required|boolean'
+            ]);
 
-        return response()->json(['success' => true]);
+            $dokumen = Dokumen::findOrFail($validated['dokumen_id']);
+            $hardcopy_diterima = (bool)$validated['hardcopy_diterima'];
+            
+            $dokumen->update([
+                'hardcopy_diterima' => $hardcopy_diterima,
+                'tanggal_terima_hardcopy' => $hardcopy_diterima ? now() : null
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Status hardcopy berhasil diperbarui']);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false, 
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            \Log::error('ToggleHardcopy Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 422);
+        }
     }
 
     // Buat record dokumen untuk hardcopy yang tidak ada file upload
     public function createHardcopy(Request $request)
     {
         try {
+            // Validasi dengan pesan custom
             $validated = $request->validate([
-                'calon_santri_id' => 'required|exists:calon_santris,id',
+                'calon_santri_id' => 'required|integer|exists:calon_santris,id',
                 'tipe_dokumen' => 'required|string',
                 'hardcopy_diterima' => 'required|boolean'
             ]);
 
-            $calonSantri = CalonSantri::findOrFail($validated['calon_santri_id']);
+            // Convert to proper types
+            $calon_santri_id = (int)$validated['calon_santri_id'];
+            $hardcopy_diterima = (bool)$validated['hardcopy_diterima'];
+            
+            $calonSantri = CalonSantri::findOrFail($calon_santri_id);
             
             // Cek apakah sudah ada dokumen dengan tipe yang sama
-            $existing = Dokumen::where('calon_santri_id', $calonSantri->id)
+            $existing = Dokumen::where('calon_santri_id', $calon_santri_id)
                 ->where('tipe_dokumen', $validated['tipe_dokumen'])
                 ->first();
 
             if ($existing) {
                 // Update yang ada
                 $existing->update([
-                    'hardcopy_diterima' => $validated['hardcopy_diterima'],
-                    'tanggal_terima_hardcopy' => $validated['hardcopy_diterima'] ? now() : null
+                    'hardcopy_diterima' => $hardcopy_diterima,
+                    'tanggal_terima_hardcopy' => $hardcopy_diterima ? now() : null
                 ]);
+                $message = 'Status hardcopy berhasil diperbarui';
             } else {
                 // Buat dokumen baru tanpa file
                 Dokumen::create([
-                    'calon_santri_id' => $calonSantri->id,
+                    'calon_santri_id' => $calon_santri_id,
                     'tipe_dokumen' => $validated['tipe_dokumen'],
                     'file_path' => null,
                     'original_filename' => 'Hardcopy - ' . $validated['tipe_dokumen'],
                     'file_size' => 0,
-                    'hardcopy_diterima' => $validated['hardcopy_diterima'],
-                    'tanggal_terima_hardcopy' => $validated['hardcopy_diterima'] ? now() : null
+                    'hardcopy_diterima' => $hardcopy_diterima,
+                    'tanggal_terima_hardcopy' => $hardcopy_diterima ? now() : null
                 ]);
+                $message = 'Dokumen hardcopy berhasil dicatat';
             }
 
-            return response()->json(['success' => true, 'message' => 'Dokumen hardcopy berhasil dicatat']);
+            return response()->json(['success' => true, 'message' => $message]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false, 
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+            \Log::error('CreateHardcopy Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false, 
+                'message' => $e->getMessage()
+            ], 422);
         }
     }
 

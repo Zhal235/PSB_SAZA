@@ -81,6 +81,7 @@ Route::middleware(['auth', 'role:admin,petugas_pendaftaran,petugas_keuangan'])->
 // API Routes
 Route::middleware(['auth', 'role:admin,petugas_pendaftaran,petugas_keuangan'])->prefix('api')->group(function () {
     Route::post('/dokumen/toggle-hardcopy', [DokumenController::class, 'toggleHardcopy']);
+    Route::post('/dokumen/create-hardcopy', [DokumenController::class, 'createHardcopy']);
 });
 
 // Santri Routes

@@ -63,7 +63,7 @@
                             <td class="p-4">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" 
-                                         style="background-color: {{ $user->role === 'admin' ? '#00a0a0' : ($user->role === 'petugas_pendaftaran' ? '#10b981' : '#8b5cf6') }}">
+                                         style="background-color: {{ $user->role?->name === 'admin' ? '#00a0a0' : ($user->role?->name === 'petugas_pendaftaran' ? '#10b981' : '#8b5cf6') }}">
                                         {{ strtoupper(substr($user->name, 0, 1)) }}
                                     </div>
                                     <div>
@@ -77,12 +77,18 @@
                                 <p class="text-sm text-gray-600">{{ $user->phone }}</p>
                             </td>
                             <td class="p-4">
-                                @if($user->role === 'admin')
-                                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">👑 Admin</span>
-                                @elseif($user->role === 'petugas_pendaftaran')
-                                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">📋 Petugas Pendaftaran</span>
-                                @elseif($user->role === 'petugas_keuangan')
-                                    <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">💰 Petugas Keuangan</span>
+                                @if($user->role)
+                                    @if($user->role->name === 'admin')
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">👑 {{ $user->role->display_name }}</span>
+                                    @elseif($user->role->name === 'petugas_pendaftaran')
+                                        <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">📋 {{ $user->role->display_name }}</span>
+                                    @elseif($user->role->name === 'petugas_keuangan')
+                                        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">💰 {{ $user->role->display_name }}</span>
+                                    @else
+                                        <span class="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-semibold">{{ $user->role->display_name }}</span>
+                                    @endif
+                                @else
+                                    <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-semibold">❌ No Role</span>
                                 @endif
                             </td>
                             <td class="p-4 text-center">

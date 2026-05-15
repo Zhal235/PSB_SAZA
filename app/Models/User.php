@@ -22,7 +22,7 @@ class User extends Authenticatable
         'email',
         'phone',
         'password',
-        'role',
+        'role_id',
         'jenjang',
         'has_selected_jenjang',
         'is_active',
@@ -61,20 +61,38 @@ class User extends Authenticatable
     }
 
     /**
+     * Get user's role
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    /**
+     * Get all permissions for this user through their role
+     */
+    public function permissions()
+    {
+        return $this->role()->first()?->permissions() ?? collect();
+    }
+
+    /**
      * Check if user has a specific permission
      */
     public function hasPermission(string $permissionName): bool
     {
+        $role = $this->role;
+        
+        if (!$role) {
+            return false;
+        }
+
         // Admin has all permissions
-        if ($this->role === 'admin') {
+        if ($role->name === 'admin') {
             return true;
         }
 
-        return \Illuminate\Support\Facades\DB::table('role_permissions')
-            ->join('permissions', 'role_permissions.permission_id', '=', 'permissions.id')
-            ->where('role', $this->role)
-            ->where('permissions.name', $permissionName)
-            ->exists();
+        return $role->hasPermission($permissionName);
     }
 
     /**
@@ -82,14 +100,52 @@ class User extends Authenticatable
      */
     public function hasAnyPermission(array $permissionNames): bool
     {
-        if ($this->role === 'admin') {
+        $role = $this->role;
+        
+        if (!$role) {
+            return false;
+        }
+
+        if ($role->name === 'admin') {
             return true;
         }
 
-        return \Illuminate\Support\Facades\DB::table('role_permissions')
-            ->join('permissions', 'role_permissions.permission_id', '=', 'permissions.id')
-            ->where('role', $this->role)
-            ->whereIn('permissions.name', $permissionNames)
-            ->exists();
+        return $role->hasAnyPermission($permissionNames);
+    }
+
+    /**
+     * Check if user has all of the given permissions
+     */
+    public function hasAllPermissions(array $permissionNames): bool
+    {
+        $role = $this->role;
+        
+        if (!$role) {
+            return false;
+        }
+
+        if ($role->name === 'admin') {
+            return true;
+        }
+
+        return $role->hasAllPermissions($permissionNames);
+    }
+
+    /**
+     * Check if user has a specific role
+     */
+    public function hasRole(string $roleName): bool
+    {
+        $role = $this->role;
+        return $role && $role->name === $roleName;
+    }
+
+    /**
+     * Check if user has any of the given roles
+     */
+    public function hasAnyRole(array $roleNames): bool
+    {
+        $role = $this->role;
+        return $role && in_array($role->name, $roleNames);
     }
 }

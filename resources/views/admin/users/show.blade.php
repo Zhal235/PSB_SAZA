@@ -11,18 +11,18 @@
             <div class="p-6 border-b bg-gradient-to-r from-blue-50 to-indigo-50">
                 <div class="flex items-center gap-4">
                     <div class="w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-2xl" 
-                         style="background-color: {{ $user->role === 'admin' ? '#00a0a0' : ($user->role === 'petugas_pendaftaran' ? '#10b981' : '#8b5cf6') }}">
+                         style="background-color: {{ $user->role?->name === 'admin' ? '#00a0a0' : ($user->role?->name === 'petugas_pendaftaran' ? '#10b981' : '#8b5cf6') }}">
                         {{ strtoupper(substr($user->name, 0, 1)) }}
                     </div>
                     <div>
                         <h3 class="text-2xl font-bold text-gray-800">{{ $user->name }}</h3>
                         <p class="text-gray-600">{{ $user->email }}</p>
                         <div class="flex items-center gap-3 mt-2">
-                            @if($user->role === 'admin')
+                            @if($user->role?->name === 'admin')
                                 <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">👑 Admin</span>
-                            @elseif($user->role === 'petugas_pendaftaran')
-                                <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">📋 Petugas Pendaftaran</span>
-                            @elseif($user->role === 'petugas_keuangan')
+                            @elseif($user->role?->name === 'petugas_pendaftaran')
+                                <span class="px-4 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">📋 Petugas Pendaftaran</span>
+                            @elseif($user->role?->name === 'petugas_keuangan')
                                 <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-semibold">💰 Petugas Keuangan</span>
                             @endif
                             
@@ -58,11 +58,11 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-600">Role</label>
                                 <p class="text-gray-800 font-semibold">
-                                    @if($user->role === 'admin')
+                                    @if($user->role?->name === 'admin')
                                         👑 Admin
-                                    @elseif($user->role === 'petugas_pendaftaran')
+                                    @elseif($user->role?->name === 'petugas_pendaftaran')
                                         📋 Petugas Pendaftaran
-                                    @elseif($user->role === 'petugas_keuangan')
+                                    @elseif($user->role?->name === 'petugas_keuangan')
                                         💰 Petugas Keuangan
                                     @endif
                                 </p>
@@ -110,11 +110,11 @@
                 <!-- Role Description -->
                 <div class="mt-8 p-4 bg-gray-50 rounded-lg">
                     <h5 class="font-bold text-gray-700 mb-2">📖 Deskripsi Role</h5>
-                    @if($user->role === 'admin')
+                    @if($user->role?->name === 'admin')
                         <p class="text-sm text-gray-600">Memiliki akses penuh ke seluruh sistem termasuk manajemen user, data santri, verifikasi dokumen, dan laporan keuangan.</p>
-                    @elseif($user->role === 'petugas_pendaftaran')
+                    @elseif($user->role?->name === 'petugas_pendaftaran')
                         <p class="text-sm text-gray-600">Bertugas mengelola data pendaftar, verifikasi dokumen, dan proses administrasi pendaftaran santri baru.</p>
-                    @elseif($user->role === 'petugas_keuangan')
+                    @elseif($user->role?->name === 'petugas_keuangan')
                         <p class="text-sm text-gray-600">Bertugas mengelola pembayaran, verifikasi transfer, pencatatan keuangan, dan pembuatan laporan keuangan.</p>
                     @endif
                 </div>
