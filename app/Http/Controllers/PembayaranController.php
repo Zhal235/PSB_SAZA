@@ -94,14 +94,12 @@ class PembayaranController extends Controller
      */
     public function invoice(Pembayaran $pembayaran)
     {
-        $pembayaran->load('calonSantri', 'records');
+        $pembayaran->load('calonSantri', 'records', 'itemDetails.pembayaranItem');
         
-        // Hitung total dari active items
-        $items = \App\Models\PembayaranItem::where('status', 'active')->get();
-        $totalFromItems = $items->sum('nominal');
-        
-        // Gunakan total dari items jika ada
-        $pembayaran->total_amount = $totalFromItems ?: $pembayaran->total_amount;
+        // Ambil items yang dipilih santri dari itemDetails
+        $items = $pembayaran->itemDetails->map(function($detail) {
+            return $detail->pembayaranItem;
+        });
         $pembayaran->remaining_amount = $pembayaran->total_amount - $pembayaran->paid_amount;
 
         // Sinkronkan status dengan nilai yang sudah dihitung ulang
@@ -124,12 +122,12 @@ class PembayaranController extends Controller
      */
     public function invoicePdf(Pembayaran $pembayaran)
     {
-        $pembayaran->load('calonSantri', 'records');
+        $pembayaran->load('calonSantri', 'records', 'itemDetails.pembayaranItem');
 
-        $items = \App\Models\PembayaranItem::where('status', 'active')->get();
-        $totalFromItems = $items->sum('nominal');
-
-        $pembayaran->total_amount = $totalFromItems ?: $pembayaran->total_amount;
+        // Ambil items yang dipilih santri dari itemDetails
+        $items = $pembayaran->itemDetails->map(function($detail) {
+            return $detail->pembayaranItem;
+        });
         $pembayaran->remaining_amount = $pembayaran->total_amount - $pembayaran->paid_amount;
 
         if ($pembayaran->remaining_amount <= 0) {
@@ -213,3 +211,5 @@ class PembayaranController extends Controller
         return redirect()->route('admin.pembayaran.show', $pembayaran)->with('success', '✅ Item berhasil diperbarui!');
     }
 }
+
+
