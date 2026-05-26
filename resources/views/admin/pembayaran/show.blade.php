@@ -177,6 +177,7 @@
                                 <th class="px-4 py-2 text-right">Jumlah</th>
                                 <th class="px-4 py-2 text-left">Kwitansi</th>
                                 <th class="px-4 py-2 text-left">Catatan</th>
+                                <th class="px-4 py-2 text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y">
@@ -202,6 +203,20 @@
                                     </td>
                                     <td class="px-4 py-3 text-gray-600 text-xs">
                                         {{ $record->notes ?? '-' }}
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        <div class="flex justify-center gap-2">
+                                            <a href="{{ route('admin.pembayaran-record.edit', $record) }}" class="text-amber-600 hover:text-amber-800" title="Edit">
+                                                ✏️
+                                            </a>
+                                            <form action="{{ route('admin.pembayaran-record.destroy', $record) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pembayaran ini? Total bayar dan sisa tagihan akan disesuaikan kembali.');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-800" title="Hapus">
+                                                    🗑️
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

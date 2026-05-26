@@ -61,6 +61,10 @@ Route::middleware(['auth', 'role:admin,petugas_pendaftaran,petugas_keuangan'])->
     Route::get('/pembayaran/{pembayaran}/edit-items', [PembayaranController::class, 'editItems'])->name('pembayaran.editItems');
     Route::put('/pembayaran/{pembayaran}/update-items', [PembayaranController::class, 'updateItems'])->name('pembayaran.updateItems');
 
+    Route::get('/pembayaran-record/{record}/edit', [PembayaranController::class, 'editRecord'])->name('pembayaran-record.edit');
+    Route::put('/pembayaran-record/{record}', [PembayaranController::class, 'updateRecord'])->name('pembayaran-record.update');
+    Route::delete('/pembayaran-record/{record}', [PembayaranController::class, 'destroyRecord'])->name('pembayaran-record.destroy');
+
     // Bukti Pembayaran Management
     Route::get('/bukti-pembayaran', [BuktiPembayaranController::class, 'index'])->name('bukti-pembayaran.index');
     Route::get('/bukti-pembayaran/{bukti}', [BuktiPembayaranController::class, 'show'])->name('bukti-pembayaran.show');

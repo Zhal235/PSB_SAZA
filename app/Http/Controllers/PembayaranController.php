@@ -210,6 +210,64 @@ class PembayaranController extends Controller
 
         return redirect()->route('admin.pembayaran.show', $pembayaran)->with('success', '✅ Item berhasil diperbarui!');
     }
+
+    /**
+     * Show form to edit payment record
+     */
+    public function editRecord(PembayaranRecord $record)
+    {
+        $pembayaran = $record->pembayaran;
+        $pembayaran->load('calonSantri');
+        return view('admin.pembayaran.edit-record', compact('record', 'pembayaran'));
+    }
+
+    /**
+     * Update payment record
+     */
+    public function updateRecord(Request $request, PembayaranRecord $record)
+    {
+        $validated = $request->validate([
+            'amount' => 'required|numeric|min:0',
+            'payment_method' => 'required|in:cash,transfer,check',
+            'paid_at' => 'required|date',
+            'notes' => 'nullable|string',
+            'receipt_number' => 'nullable|string',
+        ]);
+
+        $validated['paid_at'] = $validated['paid_at'] . ' ' . $record->paid_at->format('H:i:s');
+
+        $pembayaran = $record->pembayaran;
+
+        // Revert old amount
+        $pembayaran->paid_amount -= $record->amount;
+        
+        // Update record
+        $record->update($validated);
+
+        // Apply new amount
+        $pembayaran->paid_amount += $validated['amount'];
+        $pembayaran->remaining_amount = $pembayaran->total_amount - $pembayaran->paid_amount;
+        $pembayaran->updateStatus();
+
+        return redirect()->route('admin.pembayaran.show', $pembayaran)->with('success', '✅ Data pembayaran berhasil diubah!');
+    }
+
+    /**
+     * Delete payment record
+     */
+    public function destroyRecord(PembayaranRecord $record)
+    {
+        $pembayaran = $record->pembayaran;
+
+        // Revert amount
+        $pembayaran->paid_amount -= $record->amount;
+        $pembayaran->remaining_amount = $pembayaran->total_amount - $pembayaran->paid_amount;
+        $pembayaran->updateStatus();
+
+        $record->delete();
+
+        return redirect()->route('admin.pembayaran.show', $pembayaran)->with('success', '✅ Data pembayaran berhasil dihapus!');
+    }
 }
 
 
