@@ -120,7 +120,7 @@
                     <!-- Jumlah Pembayaran -->
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Jumlah Pembayaran (Rp) *</label>
-                        <input type="number" name="amount" placeholder="0" step="1000" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                        <input type="number" name="amount" placeholder="0" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
                         <p class="text-xs text-gray-600 mt-1">Sisa yang harus dibayar: Rp {{ number_format($pembayaran->remaining_amount, 0, ',', '.') }}</p>
                     </div>
 

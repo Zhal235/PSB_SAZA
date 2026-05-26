@@ -238,11 +238,33 @@ class PembayaranController extends Controller
 
         $pembayaran = $record->pembayaran;
 
+        // Cari FinancialRecord lama sebelum record diupdate
+        $oldAmount = $record->amount;
+        $oldMethod = $record->payment_method == 'check' ? 'transfer' : $record->payment_method;
+        $financialRecord = \App\Models\FinancialRecord::where('type', 'income')
+            ->where('amount', $oldAmount)
+            ->where('payment_method', $oldMethod)
+            ->where(function($q) use ($pembayaran, $record) {
+                $q->where('category', 'Pembayaran Pendaftaran - ' . $pembayaran->calonSantri->nama)
+                  ->orWhere('reference_number', 'BUKTI-' . $record->id . '-' . $record->unique_code);
+            })->first();
+
         // Revert old amount
         $pembayaran->paid_amount -= $record->amount;
         
         // Update record
         $record->update($validated);
+
+        // Update Financial Record
+        if ($financialRecord) {
+            $financialRecord->update([
+                'amount' => $validated['amount'],
+                'payment_method' => $validated['payment_method'] == 'check' ? 'transfer' : $validated['payment_method'],
+                'transaction_date' => $validated['paid_at'],
+                'reference_number' => $validated['receipt_number'] ?? $financialRecord->reference_number,
+                'description' => 'Pembayaran dari ' . $pembayaran->calonSantri->nama . ' - ' . ($validated['notes'] ?? ''),
+            ]);
+        }
 
         // Apply new amount
         $pembayaran->paid_amount += $validated['amount'];
@@ -258,6 +280,21 @@ class PembayaranController extends Controller
     public function destroyRecord(PembayaranRecord $record)
     {
         $pembayaran = $record->pembayaran;
+
+        // Cari dan hapus FinancialRecord terkait
+        $oldAmount = $record->amount;
+        $oldMethod = $record->payment_method == 'check' ? 'transfer' : $record->payment_method;
+        $financialRecord = \App\Models\FinancialRecord::where('type', 'income')
+            ->where('amount', $oldAmount)
+            ->where('payment_method', $oldMethod)
+            ->where(function($q) use ($pembayaran, $record) {
+                $q->where('category', 'Pembayaran Pendaftaran - ' . $pembayaran->calonSantri->nama)
+                  ->orWhere('reference_number', 'BUKTI-' . $record->id . '-' . $record->unique_code);
+            })->first();
+
+        if ($financialRecord) {
+            $financialRecord->delete();
+        }
 
         // Revert amount
         $pembayaran->paid_amount -= $record->amount;
