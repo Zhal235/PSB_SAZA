@@ -20,14 +20,16 @@ class CalonSantriObserver
             ->where('is_required', true)
             ->sum('nominal');
 
-        Pembayaran::create([
-            'calon_santri_id' => $calonSantri->id,
-            'status' => 'belum_bayar',
-            'total_amount' => $totalAmount,
-            'paid_amount' => 0,
-            'remaining_amount' => $totalAmount,
-            'due_date' => now()->addDays(14),
-        ]);
+        Pembayaran::firstOrCreate(
+            ['calon_santri_id' => $calonSantri->id],
+            [
+                'status' => 'belum_bayar',
+                'total_amount' => $totalAmount,
+                'paid_amount' => 0,
+                'remaining_amount' => $totalAmount,
+                'due_date' => now()->addDays(14),
+            ]
+        );
 
         // Simpan sekolah jika belum ada
         if ($calonSantri->asal_sekolah) {

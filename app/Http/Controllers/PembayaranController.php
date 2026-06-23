@@ -14,10 +14,19 @@ class PembayaranController extends Controller
     /**
      * Display a listing of pembayaran
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = trim((string) $request->query('search', ''));
+
         // Ambil pembayaran terbaru untuk setiap calon santri (avoid duplicate)
         $pembayarans = Pembayaran::with('calonSantri', 'itemDetails')
+            ->when($search !== '', function ($query) use ($search) {
+                $query->whereHas('calonSantri', function ($q) use ($search) {
+                    $q->where('nama', 'like', '%' . $search . '%')
+                      ->orWhere('no_pendaftaran', 'like', '%' . $search . '%')
+                      ->orWhere('jenjang', 'like', '%' . $search . '%');
+                });
+            })
             ->orderBy('updated_at', 'desc')
             ->get()
             ->groupBy('calon_santri_id')
@@ -34,7 +43,7 @@ class PembayaranController extends Controller
             return $pembayaran;
         });
         
-        return view('admin.pembayaran.index', compact('pembayarans'));
+        return view('admin.pembayaran.index', compact('pembayarans', 'search'));
     }
 
     /**

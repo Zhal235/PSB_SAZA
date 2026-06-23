@@ -152,16 +152,18 @@ class CalonSantriController extends Controller
             }
         }
 
-        // Otomatis buat pembayaran record
-        $pembayaran = Pembayaran::create([
-            'calon_santri_id' => $calonSantri->id,
-            'total_amount' => $totalAmount,
-            'paid_amount' => 0,
-            'remaining_amount' => $totalAmount,
-            'status' => 'belum_bayar',
-            'due_date' => now()->addDays(7),
-            'unique_code' => \App\Models\Pembayaran::generateUniqueCode()
-        ]);
+        // Otomatis buat pembayaran record (1 santri 1 tagihan)
+        $pembayaran = Pembayaran::firstOrCreate(
+            ['calon_santri_id' => $calonSantri->id],
+            [
+                'total_amount' => $totalAmount,
+                'paid_amount' => 0,
+                'remaining_amount' => $totalAmount,
+                'status' => 'belum_bayar',
+                'due_date' => now()->addDays(7),
+                'unique_code' => \App\Models\Pembayaran::generateUniqueCode(),
+            ]
+        );
 
         // Simpan item details
         if (!empty($allSelectedItems)) {

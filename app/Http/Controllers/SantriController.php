@@ -107,14 +107,17 @@ class SantriController extends Controller
             $validated['status'] = 'baru';
             $calonSantri = CalonSantri::create($validated);
 
-            // Create pembayaran record
-            $totalAmount = 0; // TODO: Hitung dari items
-            $calonSantri->pembayaran()->create([
-                'total_amount' => $totalAmount,
-                'paid_amount' => 0,
-                'remaining_amount' => $totalAmount,
-                'status' => 'belum_bayar',
-            ]);
+                // Create pembayaran record (1 santri 1 tagihan)
+                $totalAmount = 0; // TODO: Hitung dari items
+                \App\Models\Pembayaran::firstOrCreate(
+                    ['calon_santri_id' => $calonSantri->id],
+                    [
+                        'total_amount' => $totalAmount,
+                        'paid_amount' => 0,
+                        'remaining_amount' => $totalAmount,
+                        'status' => 'belum_bayar',
+                    ]
+                );
         }
 
         return redirect()->route('santri.dokumen-upload', $calonSantri)

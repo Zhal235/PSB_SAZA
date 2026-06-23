@@ -4,6 +4,37 @@
 @section('page-title', 'Kelola Pembayaran')
 
 @section('content')
+    <div class="bg-white rounded-lg shadow p-4 mb-4">
+        <form method="GET" action="{{ route('admin.pembayaran.index') }}" class="flex flex-col sm:flex-row gap-3 sm:items-center">
+            <div class="flex-1">
+                <label for="search" class="sr-only">Cari pembayaran</label>
+                <input
+                    id="search"
+                    type="text"
+                    name="search"
+                    value="{{ $search ?? '' }}"
+                    placeholder="Cari nama santri / no pendaftaran / jenjang..."
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+            </div>
+            <div class="flex gap-2">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg">
+                    Cari
+                </button>
+                @if(!empty($search ?? ''))
+                    <a href="{{ route('admin.pembayaran.index') }}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold px-4 py-2 rounded-lg">
+                        Reset
+                    </a>
+                @endif
+            </div>
+        </form>
+        @if(!empty($search ?? ''))
+            <p class="text-xs text-gray-500 mt-2">
+                Menampilkan hasil pencarian untuk: <span class="font-semibold text-gray-700">{{ $search }}</span>
+            </p>
+        @endif
+    </div>
+
     <div class="bg-white rounded-lg shadow overflow-hidden">
         <table class="w-full">
             <thead class="bg-gray-100 border-b">
