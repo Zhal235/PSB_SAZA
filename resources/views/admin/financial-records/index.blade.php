@@ -95,6 +95,7 @@
                         <th class="px-6 py-3 text-right text-sm font-bold text-gray-700">Jumlah</th>
                         <th class="px-6 py-3 text-center text-sm font-bold text-gray-700">Metode</th>
                         <th class="px-6 py-3 text-left text-sm font-bold text-gray-700">Ref/Kwitansi</th>
+                        <th class="px-6 py-3 text-left text-sm font-bold text-gray-700">Deskripsi</th>
                         <th class="px-6 py-3 text-left text-sm font-bold text-gray-700">Dicatat Oleh</th>
                         <th class="px-6 py-3 text-center text-sm font-bold text-gray-700">Aksi</th>
                     </tr>
@@ -122,6 +123,15 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 text-sm font-mono">{{ $record->reference_number ?? '-' }}</td>
+                            <td class="px-6 py-4 text-sm">
+                                @if($record->description)
+                                    <div class="text-gray-700 max-w-xs" title="{{ $record->description }}">
+                                        {{ Str::limit($record->description, 50) }}
+                                    </div>
+                                @else
+                                    <span class="text-gray-400 italic">-</span>
+                                @endif
+                            </td>
                             <td class="px-6 py-4 text-sm">{{ $record->recorded_by ?? '-' }}</td>
                             <td class="px-6 py-4 text-center">
                                 <div class="flex gap-2 justify-center">
