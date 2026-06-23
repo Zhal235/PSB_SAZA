@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             PendidikanSeeder::class,
             PekerjaanSeeder::class,
             PendapatanKeluargaSeeder::class,
+            RoleSeeder::class,
             UserSeeder::class,
             CalonSantriSeeder::class,
         ]);

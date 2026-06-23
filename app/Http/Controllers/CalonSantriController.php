@@ -12,12 +12,28 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class CalonSantriController extends Controller
 {
-    // List semua calon santri - filter berdasarkan jenjang
+    // List semua calon santri - filter berdasarkan jenjang dan search
     public function index(Request $request)
     {
         $jenjang = $request->query('jenjang', 'MTs'); // Default MTs
-        $calonSantri = CalonSantri::where('jenjang', $jenjang)->latest()->paginate(15);
-        return view('admin.calon-santri.index', compact('calonSantri', 'jenjang'));
+        $search = $request->query('search', ''); // Get search query
+        
+        $query = CalonSantri::where('jenjang', $jenjang);
+        
+        // Apply search filter
+        if (!empty($search)) {
+            $query->where(function($q) use ($search) {
+                $q->where('nama', 'like', '%' . $search . '%')
+                  ->orWhere('no_pendaftaran', 'like', '%' . $search . '%')
+                  ->orWhere('nisn', 'like', '%' . $search . '%')
+                  ->orWhere('nik_santri', 'like', '%' . $search . '%')
+                  ->orWhere('no_telp', 'like', '%' . $search . '%')
+                  ->orWhere('asal_sekolah', 'like', '%' . $search . '%');
+            });
+        }
+        
+        $calonSantri = $query->latest()->paginate(15)->appends($request->query());
+        return view('admin.calon-santri.index', compact('calonSantri', 'jenjang', 'search'));
     }
 
     // Show form create dengan modal jenjang
@@ -334,8 +350,9 @@ class CalonSantriController extends Controller
     public function export(Request $request)
     {
         $jenjang = $request->query('jenjang', 'MTs');
+        $search = $request->query('search', '');
         $fileName = 'CalonSantri_' . $jenjang . '_' . now()->format('d-m-Y-H-i-s') . '.xlsx';
         
-        return Excel::download(new CalonSantriExport($jenjang), $fileName);
+        return Excel::download(new CalonSantriExport($jenjang, $search), $fileName);
     }
 }

@@ -14,10 +14,12 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 class CalonSantriExport implements FromCollection, WithHeadings, WithColumnWidths, WithStyles
 {
     protected $jenjang;
+    protected $search;
 
-    public function __construct($jenjang = null)
+    public function __construct($jenjang = null, $search = null)
     {
         $this->jenjang = $jenjang;
+        $this->search = $search;
     }
 
     /**
@@ -29,6 +31,18 @@ class CalonSantriExport implements FromCollection, WithHeadings, WithColumnWidth
         
         if ($this->jenjang) {
             $query->where('jenjang', $this->jenjang);
+        }
+        
+        // Apply search filter
+        if (!empty($this->search)) {
+            $query->where(function($q) {
+                $q->where('nama', 'like', '%' . $this->search . '%')
+                  ->orWhere('no_pendaftaran', 'like', '%' . $this->search . '%')
+                  ->orWhere('nisn', 'like', '%' . $this->search . '%')
+                  ->orWhere('nik_santri', 'like', '%' . $this->search . '%')
+                  ->orWhere('no_telp', 'like', '%' . $this->search . '%')
+                  ->orWhere('asal_sekolah', 'like', '%' . $this->search . '%');
+            });
         }
 
         return $query->get()->map(function ($santri, $index) {
