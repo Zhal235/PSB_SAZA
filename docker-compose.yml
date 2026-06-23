@@ -1,5 +1,4 @@
-version: '3.8'
-
+version: "3.8"
 services:
   psb-saza:
     build:
@@ -30,10 +29,24 @@ services:
       LOG_LEVEL: ${LOG_LEVEL:-warning}
     networks:
       - psb-network
+      - dokploy-network
+      - default
     depends_on:
       psb-db:
         condition: service_healthy
-
+    labels:
+      - traefik.docker.network=dokploy-network
+      - traefik.http.routers.psb-saza-psb-hgom48-5-web.rule=Host(`psb.saza.sch.id`)
+      - traefik.http.routers.psb-saza-psb-hgom48-5-web.entrypoints=web
+      - traefik.http.services.psb-saza-psb-hgom48-5-web.loadbalancer.server.port=80
+      - traefik.http.routers.psb-saza-psb-hgom48-5-web.service=psb-saza-psb-hgom48-5-web
+      - traefik.http.routers.psb-saza-psb-hgom48-5-web.middlewares=redirect-to-https@file
+      - traefik.http.routers.psb-saza-psb-hgom48-5-websecure.rule=Host(`psb.saza.sch.id`)
+      - traefik.http.routers.psb-saza-psb-hgom48-5-websecure.entrypoints=websecure
+      - traefik.http.services.psb-saza-psb-hgom48-5-websecure.loadbalancer.server.port=80
+      - traefik.http.routers.psb-saza-psb-hgom48-5-websecure.service=psb-saza-psb-hgom48-5-websecure
+      - traefik.http.routers.psb-saza-psb-hgom48-5-websecure.tls.certresolver=letsencrypt
+      - traefik.enable=true
   psb-db:
     image: mysql:8.0
     container_name: psb-db
@@ -48,11 +61,18 @@ services:
     networks:
       - psb-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD:-rootchangeme}"]
+      test:
+        - CMD
+        - mysqladmin
+        - ping
+        - -h
+        - localhost
+        - -u
+        - root
+        - -p${DB_ROOT_PASSWORD:-rootchangeme}
       interval: 10s
       timeout: 5s
       retries: 10
-
 volumes:
   dbdata:
     driver: local
@@ -60,7 +80,8 @@ volumes:
     driver: local
   psb-cache:
     driver: local
-
 networks:
   psb-network:
     driver: bridge
+  dokploy-network:
+    external: true

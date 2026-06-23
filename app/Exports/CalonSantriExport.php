@@ -55,7 +55,7 @@ class CalonSantriExport implements FromCollection, WithHeadings, WithColumnWidth
                 'nisn' => "'" . $santri->nisn,                      // Force TEXT with apostrophe
                 'nik' => "'" . $santri->nik_santri,                 // Force TEXT with apostrophe
                 'tempat_lahir' => $santri->tempat_lahir,
-                'tanggal_lahir' => $santri->tanggal_lahir->format('d-m-Y'),
+                'tanggal_lahir' => ($santri->tanggal_lahir ? $santri->tanggal_lahir->format('d-m-Y') : ''),
                 'alamat' => $santri->alamat,
                 'desa' => $santri->desa,
                 'kecamatan' => $santri->kecamatan,

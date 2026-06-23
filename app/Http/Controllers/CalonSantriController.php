@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\CalonSantri;
+use App\Models\FinancialRecord;
 use App\Models\Pembayaran;
 use App\Models\User;
 use App\Exports\CalonSantriExport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -327,17 +329,55 @@ class CalonSantriController extends Controller
     // Delete data
     public function destroy(CalonSantri $calonSantri)
     {
-        // Hapus user terkait jika ada
-        $user = User::where('phone', $calonSantri->no_telp)->first();
-        if ($user) {
-            $user->delete();
-        }
+        DB::transaction(function () use ($calonSantri) {
+            // Ambil semua record pembayaran sebelum data induk dihapus oleh cascade FK.
+            $relatedPembayarans = Pembayaran::with('records')
+                ->where('calon_santri_id', $calonSantri->id)
+                ->get();
 
-        // Hapus data calon santri
-        $calonSantri->delete();
+            $financialRecordIds = [];
+
+            foreach ($relatedPembayarans as $pembayaran) {
+                foreach ($pembayaran->records as $record) {
+                    $method = $record->payment_method === 'check' ? 'transfer' : $record->payment_method;
+
+                    $financialRecord = FinancialRecord::where('type', 'income')
+                        ->where('amount', $record->amount)
+                        ->where('payment_method', $method)
+                        ->where(function ($q) use ($calonSantri, $record) {
+                            $q->where('category', 'Pembayaran Pendaftaran - ' . $calonSantri->nama)
+                              ->orWhere('description', 'like', 'Pembayaran dari ' . $calonSantri->nama . '%')
+                              ->orWhere('description', 'like', 'Transfer pembayaran dari ' . $calonSantri->nama . '%')
+                              ->orWhere('reference_number', 'BUKTI-' . $record->id . '-' . $record->unique_code);
+
+                            if (!empty($record->receipt_number)) {
+                                $q->orWhere('reference_number', $record->receipt_number);
+                            }
+                        })
+                        ->first();
+
+                    if ($financialRecord) {
+                        $financialRecordIds[] = $financialRecord->id;
+                    }
+                }
+            }
+
+            if (!empty($financialRecordIds)) {
+                FinancialRecord::whereIn('id', array_values(array_unique($financialRecordIds)))->delete();
+            }
+
+            // Hapus user terkait jika ada
+            $user = User::where('phone', $calonSantri->no_telp)->first();
+            if ($user) {
+                $user->delete();
+            }
+
+            // Hapus data calon santri (pembayaran & records ikut terhapus via FK cascade)
+            $calonSantri->delete();
+        });
 
         return redirect()->route('admin.calon-santri.index')
-            ->with('success', 'Data calon santri dan akun user berhasil dihapus!');
+            ->with('success', 'Data calon santri beserta pembayaran terkait berhasil dihapus!');
     }
 
     // Show detail calon santri
