@@ -105,48 +105,96 @@
                                         <td class="px-3 py-2 font-semibold sticky left-20 bg-white z-10">{{ substr($santri->nama, 0, 12) }}</td>
                                         <td class="px-3 py-2">{{ substr($santri->asal_sekolah ?? '-', 0, 10) }}</td>
                                         
-                                        <!-- Foto -->
-                                        <td class="px-2 py-2 text-center border-l border-gray-300">{{ $fotoDoc ? 'Ya' : 'Tidak' }}</td>
+                                         <!-- Foto -->
+                                         <td class="px-2 py-2 text-center border-l border-gray-300">
+                                             @if($fotoDoc && !empty($fotoDoc->file_path))
+                                                 <a href="{{ asset('storage/' . $fotoDoc->file_path) }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-semibold">Lihat</a>
+                                             @elseif($fotoDoc)
+                                                 <span class="text-gray-500">Hardcopy</span>
+                                             @else
+                                                 <span class="text-gray-400">Tidak</span>
+                                             @endif
+                                         </td>
                                         <td class="px-2 py-2 text-center">
                                             <button onclick="toggleOrCreateHardcopy('{{ $santri->id }}', 'Foto', {{ $fotoDoc ? $fotoDoc->id : 'null' }}, {{ $fotoDoc && $fotoDoc->hardcopy_diterima ? 'true' : 'false' }})" class="px-2 py-1 rounded text-xs font-semibold transition {{ ($fotoDoc && $fotoDoc->hardcopy_diterima) ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
                                                 {{ ($fotoDoc && $fotoDoc->hardcopy_diterima) ? 'Ya' : 'Tidak' }}
                                             </button>
                                         </td>
 
-                                        <!-- Ijazah -->
-                                        <td class="px-2 py-2 text-center border-l border-gray-300">{{ $ijazahDoc ? 'Ya' : 'Tidak' }}</td>
+                                         <!-- Ijazah -->
+                                         <td class="px-2 py-2 text-center border-l border-gray-300">
+                                             @if($ijazahDoc && !empty($ijazahDoc->file_path))
+                                                 <a href="{{ asset('storage/' . $ijazahDoc->file_path) }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-semibold">Lihat</a>
+                                             @elseif($ijazahDoc)
+                                                 <span class="text-gray-500">Hardcopy</span>
+                                             @else
+                                                 <span class="text-gray-400">Tidak</span>
+                                             @endif
+                                         </td>
                                         <td class="px-2 py-2 text-center">
                                             <button onclick="toggleOrCreateHardcopy('{{ $santri->id }}', 'Ijazah', {{ $ijazahDoc ? $ijazahDoc->id : 'null' }}, {{ $ijazahDoc && $ijazahDoc->hardcopy_diterima ? 'true' : 'false' }})" class="px-2 py-1 rounded text-xs font-semibold transition {{ ($ijazahDoc && $ijazahDoc->hardcopy_diterima) ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
                                                 {{ ($ijazahDoc && $ijazahDoc->hardcopy_diterima) ? 'Ya' : 'Tidak' }}
                                             </button>
                                         </td>
 
-                                        <!-- Akte -->
-                                        <td class="px-2 py-2 text-center border-l border-gray-300">{{ $akteDoc ? 'Ya' : 'Tidak' }}</td>
+                                         <!-- Akte -->
+                                         <td class="px-2 py-2 text-center border-l border-gray-300">
+                                             @if($akteDoc && !empty($akteDoc->file_path))
+                                                 <a href="{{ asset('storage/' . $akteDoc->file_path) }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-semibold">Lihat</a>
+                                             @elseif($akteDoc)
+                                                 <span class="text-gray-500">Hardcopy</span>
+                                             @else
+                                                 <span class="text-gray-400">Tidak</span>
+                                             @endif
+                                         </td>
                                         <td class="px-2 py-2 text-center">
                                             <button onclick="toggleOrCreateHardcopy('{{ $santri->id }}', 'Akte Kelahiran', {{ $akteDoc ? $akteDoc->id : 'null' }}, {{ $akteDoc && $akteDoc->hardcopy_diterima ? 'true' : 'false' }})" class="px-2 py-1 rounded text-xs font-semibold transition {{ ($akteDoc && $akteDoc->hardcopy_diterima) ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
                                                 {{ ($akteDoc && $akteDoc->hardcopy_diterima) ? 'Ya' : 'Tidak' }}
                                             </button>
                                         </td>
 
-                                        <!-- KTP Ayah -->
-                                        <td class="px-2 py-2 text-center border-l border-gray-300">{{ $ktpAyahDoc ? 'Ya' : 'Tidak' }}</td>
+                                         <!-- KTP Ayah -->
+                                         <td class="px-2 py-2 text-center border-l border-gray-300">
+                                             @if($ktpAyahDoc && !empty($ktpAyahDoc->file_path))
+                                                 <a href="{{ asset('storage/' . $ktpAyahDoc->file_path) }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-semibold">Lihat</a>
+                                             @elseif($ktpAyahDoc)
+                                                 <span class="text-gray-500">Hardcopy</span>
+                                             @else
+                                                 <span class="text-gray-400">Tidak</span>
+                                             @endif
+                                         </td>
                                         <td class="px-2 py-2 text-center">
                                             <button onclick="toggleOrCreateHardcopy('{{ $santri->id }}', 'KTP Ayah', {{ $ktpAyahDoc ? $ktpAyahDoc->id : 'null' }}, {{ $ktpAyahDoc && $ktpAyahDoc->hardcopy_diterima ? 'true' : 'false' }})" class="px-2 py-1 rounded text-xs font-semibold transition {{ ($ktpAyahDoc && $ktpAyahDoc->hardcopy_diterima) ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
                                                 {{ ($ktpAyahDoc && $ktpAyahDoc->hardcopy_diterima) ? 'Ya' : 'Tidak' }}
                                             </button>
                                         </td>
 
-                                        <!-- KTP Ibu -->
-                                        <td class="px-2 py-2 text-center border-l border-gray-300">{{ $ktpIbuDoc ? 'Ya' : 'Tidak' }}</td>
+                                         <!-- KTP Ibu -->
+                                         <td class="px-2 py-2 text-center border-l border-gray-300">
+                                             @if($ktpIbuDoc && !empty($ktpIbuDoc->file_path))
+                                                 <a href="{{ asset('storage/' . $ktpIbuDoc->file_path) }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-semibold">Lihat</a>
+                                             @elseif($ktpIbuDoc)
+                                                 <span class="text-gray-500">Hardcopy</span>
+                                             @else
+                                                 <span class="text-gray-400">Tidak</span>
+                                             @endif
+                                         </td>
                                         <td class="px-2 py-2 text-center">
                                             <button onclick="toggleOrCreateHardcopy('{{ $santri->id }}', 'KTP Ibu', {{ $ktpIbuDoc ? $ktpIbuDoc->id : 'null' }}, {{ $ktpIbuDoc && $ktpIbuDoc->hardcopy_diterima ? 'true' : 'false' }})" class="px-2 py-1 rounded text-xs font-semibold transition {{ ($ktpIbuDoc && $ktpIbuDoc->hardcopy_diterima) ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
                                                 {{ ($ktpIbuDoc && $ktpIbuDoc->hardcopy_diterima) ? 'Ya' : 'Tidak' }}
                                             </button>
                                         </td>
 
-                                        <!-- KK -->
-                                        <td class="px-2 py-2 text-center border-l border-gray-300">{{ $kkDoc ? 'Ya' : 'Tidak' }}</td>
+                                         <!-- KK -->
+                                         <td class="px-2 py-2 text-center border-l border-gray-300">
+                                             @if($kkDoc && !empty($kkDoc->file_path))
+                                                 <a href="{{ asset('storage/' . $kkDoc->file_path) }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-semibold">Lihat</a>
+                                             @elseif($kkDoc)
+                                                 <span class="text-gray-500">Hardcopy</span>
+                                             @else
+                                                 <span class="text-gray-400">Tidak</span>
+                                             @endif
+                                         </td>
                                         <td class="px-2 py-2 text-center">
                                             <button onclick="toggleOrCreateHardcopy('{{ $santri->id }}', 'Kartu Keluarga', {{ $kkDoc ? $kkDoc->id : 'null' }}, {{ $kkDoc && $kkDoc->hardcopy_diterima ? 'true' : 'false' }})" class="px-2 py-1 rounded text-xs font-semibold transition {{ ($kkDoc && $kkDoc->hardcopy_diterima) ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
                                                 {{ ($kkDoc && $kkDoc->hardcopy_diterima) ? 'Ya' : 'Tidak' }}

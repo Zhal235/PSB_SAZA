@@ -68,9 +68,15 @@ class PembayaranItemController extends Controller
             'item_type' => 'required|in:pembayaran,perlengkapan',
         ]);
 
+        // Jika nominal berubah, simpan nominal lama dan set effective_date
+        if ((float)$validated['nominal'] !== (float)$pembayaranItem->nominal) {
+            $validated['nominal_old'] = $pembayaranItem->nominal;
+            $validated['effective_date'] = now()->toDateString();
+        }
+
         $pembayaranItem->update($validated);
 
-        return redirect()->route('admin.pembayaran-items.index')->with('success', '✅ Item pembayaran berhasil diperbarui!');
+        return redirect()->route('admin.pembayaran-items.index')->with('success', '✅ Item pembayaran berhasil diperbarui! Harga baru efektif untuk pendaftar baru mulai hari ini.');
     }
 
     /**

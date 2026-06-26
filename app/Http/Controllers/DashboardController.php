@@ -37,9 +37,11 @@ class DashboardController extends Controller
         $totalTerbayar = Pembayaran::sum('paid_amount');
         $sisaTagihan = $totalTagihan - $totalTerbayar;
         
-        $pembayaranLunas = Pembayaran::whereRaw('paid_amount >= total_amount')->count();
-        $pembayaranBelum = Pembayaran::where('paid_amount', 0)->count();
-        $pembayaranCicilan = Pembayaran::whereRaw('paid_amount > 0 AND paid_amount < total_amount')->count();
+          // Gunakan kategori yang saling eksklusif agar tidak double-count.
+          // Kasus total_amount=0 & paid_amount=0 masuk kategori belum bayar.
+          $pembayaranLunas = Pembayaran::whereRaw('paid_amount >= total_amount AND NOT (paid_amount = 0 AND total_amount = 0)')->count();
+          $pembayaranBelum = Pembayaran::whereRaw('paid_amount = 0')->count();
+          $pembayaranCicilan = Pembayaran::whereRaw('paid_amount > 0 AND paid_amount < total_amount')->count();
         
         // Aktivitas Terbaru (10 pendaftar terakhir)
         $recentActivities = CalonSantri::orderBy('created_at', 'desc')->take(10)->get();

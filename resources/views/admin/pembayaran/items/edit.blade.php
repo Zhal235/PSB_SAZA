@@ -56,7 +56,25 @@
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Nominal (Rp) *</label>
                     <input type="number" name="nominal" value="{{ old('nominal', $pembayaranItem->nominal) }}" step="any" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    <p class="text-xs text-gray-600 mt-2">💡 Jika Anda mengubah harga, harga lama akan disimpan dan tanggal perubahan akan dicatat. Pendaftar baru akan dikenakan harga baru, sedangkan pendaftar lama tetap dengan harga lama.</p>
                 </div>
+
+                <!-- Riwayat Perubahan Harga -->
+                @if($pembayaranItem->nominal_old && $pembayaranItem->effective_date)
+                    <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded">
+                        <p class="font-semibold text-amber-800 mb-2">📊 Riwayat Perubahan Harga</p>
+                        <div class="text-sm text-amber-700 space-y-1">
+                            <p><strong>Harga Sebelumnya:</strong> Rp {{ number_format($pembayaranItem->nominal_old, 0, ',', '.') }}</p>
+                            <p><strong>Harga Saat Ini:</strong> Rp {{ number_format($pembayaranItem->nominal, 0, ',', '.') }}</p>
+                            <p><strong>Efektif Sejak:</strong> {{ \Carbon\Carbon::parse($pembayaranItem->effective_date)->format('d M Y') }}</p>
+                            <p class="mt-3"><strong>Keterangan:</strong> Pendaftar sebelum {{ \Carbon\Carbon::parse($pembayaranItem->effective_date)->format('d M Y') }} akan dikenakan harga lama (Rp {{ number_format($pembayaranItem->nominal_old, 0, ',', '.') }}), sedangkan pendaftar mulai {{ \Carbon\Carbon::parse($pembayaranItem->effective_date)->format('d M Y') }} akan dikenakan harga baru (Rp {{ number_format($pembayaranItem->nominal, 0, ',', '.') }}).</p>
+                        </div>
+                    </div>
+                @else
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                        <p class="text-sm text-blue-700">📌 Belum ada riwayat perubahan harga. Jika Anda mengubah harga di formulir di atas, sistem akan otomatis mencatatnya.</p>
+                    </div>
+                @endif
 
                 <!-- Wajib/Optional -->
                 <div>

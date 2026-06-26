@@ -17,7 +17,7 @@
                 <tr>
                     <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Nama Item</th>
                     <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Kategori</th>
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Nominal</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Harga</th>
                     <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Wajib</th>
                     <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Cicil</th>
                     <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Status</th>
@@ -48,6 +48,12 @@
                             <div class="font-semibold text-indigo-600">
                                 Rp {{ number_format($item->nominal, 0, ',', '.') }}
                             </div>
+                            @if($item->nominal_old && $item->effective_date)
+                                <div class="text-xs text-gray-600 mt-2">
+                                    <div>Harga lama: <span class="line-through">Rp {{ number_format($item->nominal_old, 0, ',', '.') }}</span></div>
+                                    <div>Efektif: <span class="font-semibold text-amber-600">{{ \Carbon\Carbon::parse($item->effective_date)->format('d M Y') }}</span></div>
+                                </div>
+                            @endif
                         </td>
                         <td class="px-6 py-4 text-center">
                             @if($item->is_required)

@@ -141,13 +141,15 @@ class CalonSantriController extends Controller
         
         $calonSantri = CalonSantri::create($validated);
 
-        // Hitung total dari selected items
+        // Hitung total dari selected items dengan versioning harga
         $totalAmount = 0;
         if (!empty($allSelectedItems)) {
             foreach ($allSelectedItems as $itemId) {
                 $item = \App\Models\PembayaranItem::find($itemId);
                 if ($item) {
-                    $totalAmount += $item->nominal;
+                    // Gunakan harga yang sesuai dengan tanggal pembuatan calon santri
+                    $price = $item->getPriceForDate($calonSantri->created_at);
+                    $totalAmount += $price;
                 }
             }
         }
@@ -165,16 +167,18 @@ class CalonSantriController extends Controller
             ]
         );
 
-        // Simpan item details
+        // Simpan item details dengan versioning harga
         if (!empty($allSelectedItems)) {
             foreach ($allSelectedItems as $itemId) {
                 $item = \App\Models\PembayaranItem::find($itemId);
                 if ($item) {
+                    // Gunakan harga yang sesuai dengan tanggal pembuatan calon santri
+                    $price = $item->getPriceForDate($calonSantri->created_at);
                     $pembayaran->itemDetails()->create([
                         'pembayaran_item_id' => $itemId,
                         'quantity' => 1,
-                        'unit_price' => $item->nominal,
-                        'subtotal' => $item->nominal,
+                        'unit_price' => $price,
+                        'subtotal' => $price,
                     ]);
                 }
             }
@@ -283,18 +287,20 @@ class CalonSantriController extends Controller
             // Delete existing item details
             $pembayaran->itemDetails()->delete();
 
-            // Hitung total dari selected items
+            // Hitung total dari selected items dengan versioning harga
             $totalAmount = 0;
             if (!empty($allSelectedItems)) {
                 foreach ($allSelectedItems as $itemId) {
                     $item = \App\Models\PembayaranItem::find($itemId);
                     if ($item) {
-                        $totalAmount += $item->nominal;
+                        // Gunakan harga yang sesuai dengan tanggal pembuatan calon santri
+                        $price = $item->getPriceForDate($calonSantri->created_at);
+                        $totalAmount += $price;
                         $pembayaran->itemDetails()->create([
                             'pembayaran_item_id' => $itemId,
                             'quantity' => 1,
-                            'unit_price' => $item->nominal,
-                            'subtotal' => $item->nominal,
+                            'unit_price' => $price,
+                            'subtotal' => $price,
                         ]);
                     }
                 }
