@@ -16,34 +16,102 @@ class PembayaranController extends Controller
      */
     public function index(Request $request)
     {
-        $search = trim((string) $request->query('search', ''));
+        $filters = [
+            'search' => trim((string) $request->query('search', '')),
+            'nama' => trim((string) $request->query('nama', '')),
+            'no_pendaftaran' => trim((string) $request->query('no_pendaftaran', '')),
+            'jenjang' => trim((string) $request->query('jenjang', '')),
+            'status' => trim((string) $request->query('status', '')),
+            'due_date_from' => trim((string) $request->query('due_date_from', '')),
+            'due_date_to' => trim((string) $request->query('due_date_to', '')),
+            'min_total' => trim((string) $request->query('min_total', '')),
+            'max_total' => trim((string) $request->query('max_total', '')),
+            'min_paid' => trim((string) $request->query('min_paid', '')),
+            'max_paid' => trim((string) $request->query('max_paid', '')),
+            'min_remaining' => trim((string) $request->query('min_remaining', '')),
+            'max_remaining' => trim((string) $request->query('max_remaining', '')),
+        ];
 
-        // Ambil pembayaran terbaru untuk setiap calon santri (avoid duplicate)
-        $pembayarans = Pembayaran::with('calonSantri', 'itemDetails')
-            ->when($search !== '', function ($query) use ($search) {
-                $query->whereHas('calonSantri', function ($q) use ($search) {
-                    $q->where('nama', 'like', '%' . $search . '%')
-                      ->orWhere('no_pendaftaran', 'like', '%' . $search . '%')
-                      ->orWhere('jenjang', 'like', '%' . $search . '%');
-                });
-            })
+        $query = Pembayaran::with('calonSantri', 'itemDetails');
+
+        if ($filters['search'] !== '') {
+            $query->whereHas('calonSantri', function ($q) use ($filters) {
+                $q->where('nama', 'like', '%' . $filters['search'] . '%')
+                    ->orWhere('no_pendaftaran', 'like', '%' . $filters['search'] . '%')
+                    ->orWhere('jenjang', 'like', '%' . $filters['search'] . '%');
+            });
+        }
+
+        if ($filters['nama'] !== '') {
+            $query->whereHas('calonSantri', function ($q) use ($filters) {
+                $q->where('nama', 'like', '%' . $filters['nama'] . '%');
+            });
+        }
+
+        if ($filters['no_pendaftaran'] !== '') {
+            $query->whereHas('calonSantri', function ($q) use ($filters) {
+                $q->where('no_pendaftaran', 'like', '%' . $filters['no_pendaftaran'] . '%');
+            });
+        }
+
+        if ($filters['jenjang'] !== '') {
+            $query->whereHas('calonSantri', function ($q) use ($filters) {
+                $q->where('jenjang', 'like', '%' . $filters['jenjang'] . '%');
+            });
+        }
+
+        if ($filters['status'] !== '') {
+            $query->where('status', $filters['status']);
+        }
+
+        if ($filters['due_date_from'] !== '') {
+            $query->whereDate('due_date', '>=', $filters['due_date_from']);
+        }
+
+        if ($filters['due_date_to'] !== '') {
+            $query->whereDate('due_date', '<=', $filters['due_date_to']);
+        }
+
+        if ($filters['min_total'] !== '' && is_numeric($filters['min_total'])) {
+            $query->where('total_amount', '>=', (float) $filters['min_total']);
+        }
+
+        if ($filters['max_total'] !== '' && is_numeric($filters['max_total'])) {
+            $query->where('total_amount', '<=', (float) $filters['max_total']);
+        }
+
+        if ($filters['min_paid'] !== '' && is_numeric($filters['min_paid'])) {
+            $query->where('paid_amount', '>=', (float) $filters['min_paid']);
+        }
+
+        if ($filters['max_paid'] !== '' && is_numeric($filters['max_paid'])) {
+            $query->where('paid_amount', '<=', (float) $filters['max_paid']);
+        }
+
+        if ($filters['min_remaining'] !== '' && is_numeric($filters['min_remaining'])) {
+            $query->where('remaining_amount', '>=', (float) $filters['min_remaining']);
+        }
+
+        if ($filters['max_remaining'] !== '' && is_numeric($filters['max_remaining'])) {
+            $query->where('remaining_amount', '<=', (float) $filters['max_remaining']);
+        }
+
+        $pembayarans = $query
             ->orderBy('updated_at', 'desc')
             ->get()
             ->groupBy('calon_santri_id')
-            ->map(function($group) {
-                return $group->first(); // Ambil yang paling baru
+            ->map(function ($group) {
+                return $group->first();
             })
-            ->values();
-        
-        // Hitung total dari itemDetails yang dipilih
-        $pembayarans = $pembayarans->map(function($pembayaran) {
-            // Gunakan total dari database yang sudah dihitung
-            $pembayaran->calculated_total = $pembayaran->total_amount;
-            $pembayaran->calculated_remaining = $pembayaran->total_amount - $pembayaran->paid_amount;
-            return $pembayaran;
-        });
-        
-        return view('admin.pembayaran.index', compact('pembayarans', 'search'));
+            ->values()
+            ->map(function ($pembayaran) {
+                $pembayaran->calculated_total = $pembayaran->total_amount;
+                $pembayaran->calculated_remaining = $pembayaran->total_amount - $pembayaran->paid_amount;
+
+                return $pembayaran;
+            });
+
+        return view('admin.pembayaran.index', compact('pembayarans', 'filters'));
     }
 
     /**
