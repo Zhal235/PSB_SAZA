@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PembayaranExport;
 use App\Models\CalonSantri;
 use App\Models\FinancialRecord;
 use App\Models\Pembayaran;
 use App\Models\PembayaranRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PembayaranController extends Controller
 {
@@ -112,6 +114,32 @@ class PembayaranController extends Controller
             });
 
         return view('admin.pembayaran.index', compact('pembayarans', 'filters'));
+    }
+
+    /**
+     * Export pembayaran ke Excel
+     */
+    public function export(Request $request)
+    {
+        $filters = [
+            'search' => trim((string) $request->query('search', '')),
+            'nama' => trim((string) $request->query('nama', '')),
+            'no_pendaftaran' => trim((string) $request->query('no_pendaftaran', '')),
+            'jenjang' => trim((string) $request->query('jenjang', '')),
+            'status' => trim((string) $request->query('status', '')),
+            'due_date_from' => trim((string) $request->query('due_date_from', '')),
+            'due_date_to' => trim((string) $request->query('due_date_to', '')),
+            'min_total' => trim((string) $request->query('min_total', '')),
+            'max_total' => trim((string) $request->query('max_total', '')),
+            'min_paid' => trim((string) $request->query('min_paid', '')),
+            'max_paid' => trim((string) $request->query('max_paid', '')),
+            'min_remaining' => trim((string) $request->query('min_remaining', '')),
+            'max_remaining' => trim((string) $request->query('max_remaining', '')),
+        ];
+
+        $fileName = 'Pembayaran_' . now()->format('d-m-Y-H-i-s') . '.xlsx';
+
+        return Excel::download(new PembayaranExport($filters), $fileName);
     }
 
     /**

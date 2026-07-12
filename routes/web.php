@@ -54,6 +54,7 @@ Route::middleware(['auth', 'role:admin,petugas_pendaftaran,petugas_keuangan'])->
 
     // Pembayaran Management
     Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran.index');
+    Route::get('/pembayaran/export', [PembayaranController::class, 'export'])->name('pembayaran.export');
     Route::get('/pembayaran/{pembayaran}', [PembayaranController::class, 'show'])->name('pembayaran.show');
     Route::post('/pembayaran/{pembayaran}/payment', [PembayaranController::class, 'storePayment'])->name('pembayaran.storePayment');
     Route::get('/pembayaran/{pembayaran}/invoice', [PembayaranController::class, 'invoice'])->name('pembayaran.invoice');

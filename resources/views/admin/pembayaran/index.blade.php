@@ -166,6 +166,9 @@
                         Reset
                     </a>
                 @endif
+                <a href="{{ route('admin.pembayaran.export', request()->query()) }}" class="bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-4 py-2 rounded-lg">
+                    Export Excel
+                </a>
             </div>
         </form>
         @if(collect($filters)->contains(fn ($value) => is_string($value) && trim($value) !== ''))
