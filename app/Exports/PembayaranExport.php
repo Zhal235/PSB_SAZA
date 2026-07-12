@@ -90,7 +90,9 @@ class PembayaranExport implements FromCollection, WithHeadings, WithColumnWidths
             ->get()
             ->map(function ($pembayaran) {
                 $history = $pembayaran->records->map(function ($record) {
-                    return $record->amount . ' (' . $record->payment_method . ')';
+                    $date = $record->paid_at ? \Illuminate\Support\Carbon::parse($record->paid_at)->translatedFormat('d-m-Y H:i') : '-';
+
+                    return $date . ' - ' . number_format((float) $record->amount, 0, ',', '.') . ' (' . $record->payment_method . ')';
                 })->implode(' | ');
 
                 return [
