@@ -46,9 +46,14 @@
     <div class="bg-white rounded-lg shadow p-6 mb-6">
         <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg font-bold text-gray-800">🔍 Filter Data</h3>
-            <a href="{{ route('admin.financial-records.create') }}" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 font-semibold">
-                ➕ Tambah Pencatatan
-            </a>
+            <div class="flex gap-2">
+                <a href="{{ route('admin.financial-records.export', request()->query()) }}" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 font-semibold">
+                    📊 Export Excel
+                </a>
+                <a href="{{ route('admin.financial-records.create') }}" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 font-semibold">
+                    ➕ Tambah Pencatatan
+                </a>
+            </div>
         </div>
 
         <form method="GET" class="grid grid-cols-4 gap-4">

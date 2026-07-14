@@ -50,6 +50,7 @@ Route::middleware(['auth', 'role:admin,petugas_pendaftaran,petugas_keuangan'])->
     Route::resource('bank-settings', BankSettingController::class);
 
     // Financial Records Management
+    Route::get('/financial-records/export', [FinancialRecordController::class, 'export'])->name('financial-records.export');
     Route::resource('financial-records', FinancialRecordController::class);
 
     // Pembayaran Management

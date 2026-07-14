@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\FinancialRecordExport;
 use App\Models\FinancialRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FinancialRecordController extends Controller
 {
@@ -47,6 +49,20 @@ class FinancialRecordController extends Controller
         $transferBalance = $transferIncome - $transferExpense;
 
         return view('admin.financial-records.index', compact('records', 'totalIncome', 'totalExpense', 'balance', 'cashBalance', 'transferBalance'));
+    }
+
+    public function export(Request $request)
+    {
+        $filters = [
+            'type' => $request->get('type'),
+            'payment_method' => $request->get('payment_method'),
+            'date_from' => $request->get('date_from'),
+            'date_to' => $request->get('date_to'),
+        ];
+
+        $fileName = 'pencatatan-keuangan-' . date('Y-m-d-H-i-s') . '.xlsx';
+
+        return Excel::download(new FinancialRecordExport($filters), $fileName);
     }
 
     public function create()
